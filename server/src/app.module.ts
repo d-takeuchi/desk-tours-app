@@ -5,6 +5,12 @@ import { AppService } from './app.service';
 import { User } from './users/users.entity';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { PostsModule } from './posts/posts.module';
+import { TagsModule } from './tags/tags.module';
+import { Tag } from './tags/tags.entity';
+import { Post } from './posts/post.entity';
+import { CommentsModule } from './comments/comments.module';
+import { Comment } from './comments/comments.entity';
 
 @Module({
   imports: [
@@ -16,10 +22,13 @@ import { AuthModule } from './auth/auth.module';
       username: 'develop',
       password: 'password',
       database: 'develop',
-      entities: [User],
+      entities: [User, Tag, Post, Comment],
       synchronize: true,
     }),
     AuthModule,
+    PostsModule,
+    TagsModule,
+    CommentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

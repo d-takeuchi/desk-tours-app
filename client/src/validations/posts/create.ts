@@ -14,7 +14,7 @@ export const schema = yup
       .max(300, "300文字以下で入力してください")
       .required("この項目は必須です"),
 
-    tags: yup.array().min(1, "1つ以上選択してください"),
+    tagIds: yup.array().min(1, "1つ以上選択してください"),
 
     imageFile: yup
       .mixed()

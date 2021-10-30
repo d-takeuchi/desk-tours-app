@@ -1,4 +1,4 @@
-import React, { useState, VFC } from "react";
+import React, { useEffect, useState, VFC } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Resizer from "react-image-file-resizer";
@@ -6,6 +6,7 @@ import Resizer from "react-image-file-resizer";
 import { schema } from "../../validations/posts/create";
 import PostCategoryTag from "../organisms/PostCategoryTag";
 import { useDecodedToken } from "../../hooks/useDecodedToken";
+import axios from "axios";
 
 const PostCreate: VFC = () => {
   const [deskImageUrl, setDeskImageUrl] = useState("");
@@ -14,7 +15,7 @@ const PostCreate: VFC = () => {
     title: string;
     imageFile: string;
     description: string;
-    tags: number[];
+    tagIds: number[];
   };
 
   const {
@@ -25,14 +26,25 @@ const PostCreate: VFC = () => {
     resolver: yupResolver(schema),
     defaultValues: {
       title: "",
-      tags: [],
+      tagIds: [],
       imageFile: "",
       description: "",
     },
   });
 
   const currentUser = useDecodedToken();
-  const onSubmit = (data: FormInputData) => {};
+  const onSubmit = (data: FormInputData) => {
+    axios
+      .post("http://localhost:3000/posts", {
+        ...data,
+        imageFile: deskImageUrl,
+        email: currentUser!.email,
+      })
+      .then(() => {})
+      .catch((err) => {
+        console.error(err);
+      });
+  };
 
   const resizeFile = (file: Blob) =>
     new Promise((resolve) => {
@@ -60,6 +72,19 @@ const PostCreate: VFC = () => {
       }
     }
   };
+
+  type Tag = {
+    id: number;
+    name: string;
+  };
+
+  const [tags, setTags] = useState<Array<Tag>>([]);
+
+  useEffect(() => {
+    axios
+      .get<Array<Tag>>("http://localhost:3000/tags")
+      .then((res) => setTags(res.data));
+  }, []);
 
   return (
     <div className="flex-grow bg-primary">
@@ -151,19 +176,18 @@ const PostCreate: VFC = () => {
                     </label>
 
                     <div className="flex flex-col sm:flex-row">
-                      {/* {data &&
-                        data.tags.map((tag) => (
-                          <PostCategoryTag
-                            key={tag.id}
-                            tagId={tag.id}
-                            tagName={tag.name}
-                            register={register}
-                          />
-                        ))} */}
+                      {tags.map((tag) => (
+                        <PostCategoryTag
+                          key={tag.id}
+                          tagId={tag.id}
+                          tagName={tag.name}
+                          register={register}
+                        />
+                      ))}
                     </div>
                     <div className="mt-5">
                       <span className="text-xs text-red-700 ">
-                        {(errors.tags as any)?.message}
+                        {(errors.tagIds as any)?.message}
                       </span>
                     </div>
                   </div>

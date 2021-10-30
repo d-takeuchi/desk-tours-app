@@ -14,7 +14,7 @@ const PostCategoryTag: VFC<Props> = ({ tagId, tagName, register }) => {
         className="hidden"
         value={tagId}
         id={`tags_${tagId}`}
-        {...register("tags")}
+        {...register("tagIds")}
       />
       <label
         htmlFor={`tags_${tagId}`}

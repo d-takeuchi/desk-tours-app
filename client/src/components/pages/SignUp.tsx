@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "../../validations/signup";
 import { useHistory } from "react-router-dom";
+import axios from "axios";
 
 const SignUp: VFC = () => {
   const history = useHistory();
@@ -16,13 +17,21 @@ const SignUp: VFC = () => {
   });
 
   type FormInputData = {
-    userName: string;
+    name: string;
     email: string;
     password: string;
   };
 
   const onSubmit = (data: FormInputData) => {
-    history.push("/login");
+    console.log(data);
+    axios
+      .post("http://localhost:3000/users", data)
+      .then(() => {
+        history.push("/login");
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   return (
@@ -33,15 +42,15 @@ const SignUp: VFC = () => {
           <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
             <div className="relative mt-4">
               <label
-                htmlFor="userName"
+                htmlFor="name"
                 className="text-base leading-7 text-blueGray-500"
               >
                 ユーザー名
               </label>
               <input
                 type="text"
-                id="username"
-                {...register("userName")}
+                id="name"
+                {...register("name")}
                 className="w-full px-4 py-2 mt-2 text-base text-black transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 "
               />
               <span className="text-xs text-red-700">

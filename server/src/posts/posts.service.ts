@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Tag } from 'src/tags/tags.entity';
-import { User } from 'src/users/users.entity';
-import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
+
+import { Tag } from 'src/tags/tags.entity';
+import { UsersService } from 'src/users/users.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { Post } from './post.entity';
 
@@ -31,9 +31,17 @@ export class PostsService {
   }
 
   async findAll() {
-    return await this.postRepository.find({
-      relations: ['user'],
-      select: ['user'],
-    });
+    // return await this.postRepository.find({
+    //   relations: ['user', 'likes', 'tags', 'comments'],
+    // });
+
+    return await this.postRepository
+      .createQueryBuilder('Post')
+      .select(['Post.id', 'tags.id', 'tags.name'])
+      .leftJoin('Post.tags', 'tags') // bar is the joined table
+      .getMany();
+    // .innerJoin('post.user', 'user')
+    // .leftJoin('post.tags', 'tags') // bar is the joined table
+    // .getMany();
   }
 }

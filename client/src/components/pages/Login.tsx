@@ -1,4 +1,4 @@
-import React, { VFC } from "react";
+import { VFC } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "../../validations/login";
@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 import jwt from "jwt-decode";
 import { DecodedToken } from "../../types/types";
+import toast from "react-hot-toast";
 
 const Login: VFC = () => {
   const history = useHistory();
@@ -30,10 +31,11 @@ const Login: VFC = () => {
         const decodedToken: DecodedToken = jwt(res.data.access_token);
         localStorage.setItem("app-auth", res.data.access_token);
         localStorage.setItem("app-meta", JSON.stringify(decodedToken));
+        toast.success("ログイン成功");
         history.push("/");
       })
       .catch((err) => {
-        //TODO ここは後でトーストでエラーメッセージを表示させるか、、
+        toast.error("ログイン失敗");
         console.error(err);
       });
   };

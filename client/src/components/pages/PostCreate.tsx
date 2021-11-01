@@ -2,11 +2,13 @@ import React, { useEffect, useState, VFC } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Resizer from "react-image-file-resizer";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 
 import { schema } from "../../validations/posts/create";
 import PostCategoryTag from "../organisms/PostCategoryTag";
 import { useDecodedToken } from "../../hooks/useDecodedToken";
-import axios from "axios";
+import { useHistory } from "react-router";
 
 const PostCreate: VFC = () => {
   const [deskImageUrl, setDeskImageUrl] = useState("");
@@ -32,6 +34,7 @@ const PostCreate: VFC = () => {
     },
   });
 
+  const history = useHistory();
   const currentUser = useDecodedToken();
   const onSubmit = (data: FormInputData) => {
     axios
@@ -40,8 +43,12 @@ const PostCreate: VFC = () => {
         imageFile: deskImageUrl,
         email: currentUser!.email,
       })
-      .then(() => {})
+      .then(() => {
+        history.push("/");
+        toast.success("投稿成功");
+      })
       .catch((err) => {
+        toast.error("投稿失敗");
         console.error(err);
       });
   };

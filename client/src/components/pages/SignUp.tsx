@@ -1,10 +1,11 @@
-import React, { VFC } from "react";
+import { VFC } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { schema } from "../../validations/signup";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
+import toast from "react-hot-toast";
 
+import { schema } from "../../validations/signup";
 const SignUp: VFC = () => {
   const history = useHistory();
 
@@ -27,9 +28,11 @@ const SignUp: VFC = () => {
     axios
       .post("http://localhost:3000/users", data)
       .then(() => {
+        toast.success("ユーザー作成成功");
         history.push("/login");
       })
       .catch((err) => {
+        toast.error("ユーザー作成失敗");
         console.error(err);
       });
   };

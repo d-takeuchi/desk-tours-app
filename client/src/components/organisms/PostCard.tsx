@@ -1,23 +1,23 @@
 import { memo, VFC } from "react";
 import { Link } from "react-router-dom";
 
-type Props = {
-  image: string;
-};
+import { Post } from "../../types/post";
 
-const PostCard: VFC<Props> = memo(({ image }) => {
+const PostCard: VFC<Post> = memo((props) => {
+  const { id, title, imageFile, commentCount, likeCount } = props;
+
   return (
     <div className="w-full p-6 mx-auto lg:w-1/3">
       <div className="shadow-xl  rounded-xl bg-blueGray-50">
-        <Link to="/posts/view/1">
+        <Link to={`/posts/view/${id}`}>
           <img
             className="object-cover object-center w-full lg:h-48 md:h-36 rounded-t-xl"
-            src={image}
+            src={imageFile}
             alt="deskImg"
           />
         </Link>
         <div className="flex justify-between p-4 lg:p-8 bg-white rounded-b-xl">
-          <h3>hogehoge</h3>
+          <h3>{title}</h3>
 
           <div className="flex">
             <svg
@@ -32,7 +32,7 @@ const PostCard: VFC<Props> = memo(({ image }) => {
                 clipRule="evenodd"
               />
             </svg>
-            100
+            {likeCount}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5 ml-2"
@@ -45,7 +45,7 @@ const PostCard: VFC<Props> = memo(({ image }) => {
                 clipRule="evenodd"
               />
             </svg>
-            100
+            {commentCount}
           </div>
         </div>
       </div>

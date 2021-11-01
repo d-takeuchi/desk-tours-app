@@ -15,7 +15,7 @@ export class PostsService {
     private readonly usersService: UsersService,
   ) {}
 
-  async create(postData: CreatePostDto) {
+  async create(postData: CreatePostDto): Promise<Post> {
     const { title, description, imageFile, tagIds, email } = postData;
     const tags = await this.tagRepository.findByIds(tagIds);
     const user = await this.usersService.findOne(email);
@@ -30,18 +30,31 @@ export class PostsService {
     return await this.postRepository.save(post);
   }
 
-  async findAll() {
-    // return await this.postRepository.find({
-    //   relations: ['user', 'likes', 'tags', 'comments'],
-    // });
-
+  async findAll(): Promise<Post[]> {
     return await this.postRepository
       .createQueryBuilder('Post')
-      .select(['Post.id', 'tags.id', 'tags.name'])
-      .leftJoin('Post.tags', 'tags') // bar is the joined table
+      .select(['Post.id', 'Post.title', 'Post.imageFile'])
+      .loadRelationCountAndMap('Post.commentCount', 'Post.comments', 'comments')
+      .loadRelationCountAndMap('Post.likeCount', 'Post.likes', 'likes')
       .getMany();
-    // .innerJoin('post.user', 'user')
-    // .leftJoin('post.tags', 'tags') // bar is the joined table
-    // .getMany();
+  }
+
+  async findOne(postId: number): Promise<Post> {
+    return await this.postRepository
+      .createQueryBuilder('Post')
+      .select(['Post.id', 'Post.title', 'Post.imageFile', 'Post.description'])
+      .where(`Post.id = ${postId}`)
+      .leftJoinAndSelect('Post.tags', 'tags')
+      .leftJoinAndSelect('Post.comments', 'comments')
+      .getOne();
+  }
+
+  async getNewArrivalPosts(): Promise<Post[]> {
+    // return await this.postRepository.find({
+    //   // order: { createdAt: 'DESC' },
+    //   // take: 3,
+    // });
+
+    return await this.postRepository.find();
   }
 }

@@ -1,7 +1,18 @@
+import axios from "axios";
+import { useEffect, useState, VFC } from "react";
 import { Link } from "react-router-dom";
+import { Post } from "../../types/post";
 // import PostCard from "../organisms/PostCard";
 
-const Home = () => {
+const Home: VFC = () => {
+  const [posts, setPosts] = useState<Array<Post>>([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/posts/getNewArrivalPosts")
+      .then(() => {})
+      .catch(() => {});
+  }, []);
   return (
     <>
       {/* メインビジュアル */}
@@ -26,9 +37,12 @@ const Home = () => {
         <div className="container items-center px-5 py-8 mx-auto lg:px-24">
           <div className="flex justify-between">
             <h2 className="font-medium text-white">新着</h2>
-            <button className="text-white bg-primaryButton rounded-xl py-2 px-8 hover:bg-gray-300">
+            <Link
+              to="/posts"
+              className="text-white bg-primaryButton rounded-xl py-2 px-8 hover:bg-gray-300"
+            >
               すべて見る
-            </button>
+            </Link>
           </div>
 
           <div className="flex flex-wrap mb-12 text-left">

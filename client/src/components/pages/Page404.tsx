@@ -1,7 +1,7 @@
 const Page404 = () => {
   return (
     <div className="flex-grow">
-      <div className="bg-indigo-900 relative overflow-hidden h-screen">
+      <div className="bg-primary relative overflow-hidden h-screen">
         <div className="inset-0 bg-black opacity-25 absolute"></div>
         <div className="container mx-auto px-6 md:px-12 relative z-10 flex items-center py-32 xl:py-40">
           <div className="w-full font-mono flex flex-col items-center relative z-10">

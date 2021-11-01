@@ -1,6 +1,7 @@
 import React, { VFC } from "react";
 import { Route, Switch } from "react-router-dom";
 import MyPage from "../components/pages/MyPage";
+import Page404 from "../components/pages/Page404";
 import PostCreate from "../components/pages/PostCreate";
 import PostView from "../components/pages/PostView";
 import UserProfileEdit from "../components/pages/UserEditProfile";
@@ -35,6 +36,7 @@ export const AuthenticateRouter: VFC = () => {
           </Switch>
         )}
       />
+      <Route path="*" component={Page404} />
     </Switch>
   );
 };

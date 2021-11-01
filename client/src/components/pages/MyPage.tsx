@@ -34,10 +34,10 @@ const MyPage = () => {
           </div>
           <div>
             <div className="p-6 px-20 flex flex-wrap items-center justify-center">
-              <PostCard image={"hoge"} />
+              {/* <PostCard image={"hoge"} /> */}
             </div>
             <div className="p-6 px-20 flex flex-wrap items-center justify-center">
-              <PostCard image={"hoge"} />
+              {/* <PostCard image={"hoge"} /> */}
             </div>
           </div>
         </div>

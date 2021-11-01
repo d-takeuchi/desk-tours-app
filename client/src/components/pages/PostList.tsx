@@ -1,19 +1,13 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import PostCard from "../organisms/PostCard";
 
-type Post = {
-  id: number;
-  title: string;
-  description: string;
-  imageFile: string;
-  createdAt: string;
-  updatedAt: string;
-};
+import PostCard from "../organisms/PostCard";
+import { Post } from "../../types/post";
 
 const PostList = () => {
   const [posts, setPosts] = useState<Array<Post>>([]);
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     setLoading(true);
     axios
@@ -22,6 +16,7 @@ const PostList = () => {
       .catch((err) => console.error(err))
       .finally(() => setLoading(false));
   }, []);
+
   return (
     <div className="flex-grow bg-primary">
       <div className="container items-center px-5 py-8 mx-auto lg:px-24">
@@ -31,7 +26,14 @@ const PostList = () => {
             <p>ローディング中</p>
           ) : (
             posts.map((post) => (
-              <PostCard key={post.id} image={post.imageFile} />
+              <PostCard
+                key={post.id}
+                id={post.id}
+                title={post.title}
+                imageFile={post.imageFile}
+                commentCount={post.commentCount}
+                likeCount={post.likeCount}
+              />
             ))
           )}
         </div>

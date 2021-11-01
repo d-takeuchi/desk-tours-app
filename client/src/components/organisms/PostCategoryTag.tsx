@@ -3,7 +3,7 @@ import { VFC } from "react";
 type Props = {
   tagId: number;
   tagName: string;
-  register: any;
+  register?: any;
 };
 
 const PostCategoryTag: VFC<Props> = ({ tagId, tagName, register }) => {

@@ -28,7 +28,13 @@ export const AuthenticateRouter: VFC = () => {
         render={({ match: { url } }) => (
           <Switch>
             <Route exact path={`${url}/profile/:id`}>
-              <MyPage />
+              <MyPage display="myPosts" />
+            </Route>
+            <Route exact path={`${url}/profile/:id/myPosts`}>
+              <MyPage display="myPosts" />
+            </Route>
+            <Route exact path={`${url}/profile/:id/myFavorites`}>
+              <MyPage display="myFavorites" />
             </Route>
             <Route exact path={`${url}/profile/edit/:id`}>
               <UserProfileEdit />

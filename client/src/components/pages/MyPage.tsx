@@ -1,7 +1,31 @@
+import { useEffect, useState, VFC } from "react";
 import { Link } from "react-router-dom";
-import PostCard from "../organisms/PostCard";
+import { useDecodedToken } from "../../hooks/useDecodedToken";
 
-const MyPage = () => {
+import { Profile } from "../../types/profile";
+import PostCard from "../organisms/PostCard";
+import axios from "../../http";
+
+type Props = {
+  display: "myFavorites" | "myPosts";
+};
+
+const MyPage: VFC<Props> = ({ display }) => {
+  const [profile, setProfile] = useState<Profile | null>(null);
+
+  const { email } = useDecodedToken()!;
+
+  useEffect(() => {
+    axios
+      .get<Profile>(`http://localhost:3000/users/${email}`)
+      .then((res) => {
+        setProfile(res.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [email]);
+
   return (
     <div className="flex-grow bg-primary">
       <div className="flex flex-wrap items-center justify-center">
@@ -16,28 +40,54 @@ const MyPage = () => {
           </div>
           <div>
             <div className="text-center px-14 ">
-              <h2 className="text-white text-3xl font-bold mb-2">hogehoge</h2>
-              <Link to="/users/profile/edit/1" className="text-white">
+              <h2 className="text-white text-3xl font-bold mb-2">
+                {profile?.name}
+              </h2>
+              <Link
+                to={`/users/profile/edit/${profile?.id}`}
+                className="text-white"
+              >
                 プロフィール編集
               </Link>
             </div>
-            {/* <hr className="mt-6" /> */}
             <div className="mx-auto w-full sm:w-2/3 flex bg-gray-100 mt-6">
-              <div className="text-center w-1/2 p-4 hover:bg-gray-100 cursor-pointer">
+              <Link
+                to={`/users/profile/${profile?.id}/myPosts`}
+                className="text-center w-1/2 p-4 hover:bg-gray-100 cursor-pointer"
+              >
                 <p>投稿</p>
-              </div>
+              </Link>
+
               <div className="border"></div>
-              <div className="text-center w-1/2 p-4 hover:bg-gray-100 cursor-pointer">
+              <Link
+                to={`/users/profile/${profile?.id}/myFavorites`}
+                className="text-center w-1/2 p-4 hover:bg-gray-100 cursor-pointer"
+              >
                 <p>いいね</p>
-              </div>
+              </Link>
             </div>
           </div>
           <div>
-            <div className="p-6 px-20 flex flex-wrap items-center justify-center">
-              {/* <PostCard image={"hoge"} /> */}
-            </div>
-            <div className="p-6 px-20 flex flex-wrap items-center justify-center">
-              {/* <PostCard image={"hoge"} /> */}
+            <div className="p-6 px-20 ">
+              {display === "myPosts"
+                ? profile?.posts.map((post) => (
+                    <PostCard
+                      id={post.id}
+                      title={post.title}
+                      imageFile={post.imageFile}
+                      commentCount={post.commentsCount}
+                      likeCount={post.likesCount}
+                    />
+                  ))
+                : profile?.likes.map((like) => (
+                    <PostCard
+                      id={like.post.id}
+                      title={like.post.title}
+                      imageFile={like.post.imageFile}
+                      commentCount={like.post.commentsCount}
+                      likeCount={like.post.likesCount}
+                    />
+                  ))}
             </div>
           </div>
         </div>

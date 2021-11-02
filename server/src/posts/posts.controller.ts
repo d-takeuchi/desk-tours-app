@@ -27,9 +27,4 @@ export class PostsController {
   create(@Body(ValidationPipe) postData: CreatePostDto) {
     return this.postsService.create(postData);
   }
-
-  @Get('getNewArrivalPosts')
-  getNewArrivalPosts() {
-    return this.postsService.getNewArrivalPosts();
-  }
 }

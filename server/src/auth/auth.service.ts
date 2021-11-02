@@ -12,7 +12,7 @@ export class AuthService {
   ) {}
 
   async validateUser({ email, password }: LoginDataDto) {
-    const user = await this.usersService.findOne(email);
+    const user = await this.usersService.findByEmail(email);
 
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) {

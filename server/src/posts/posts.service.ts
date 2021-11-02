@@ -18,7 +18,7 @@ export class PostsService {
   async create(postData: CreatePostDto): Promise<Post> {
     const { title, description, imageFile, tagIds, email } = postData;
     const tags = await this.tagRepository.findByIds(tagIds);
-    const user = await this.usersService.findOne(email);
+    const user = await this.usersService.findByEmail(email);
     const post = this.postRepository.create({
       title,
       description,
@@ -49,12 +49,12 @@ export class PostsService {
       .getOne();
   }
 
-  async getNewArrivalPosts(): Promise<Post[]> {
-    // return await this.postRepository.find({
-    //   // order: { createdAt: 'DESC' },
-    //   // take: 3,
-    // });
+  // async getNewArrivalPosts(): Promise<Post[]> {
+  //   // return await this.postRepository.find({
+  //   //   // order: { createdAt: 'DESC' },
+  //   //   // take: 3,
+  //   // });
 
-    return await this.postRepository.find();
-  }
+  //   return await this.postRepository.find();
+  // }
 }

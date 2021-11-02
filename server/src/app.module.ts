@@ -11,6 +11,7 @@ import { Tag } from './tags/tags.entity';
 import { Post } from './posts/post.entity';
 import { CommentsModule } from './comments/comments.module';
 import { Comment } from './comments/comments.entity';
+import { Like } from './likes/likes.entity';
 
 @Module({
   imports: [
@@ -22,7 +23,7 @@ import { Comment } from './comments/comments.entity';
       username: 'develop',
       password: 'password',
       database: 'develop',
-      entities: [User, Tag, Post, Comment],
+      entities: [User, Tag, Post, Comment, Like],
       synchronize: true,
     }),
     AuthModule,

@@ -1,4 +1,5 @@
 import { Comment } from 'src/comments/comments.entity';
+import { Like } from 'src/likes/likes.entity';
 import { Tag } from 'src/tags/tags.entity';
 import { User } from 'src/users/users.entity';
 import {
@@ -11,6 +12,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  RelationCount,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -38,12 +40,17 @@ export class Post {
   @JoinTable({ name: 'post_tags' })
   tags: Tag[];
 
-  @ManyToMany(() => User)
-  @JoinTable({ name: 'likes' })
-  likes: User[];
-
   @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[];
+
+  @OneToMany(() => Like, (like) => like.post)
+  likes: Like[];
+
+  @RelationCount('likes')
+  likesCount?: number;
+
+  @RelationCount('comments')
+  commentsCount?: number;
 
   @CreateDateColumn()
   readonly createdAt?: Date;

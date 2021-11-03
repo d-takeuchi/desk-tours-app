@@ -11,7 +11,10 @@ export class AuthService {
     private readonly usersService: UsersService,
   ) {}
 
-  async validateUser({ email, password }: LoginDataDto) {
+  public async validateUser({
+    email,
+    password,
+  }: LoginDataDto): Promise<boolean> {
     const user = await this.usersService.findByEmail(email);
 
     const isValid = await bcrypt.compare(password, user.password);
@@ -21,7 +24,9 @@ export class AuthService {
     return isValid;
   }
 
-  async login(loginData: LoginDataDto) {
+  public async login(
+    loginData: LoginDataDto,
+  ): Promise<{ access_token: string }> {
     if (await this.validateUser(loginData)) {
       const payload = {
         email: loginData.email,

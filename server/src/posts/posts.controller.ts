@@ -14,17 +14,22 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Get()
-  findAll() {
+  public findAll() {
     return this.postsService.findAll();
   }
 
+  @Get('getNewArrivalPosts')
+  public getNewArrivalPosts() {
+    return this.postsService.getNewArrivalPosts();
+  }
+
   @Get(':id')
-  findOne(@Param('id') id: number) {
+  public findOne(@Param('id') id: number) {
     return this.postsService.findOne(id);
   }
 
   @Post()
-  create(@Body(ValidationPipe) postData: CreatePostDto) {
+  public create(@Body(ValidationPipe) postData: CreatePostDto) {
     return this.postsService.create(postData);
   }
 }

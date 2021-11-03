@@ -11,7 +11,7 @@ export class UsersService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
-  async create(user: CreateUserDto): Promise<User> {
+  public async create(user: CreateUserDto): Promise<User> {
     const createdUser = this.userRepository.create({
       ...user,
       password: await bcrypt.hash(user.password, 12),
@@ -19,11 +19,11 @@ export class UsersService {
     return await this.userRepository.save(createdUser);
   }
 
-  async findAll(): Promise<User[]> {
+  public async findAll(): Promise<User[]> {
     return await this.userRepository.find({});
   }
 
-  async findByEmail(email: string): Promise<User> {
+  public async findByEmail(email: string): Promise<User> {
     const user = await this.userRepository.findOne(
       { email },
       { relations: ['posts', 'likes'] },

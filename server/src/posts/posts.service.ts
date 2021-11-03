@@ -49,12 +49,10 @@ export class PostsService {
       .getOne();
   }
 
-  // async getNewArrivalPosts(): Promise<Post[]> {
-  //   // return await this.postRepository.find({
-  //   //   // order: { createdAt: 'DESC' },
-  //   //   // take: 3,
-  //   // });
-
-  //   return await this.postRepository.find();
-  // }
+  async getNewArrivalPosts(): Promise<Post[]> {
+    return await this.postRepository.find({
+      order: { createdAt: 'DESC' },
+      take: 3,
+    });
+  }
 }

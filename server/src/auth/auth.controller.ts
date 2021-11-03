@@ -7,7 +7,9 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
-  login(@Body(ValidationPipe) loginData: LoginDataDto) {
+  public login(
+    @Body(ValidationPipe) loginData: LoginDataDto,
+  ): Promise<{ access_token: string }> {
     return this.authService.login(loginData);
   }
 }

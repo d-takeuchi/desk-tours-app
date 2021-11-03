@@ -9,7 +9,7 @@ export class TagsService {
     @InjectRepository(Tag) private readonly tagRepository: Repository<Tag>,
   ) {}
 
-  async findAll() {
+  public async findAll(): Promise<Tag[]> {
     return await this.tagRepository.find();
   }
 }

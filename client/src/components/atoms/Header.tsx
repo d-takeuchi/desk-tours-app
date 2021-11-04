@@ -1,11 +1,15 @@
-import { Fragment, VFC } from "react";
+import { Fragment, useContext, VFC } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import { Link } from "react-router-dom";
+import DropDownMenu from "./DropDownMenu";
+
+import { AuthContext } from "../../providers/AuthProvider";
 
 export const Header: VFC = () => {
+  const { isAuth } = useContext(AuthContext);
   return (
-    <Popover className="relative bg-secondary">
+    <Popover className="bg-secondary">
       <div className="mx-auto px-4 sm:px-6">
         <div className="flex justify-between items-center border-gray-100 py-6 md:justify-start md:space-x-10 ">
           <div className="flex justify-start lg:w-0 lg:flex-1">
@@ -35,26 +39,25 @@ export const Header: VFC = () => {
             >
               投稿一覧
             </Link>
-            <Link
-              to="/login"
-              className="ml-8 whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
-            >
-              ログイン
-            </Link>
-            <Link
-              to="/sign-up"
-              className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-primaryButton hover:bg-gray-300"
-            >
-              新規登録
-            </Link>
 
-            <Link to="/users/profile/1" className="block relative">
-              <img
-                className="ml-8 object-cover rounded-full h-16 w-16"
-                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80"
-                alt=""
-              />
-            </Link>
+            {!isAuth ? (
+              <>
+                <Link
+                  to="/login"
+                  className="ml-8 whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
+                >
+                  ログイン
+                </Link>
+                <Link
+                  to="/sign-up"
+                  className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-primaryButton hover:bg-gray-300"
+                >
+                  新規登録
+                </Link>
+              </>
+            ) : (
+              <DropDownMenu />
+            )}
           </div>
         </div>
       </div>

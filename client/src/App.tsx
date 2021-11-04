@@ -6,14 +6,19 @@ import "./App.css";
 import { Footer } from "./components/atoms/Footer";
 import { Header } from "./components/atoms/Header";
 import { Router } from "./routes/Router";
+import { AuthProvider } from "./providers/AuthProvider";
 
 function App() {
   return (
     <BrowserRouter>
-      <Toaster />
-      <Header />
-      <Router />
-      <Footer />
+      <AuthProvider>
+        <Toaster
+          toastOptions={{ className: "px-20 py-3 bg-primary text-white" }}
+        />
+        <Header />
+        <Router />
+        <Footer />
+      </AuthProvider>
     </BrowserRouter>
   );
 }

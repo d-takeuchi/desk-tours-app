@@ -1,4 +1,4 @@
-import { VFC } from "react";
+import { useContext, VFC } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema } from "../../validations/login";
@@ -7,9 +7,11 @@ import axios from "axios";
 import jwt from "jwt-decode";
 import { DecodedToken } from "../../types/types";
 import toast from "react-hot-toast";
+import { AuthContext } from "../../providers/AuthProvider";
 
 const Login: VFC = () => {
   const history = useHistory();
+  const { setIsAuth } = useContext(AuthContext);
 
   const {
     register,
@@ -32,6 +34,7 @@ const Login: VFC = () => {
         localStorage.setItem("app-auth", res.data.access_token);
         localStorage.setItem("app-meta", JSON.stringify(decodedToken));
         toast.success("ログイン成功");
+        setIsAuth(true);
         history.push("/");
       })
       .catch((err) => {

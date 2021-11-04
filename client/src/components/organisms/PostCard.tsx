@@ -6,7 +6,7 @@ import { ChatAltIcon } from "@heroicons/react/outline";
 import { Post } from "../../types/post";
 
 const PostCard: VFC<Post> = memo((props) => {
-  const { id, title, imageFile, commentCount, likeCount } = props;
+  const { id, title, imageFile, commentsCount, likesCount } = props;
 
   return (
     <div className="w-full p-6 mx-auto lg:w-1/3 sm:w-2/3">
@@ -23,9 +23,9 @@ const PostCard: VFC<Post> = memo((props) => {
 
           <div className="flex">
             <HeartIcon className="h-5 w-5 text-gray-400 cursor-pointer" />
-            <p>{likeCount}</p>
+            <p>{likesCount}</p>
             <ChatAltIcon className="h-5 w-5 text-gray-400 ml-2 cursor-pointer" />
-            <p>{commentCount}</p>
+            <p>{commentsCount}</p>
           </div>
         </div>
       </div>

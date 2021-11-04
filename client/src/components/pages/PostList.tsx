@@ -31,8 +31,8 @@ const PostList = () => {
                 id={post.id}
                 title={post.title}
                 imageFile={post.imageFile}
-                commentCount={post.commentCount}
-                likeCount={post.likeCount}
+                commentsCount={post.commentsCount}
+                likesCount={post.likesCount}
               />
             ))
           )}

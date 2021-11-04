@@ -9,6 +9,7 @@ import { schema } from "../../validations/posts/create";
 import PostCategoryTag from "../organisms/PostCategoryTag";
 import { useDecodedToken } from "../../hooks/useDecodedToken";
 import { useHistory } from "react-router";
+import { PhotographIcon } from "@heroicons/react/outline";
 
 const PostCreate: VFC = () => {
   const [deskImageUrl, setDeskImageUrl] = useState("");
@@ -140,10 +141,11 @@ const PostCreate: VFC = () => {
                         {deskImageUrl ? (
                           <img src={deskImageUrl} alt="deskImage" />
                         ) : (
-                          <img
-                            src="http://placehold.jp/300x200.png"
-                            alt="deskImage"
-                          />
+                          <PhotographIcon className="h-56 w-80 bg-gray-500 text-gray-200 rounded-md" />
+                          // <img
+                          //   src="http://placehold.jp/300x200.png"
+                          //   alt="deskImage"
+                          // />
                         )}
                       </div>
                       <span className="text-xs text-red-700">

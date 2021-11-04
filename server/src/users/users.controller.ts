@@ -23,11 +23,6 @@ export class UsersController {
     return this.usersService.create(createUser);
   }
 
-  @Get()
-  public findAll(): Promise<User[]> {
-    return this.usersService.findAll();
-  }
-
   @Get(':email')
   @UseGuards(AuthGuard('jwt'))
   public findOne(@Param('email') email: string): Promise<User> {

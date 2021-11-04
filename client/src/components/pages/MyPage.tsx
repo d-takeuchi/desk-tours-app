@@ -75,8 +75,8 @@ const MyPage: VFC<Props> = ({ display }) => {
                       id={post.id}
                       title={post.title}
                       imageFile={post.imageFile}
-                      commentCount={post.commentsCount}
-                      likeCount={post.likesCount}
+                      commentsCount={post.commentsCount}
+                      likesCount={post.likesCount}
                     />
                   ))
                 : profile?.likes.map((like) => (
@@ -84,8 +84,8 @@ const MyPage: VFC<Props> = ({ display }) => {
                       id={like.post.id}
                       title={like.post.title}
                       imageFile={like.post.imageFile}
-                      commentCount={like.post.commentsCount}
-                      likeCount={like.post.likesCount}
+                      commentsCount={like.post.commentsCount}
+                      likesCount={like.post.likesCount}
                     />
                   ))}
             </div>

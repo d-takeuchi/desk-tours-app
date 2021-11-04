@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState, VFC } from "react";
 import { Link } from "react-router-dom";
 import { Post } from "../../types/post";
+import PostCard from "../organisms/PostCard";
 // import PostCard from "../organisms/PostCard";
 
 const Home: VFC = () => {
@@ -9,10 +10,11 @@ const Home: VFC = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/posts/getNewArrivalPosts")
-      .then(() => {})
-      .catch(() => {});
+      .get<Array<Post>>("http://localhost:3000/posts/getNewArrivalPosts")
+      .then((res) => setPosts(res.data))
+      .catch((err) => console.error(err));
   }, []);
+
   return (
     <>
       {/* メインビジュアル */}
@@ -46,10 +48,16 @@ const Home: VFC = () => {
           </div>
 
           <div className="flex flex-wrap mb-12 text-left">
-            {/* {data &&
-              data.getNewArrivalPosts.map((post: any) => (
-                <PostCard image={post.deskImage} />
-              ))} */}
+            {posts.map((post) => (
+              <PostCard
+                key={post.id}
+                title={post.title}
+                imageFile={post.imageFile}
+                likesCount={post.likesCount}
+                commentsCount={post.commentsCount}
+                id={post.id}
+              />
+            ))}
           </div>
         </div>
       </section>

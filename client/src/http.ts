@@ -1,5 +1,10 @@
 import axios from "axios";
 
-const token = localStorage.getItem("app-auth");
-axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+axios.interceptors.request.use((config: any) => {
+  config.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
+    "app-auth"
+  )}`;
+  return config;
+});
+
 export default axios;

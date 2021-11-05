@@ -11,15 +11,27 @@ import { useDecodedToken } from "../../hooks/useDecodedToken";
 import { useHistory } from "react-router";
 import { PhotographIcon } from "@heroicons/react/outline";
 
+type FormInputData = {
+  title: string;
+  imageFile: string;
+  description: string;
+  tagIds: number[];
+};
+
+type Tag = {
+  id: number;
+  name: string;
+};
+
 const PostCreate: VFC = () => {
   const [deskImageUrl, setDeskImageUrl] = useState("");
+  const [tags, setTags] = useState<Array<Tag>>([]);
 
-  type FormInputData = {
-    title: string;
-    imageFile: string;
-    description: string;
-    tagIds: number[];
-  };
+  useEffect(() => {
+    axios
+      .get<Array<Tag>>("http://localhost:3000/tags")
+      .then((res) => setTags(res.data));
+  }, []);
 
   const {
     register,
@@ -81,19 +93,6 @@ const PostCreate: VFC = () => {
     }
   };
 
-  type Tag = {
-    id: number;
-    name: string;
-  };
-
-  const [tags, setTags] = useState<Array<Tag>>([]);
-
-  useEffect(() => {
-    axios
-      .get<Array<Tag>>("http://localhost:3000/tags")
-      .then((res) => setTags(res.data));
-  }, []);
-
   return (
     <div className="flex-grow bg-primary">
       <div className="container items-center px-5 pb-8 mx-auto lg:px-24 mt-10">
@@ -142,10 +141,6 @@ const PostCreate: VFC = () => {
                           <img src={deskImageUrl} alt="deskImage" />
                         ) : (
                           <PhotographIcon className="h-56 w-80 bg-gray-500 text-gray-200 rounded-md" />
-                          // <img
-                          //   src="http://placehold.jp/300x200.png"
-                          //   alt="deskImage"
-                          // />
                         )}
                       </div>
                       <span className="text-xs text-red-700">

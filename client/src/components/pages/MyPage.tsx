@@ -5,6 +5,7 @@ import { useDecodedToken } from "../../hooks/useDecodedToken";
 import { Profile } from "../../types/profile";
 import PostCard from "../organisms/PostCard";
 import axios from "../../http";
+import { PencilAltIcon } from "@heroicons/react/outline";
 
 type Props = {
   display: "myFavorites" | "myPosts";
@@ -29,7 +30,7 @@ const MyPage: VFC<Props> = ({ display }) => {
   return (
     <div className="flex-grow bg-primary">
       <div className="flex flex-wrap items-center justify-center">
-        <div className="w-full bg-white shadow-lg transform duration-200 easy-in-out bg-primary">
+        <div className="w-full bg-primary shadow-lg transform duration-200 easy-in-out ">
           <div className="h-32 overflow-hidden"></div>
           <div className="h-32 flex justify-center px-5  -mt-12">
             <img
@@ -47,13 +48,20 @@ const MyPage: VFC<Props> = ({ display }) => {
                 to={`/users/profile/edit/${profile?.id}`}
                 className="text-white"
               >
-                プロフィール編集
+                <div className="flex justify-center">
+                  <PencilAltIcon className="h-6 mr-2" />
+                  <p>プロフィール編集</p>
+                </div>
               </Link>
             </div>
             <div className="mx-auto w-full sm:w-2/3 flex bg-gray-100 mt-6">
               <Link
                 to={`/users/profile/${profile?.id}/myPosts`}
-                className="text-center w-1/2 p-4 hover:bg-gray-100 cursor-pointer"
+                className={`text-center w-1/2 p-4 hover:bg-gray-100 cursor-pointer ${
+                  display === "myPosts"
+                    ? "border-b-4 border-blue-400 font-bold"
+                    : ""
+                }`}
               >
                 <p>投稿</p>
               </Link>
@@ -61,7 +69,11 @@ const MyPage: VFC<Props> = ({ display }) => {
               <div className="border"></div>
               <Link
                 to={`/users/profile/${profile?.id}/myFavorites`}
-                className="text-center w-1/2 p-4 hover:bg-gray-100 cursor-pointer"
+                className={`text-center w-1/2 p-4 hover:bg-gray-100 cursor-pointer ${
+                  display === "myFavorites"
+                    ? "border-b-4 border-blue-400 font-bold"
+                    : ""
+                }`}
               >
                 <p>いいね</p>
               </Link>
@@ -72,6 +84,7 @@ const MyPage: VFC<Props> = ({ display }) => {
               {display === "myPosts"
                 ? profile?.posts.map((post) => (
                     <PostCard
+                      key={post.id}
                       id={post.id}
                       title={post.title}
                       imageFile={post.imageFile}
@@ -81,6 +94,7 @@ const MyPage: VFC<Props> = ({ display }) => {
                   ))
                 : profile?.likes.map((like) => (
                     <PostCard
+                      key={like.post.id}
                       id={like.post.id}
                       title={like.post.title}
                       imageFile={like.post.imageFile}

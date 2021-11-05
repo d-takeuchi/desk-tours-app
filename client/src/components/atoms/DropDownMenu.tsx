@@ -1,7 +1,7 @@
 import { Fragment, useContext } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { useHistory } from "react-router";
-import { AuthContext, AuthProvider } from "../../providers/AuthProvider";
+import { AuthContext } from "../../providers/AuthProvider";
 import { Link } from "react-router-dom";
 
 function classNames(...classes: string[]) {

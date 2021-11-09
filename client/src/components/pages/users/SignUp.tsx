@@ -1,17 +1,14 @@
-import { useContext, VFC } from "react";
+import { VFC } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { schema } from "../../validations/login";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import jwt from "jwt-decode";
-import { DecodedToken } from "../../types/types";
 import toast from "react-hot-toast";
-import { AuthContext } from "../../providers/AuthProvider";
 
-const Login: VFC = () => {
+import { schema } from "../../../validations/signup";
+
+const SignUp: VFC = () => {
   const history = useHistory();
-  const { setIsAuth } = useContext(AuthContext);
 
   const {
     register,
@@ -22,23 +19,23 @@ const Login: VFC = () => {
   });
 
   type FormInputData = {
+    name: string;
     email: string;
     password: string;
   };
 
   const onSubmit = (data: FormInputData) => {
+    console.log(data);
     axios
-      .post<{ access_token: string }>(`http://localhost:3000/auth/login`, data)
-      .then((res) => {
-        const decodedToken: DecodedToken = jwt(res.data.access_token);
-        localStorage.setItem("app-auth", res.data.access_token);
-        localStorage.setItem("app-meta", JSON.stringify(decodedToken));
-        toast.success("ログイン成功");
-        setIsAuth(true);
-        history.push("/");
+      .post("http://localhost:3000/users", {
+        ...data,
+      })
+      .then(() => {
+        toast.success("ユーザー作成成功");
+        history.push("/login");
       })
       .catch((err) => {
-        toast.error("ログイン失敗");
+        toast.error("ユーザー作成失敗");
         console.error(err);
       });
   };
@@ -47,8 +44,25 @@ const Login: VFC = () => {
     <section className="flex-grow flex text-blueGray-700 justify-center bg-primary">
       <div className="container items-center px-5 py-12 lg:px-20">
         <div className="flex flex-col w-full p-10 mx-auto my-6 transition duration-500 ease-in-out transform bg-white border rounded-lg lg:w-2/6 md:w-1/2 md:mt-0">
-          <h1 className="text-center">ログイン</h1>
+          <h1 className="text-center">新規ユーザー登録</h1>
           <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+            <div className="relative mt-4">
+              <label
+                htmlFor="name"
+                className="text-base leading-7 text-blueGray-500"
+              >
+                ユーザー名
+              </label>
+              <input
+                type="text"
+                id="name"
+                {...register("name")}
+                className="w-full px-4 py-2 mt-2 text-base text-black transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 "
+              />
+              <span className="text-xs text-red-700">
+                {errors.userName?.message}
+              </span>
+            </div>
             <div className="relative mt-4">
               <label
                 htmlFor="email"
@@ -60,7 +74,7 @@ const Login: VFC = () => {
                 type="email"
                 id="email"
                 {...register("email")}
-                className="w-full px-4 py-2 mt-2 text-base text-black transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2"
+                className="w-full px-4 py-2 mt-2 text-base text-black transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 "
               />
               <span className="text-xs text-red-700">
                 {errors.email?.message}
@@ -86,9 +100,9 @@ const Login: VFC = () => {
             <div className="mt-10">
               <button
                 type="submit"
-                className="w-full px-16 py-2 my-2 mr-2 text-base text-white transition duration-500 ease-in-out transform bg-primaryButton border-blue-600 rounded-md focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 hover:bg-gray-200 "
+                className="w-full px-16 py-2 my-2 mr-2 text-base text-white transition duration-500 ease-in-out transform bg-primaryButton border-blue-600 rounded-md focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 hover:bg-gray-200"
               >
-                ログイン
+                新規登録
               </button>
             </div>
           </form>
@@ -135,7 +149,7 @@ const Login: VFC = () => {
                     d="M48 48L17 24l-4-3 35-10z"
                   ></path>
                 </svg>
-                <span className="ml-4">Googleアカウントでログイン</span>
+                <span className="ml-4">Googleアカウントで登録</span>
               </div>
             </button>
             <button
@@ -153,7 +167,7 @@ const Login: VFC = () => {
                 >
                   <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"></path>
                 </svg>
-                <span className="ml-4"> Twitterアカウントでログイン</span>
+                <span className="ml-4"> Twitterアカウントで登録</span>
               </div>
             </button>
           </div>
@@ -163,4 +177,4 @@ const Login: VFC = () => {
   );
 };
 
-export default Login;
+export default SignUp;

@@ -1,19 +1,19 @@
-import { useEffect, useState, VFC } from "react";
+import { useContext, useEffect, VFC } from "react";
 import { Link } from "react-router-dom";
-import { useDecodedToken } from "../../hooks/useDecodedToken";
-
-import { Profile } from "../../types/profile";
-import PostCard from "../organisms/PostCard";
-import axios from "../../http";
 import { PencilAltIcon } from "@heroicons/react/outline";
+
+import { useDecodedToken } from "../../../hooks/useDecodedToken";
+import { Profile } from "../../../types/users/profile";
+import PostCard from "../../organisms/posts/PostCard";
+import axios from "../../../http";
+import { LoginUserContext } from "../../../providers/LoginUserProvider";
 
 type Props = {
   display: "myFavorites" | "myPosts";
 };
 
 const MyPage: VFC<Props> = ({ display }) => {
-  const [profile, setProfile] = useState<Profile | null>(null);
-
+  const { profile, setProfile } = useContext(LoginUserContext);
   const { email } = useDecodedToken()!;
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const MyPage: VFC<Props> = ({ display }) => {
       .catch((err) => {
         console.error(err);
       });
-  }, [email]);
+  }, []);
 
   return (
     <div className="flex-grow bg-primary">
@@ -33,11 +33,21 @@ const MyPage: VFC<Props> = ({ display }) => {
         <div className="w-full bg-primary shadow-lg transform duration-200 easy-in-out ">
           <div className="h-32 overflow-hidden"></div>
           <div className="h-32 flex justify-center px-5  -mt-12">
-            <img
-              className="h-32 w-32 bg-white p-2 rounded-full   "
-              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80"
-              alt=""
-            />
+            {profile?.icon ? (
+              <img
+                className="h-32 w-32 bg-white p-2 rounded-full"
+                src={profile?.icon}
+                alt=""
+              />
+            ) : (
+              <svg
+                className="h-32 w-32 bg-white p-2 rounded-full"
+                fill="gray"
+                viewBox="0 0 24 24"
+              >
+                <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+            )}
           </div>
           <div>
             <div className="text-center px-14 ">

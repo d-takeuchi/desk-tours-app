@@ -2,12 +2,15 @@ import { Fragment, useContext, VFC } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import { Link } from "react-router-dom";
-import DropDownMenu from "./DropDownMenu";
 
+import { DropDownMenu } from "./DropDownMenu";
 import { AuthContext } from "../../providers/AuthProvider";
+import { LoginUserContext } from "../../providers/LoginUserProvider";
 
 export const Header: VFC = () => {
   const { isAuth } = useContext(AuthContext);
+  const { profile } = useContext(LoginUserContext);
+
   return (
     <Popover className="bg-secondary">
       <div className="mx-auto px-4 sm:px-6">
@@ -56,7 +59,7 @@ export const Header: VFC = () => {
                 </Link>
               </>
             ) : (
-              <DropDownMenu />
+              <DropDownMenu icon={profile?.icon} />
             )}
           </div>
         </div>
@@ -79,7 +82,7 @@ export const Header: VFC = () => {
             <div className="pt-5 pb-6 px-5">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2>Logo</h2>
+                  <h2>DeskTourApp</h2>
                 </div>
 
                 {/* {閉じるボタン} */}
@@ -93,31 +96,29 @@ export const Header: VFC = () => {
             </div>
             <div className="py-6 px-5 space-y-6">
               <div className="grid grid-cols-2 gap-y-4 gap-x-8">
-                <a
-                  href="/"
-                  className="text-base font-medium text-gray-900 hover:text-gray-700"
+                <Link
+                  to="/users/profile/1"
+                  className="text-gray-700 block px-4 py-2 text-sm"
                 >
-                  Pricing
-                </a>
-                <a
-                  href="/"
-                  className="text-base font-medium text-gray-900 hover:text-gray-700"
-                >
-                  Docs
-                </a>
+                  プロフィール画面
+                </Link>
+                <button className="text-sm">ログアウト</button>
               </div>
               <div>
-                <a
-                  href="/"
-                  className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+                <Link
+                  to="/sign-up"
+                  className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-primaryButton hover:bg-gray-300"
                 >
                   新規登録
-                </a>
+                </Link>
                 <p className="mt-6 text-center text-base font-medium text-gray-500">
-                  既にアカウントをお持ちの場合{" "}
-                  <a href="/" className="text-indigo-600 hover:text-indigo-500">
+                  既にアカウントをお持ちの場合
+                  <Link
+                    to="/login"
+                    className="text-indigo-600 hover:text-indigo-500"
+                  >
                     ログイン
-                  </a>
+                  </Link>
                 </p>
               </div>
             </div>

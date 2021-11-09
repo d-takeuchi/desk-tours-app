@@ -1,9 +1,15 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { toast } from "react-hot-toast";
+import { useHistory } from "react-router";
 
-import { schema } from "../../validations/users/edit";
-import { useResizeFile } from "../../hooks/useResizeFile";
+import { schema } from "../../../validations/users/edit";
+import { useResizeFile } from "../../../hooks/useResizeFile";
+import { useDecodedToken } from "../../../hooks/useDecodedToken";
+import axios from "../../../http";
+import { Profile } from "../../../types/users/profile";
+import { LoginUserContext } from "../../../providers/LoginUserProvider";
 
 type FormInputData = {
   name: string;
@@ -12,33 +18,47 @@ type FormInputData = {
 
 const UserProfileEdit = () => {
   const [icon, setIcon] = useState("");
+  const { profile, setProfile } = useContext(LoginUserContext);
   const { processImage } = useResizeFile();
+
+  const history = useHistory();
+  const { email } = useDecodedToken()!;
+
+  useEffect(() => {
+    axios.get<Profile>(`http://localhost:3000/users/${email}`).then((res) => {
+      setProfile(res.data);
+      setValue("name", res.data.name);
+      setIcon(res.data.icon);
+      setValue("icon", res.data.icon);
+    });
+  }, []);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<FormInputData>({
+    shouldUnregister: false,
     resolver: yupResolver(schema),
-    defaultValues: {
-      name: "",
-      icon: "",
-    },
   });
 
   const onSubmit = (data: FormInputData) => {
-    // axios
-    //   .post("http://localhost:3000/posts", {
-    //     ...data,
-    //     imageFile: deskImageUrl,
-    //     email: currentUser!.email,
-    //   })
-    //   .then(() => {
-    //     toast.success("投稿成功");
-    //   })
-    //   .catch((err) => {
-    //     toast.error("投稿失敗");
-    //   });
+    axios
+      .post<Profile>("http://localhost:3000/users/edit", {
+        ...data,
+        email,
+        icon,
+      })
+      .then((res) => {
+        setProfile(res.data);
+        toast.success("投稿成功");
+        history.push("/");
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error("投稿失敗");
+      });
   };
 
   const onChangeFileResize = async (
@@ -47,6 +67,7 @@ const UserProfileEdit = () => {
     const imageFile = event.target.files?.[0];
     const resizedFile = await processImage(imageFile);
     setIcon(resizedFile);
+    setValue("icon", resizedFile);
   };
 
   return (
@@ -59,7 +80,7 @@ const UserProfileEdit = () => {
                 プロフィール画像
               </label>
               <div className="mt-5 flex items-center flex-col sm:flex-row">
-                {icon ? (
+                {icon || profile?.icon ? (
                   <img
                     src={icon}
                     className="h-32 w-32 rounded-full"
@@ -79,13 +100,13 @@ const UserProfileEdit = () => {
                 <div className="mb-4 my-5">
                   <div className="relative">
                     <input
-                      className="ml-5 border-gray-300 focus:ring-blue-600 block w-full overflow-hidden cursor-pointer border text-gray-800 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:border-transparent"
-                      {...register("icon")}
+                      className="ml-5 border-gray-300 focus:ring-indigo-700 block w-full overflow-hidden cursor-pointer border text-gray-800 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:border-transparent"
                       id="icon"
                       type="file"
                       accept="image/*"
                       onChange={onChangeFileResize}
                     />
+                    <input type="hidden" {...register("icon")} />
                   </div>
                 </div>
               </div>

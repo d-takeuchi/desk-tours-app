@@ -1,23 +1,26 @@
 import * as yup from "yup";
 
-const FILE_SIZE = 1000000;
-
 export const schema = yup
   .object({
     name: yup
       .string()
       .max(50, "50文字以下で入力してください")
       .required("この項目は必須です"),
-
-    icon: yup
-      .mixed()
-      .test("fileSize", "画像ファイルを選択してください", (value) => {
-        console.log("value");
-        console.log(value);
-        return value.length !== 0;
-      })
-      .test("fileSize", "画像サイズが大きいです", (value) => {
-        return value.length > 0 && value[0].size <= FILE_SIZE;
-      }),
+    icon: yup.lazy((value) =>
+      /^data/.test(value)
+        ? yup
+            .string()
+            .trim()
+            .matches(
+              /^data:([a-z]+\/[a-z0-9-+.]+(;[a-z-]+=[a-z0-9-]+)?)?(;base64)?,([a-z0-9!$&',()*+;=\-._~:@/?%\s]*)$/i,
+              "選択したデータに問題があります"
+            )
+            .required("この項目は必須です")
+        : yup
+            .string()
+            .trim()
+            .url("有効なデータではありません")
+            .required("この項目は必須です")
+    ),
   })
   .required();

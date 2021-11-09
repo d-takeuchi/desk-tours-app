@@ -3,6 +3,7 @@ export type Profile = {
   name: string;
   password: string;
   email: string;
+  icon: string;
   posts: [
     {
       id: number;

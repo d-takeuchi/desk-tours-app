@@ -1,7 +1,9 @@
-import axios from "axios";
 import { useEffect, useState, VFC } from "react";
 import { useParams } from "react-router";
+import { PencilAltIcon, TrashIcon } from "@heroicons/react/outline";
 
+import axios from "../../../http";
+import { Link } from "react-router-dom";
 type Post = {
   id: number;
   title: string;
@@ -37,7 +39,13 @@ const PostView: VFC = () => {
   return (
     <div className="flex-grow bg-primary">
       <div className="container items-center px-5 pb-8 mx-auto lg:px-24 mt-10">
-        <h1 className="text-2xl text-white mb-5">投稿詳細</h1>
+        <div className="flex items-center mb-5">
+          <h1 className="text-2xl text-white ">投稿詳細</h1>
+          <TrashIcon className="h-7 text-white cursor-pointer" />
+          <Link to={`/posts/edit/${id}`}>
+            <PencilAltIcon className="h-7 text-white cursor-pointer" />
+          </Link>
+        </div>
         <div className="md:grid md:grid-cols-3 md:gap-6">
           <div className="mt-5 md:mt-0 md:col-span-3">
             <div className="shadow sm:rounded-md sm:overflow-hidden">

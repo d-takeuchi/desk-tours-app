@@ -1,15 +1,17 @@
 import React, { useEffect, useState, VFC } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Resizer from "react-image-file-resizer";
-import axios from "axios";
 import { toast } from "react-hot-toast";
-
-import { schema } from "../../validations/posts/create";
-import PostCategoryTag from "../organisms/PostCategoryTag";
-import { useDecodedToken } from "../../hooks/useDecodedToken";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { PhotographIcon } from "@heroicons/react/outline";
+
+import axios from "../../../http";
+import { schema } from "../../../validations/posts/create";
+import PostCategoryTag from "../../organisms/posts/PostCategoryTag";
+import { useDecodedToken } from "../../../hooks/useDecodedToken";
+import { Tag } from "../../../types/tag";
+import { useResizeFile } from "../../../hooks/useResizeFile";
+import { Post } from "../../../types/posts/post";
 
 type FormInputData = {
   title: string;
@@ -18,26 +20,37 @@ type FormInputData = {
   tagIds: number[];
 };
 
-type Tag = {
-  id: number;
-  name: string;
-};
-
 const PostCreate: VFC = () => {
   const [deskImageUrl, setDeskImageUrl] = useState("");
   const [tags, setTags] = useState<Array<Tag>>([]);
+  const { id } = useParams<{ id: string }>();
+
+  const [post, setPost] = useState<Post | null>(null);
 
   useEffect(() => {
     axios
+      .get<Post>(`http://localhost:3000/posts/${id}`)
+      .then((res) => {
+        setPost(res.data);
+        setValue("title", res.data.title);
+        setDeskImageUrl(res.data.imageFile);
+        setValue("imageFile", res.data.imageFile);
+        setValue("description", res.data.description);
+      })
+      .catch((err) => console.error(err));
+
+    axios
       .get<Array<Tag>>("http://localhost:3000/tags")
       .then((res) => setTags(res.data));
-  }, []);
+  }, [id]);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<FormInputData>({
+    shouldUnregister: false,
     resolver: yupResolver(schema),
     defaultValues: {
       title: "",
@@ -49,54 +62,37 @@ const PostCreate: VFC = () => {
 
   const history = useHistory();
   const currentUser = useDecodedToken();
+
   const onSubmit = (data: FormInputData) => {
     axios
       .post("http://localhost:3000/posts", {
         ...data,
-        imageFile: deskImageUrl,
         email: currentUser!.email,
       })
       .then(() => {
         history.push("/");
-        toast.success("投稿成功");
+        toast.success("更新成功");
       })
       .catch((err) => {
-        toast.error("投稿失敗");
-        console.error(err);
+        toast.error("更新失敗");
       });
   };
 
-  const resizeFile = (file: Blob) =>
-    new Promise((resolve) => {
-      Resizer.imageFileResizer(
-        file,
-        300,
-        200,
-        "JPEG",
-        100,
-        0,
-        (uri) => {
-          resolve(uri);
-        },
-        "base64"
-      );
-    });
+  const { processImage } = useResizeFile();
 
-  const processImage = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onChangeFileResize = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const imageFile = event.target.files?.[0];
-
-    if (imageFile !== undefined) {
-      if (/image.*/.exec(imageFile.type)) {
-        const resizeImage = (await resizeFile(imageFile)) as string;
-        setDeskImageUrl(resizeImage);
-      }
-    }
+    const resizedFile = await processImage(imageFile);
+    setDeskImageUrl(resizedFile);
+    setValue("imageFile", resizedFile);
   };
 
   return (
     <div className="flex-grow bg-primary">
       <div className="container items-center px-5 pb-8 mx-auto lg:px-24 mt-10">
-        <h1 className="text-2xl text-white mb-5">新規投稿</h1>
+        <h1 className="text-2xl text-white mb-5">投稿編集</h1>
         <div className="md:grid md:grid-cols-3 md:gap-6">
           <div className="mt-5 md:mt-0 md:col-span-3">
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -125,22 +121,24 @@ const PostCreate: VFC = () => {
                   </div>
                   <div className="grid grid-cols-3 gap-6">
                     <div className="col-span-3 sm:col-span-2">
-                      <label className="block text-sm font-medium text-gray-700">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
                         デスク写真
                       </label>
                       <div className="flex flex-col lg:flex-row justify-between">
-                        <input
-                          type="file"
-                          {...register("imageFile")}
-                          id="imageFile"
-                          accept="image/*"
-                          onChange={processImage}
-                          className="h-10"
-                        />
+                        <div className="relative">
+                          <input
+                            type="file"
+                            id="imageFile"
+                            accept="image/*"
+                            onChange={onChangeFileResize}
+                            className=" border-gray-300 focus:ring-indigo-700 block w-full overflow-hidden cursor-pointer border text-gray-800 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:border-transparent"
+                          />
+                          <input type="hidden" {...register("imageFile")} />
+                        </div>
                         {deskImageUrl ? (
                           <img src={deskImageUrl} alt="deskImage" />
                         ) : (
-                          <PhotographIcon className="h-56 w-80 bg-gray-500 text-gray-200 rounded-md" />
+                          <PhotographIcon className="sm:h-1/2 sm:w-1/2 bg-gray-500 text-gray-200 rounded-md mx-2 my-2" />
                         )}
                       </div>
                       <span className="text-xs text-red-700">

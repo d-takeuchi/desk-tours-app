@@ -1,10 +1,12 @@
-import React, { VFC } from "react";
+import { VFC } from "react";
 import { Route, Switch } from "react-router-dom";
-import MyPage from "../components/pages/MyPage";
+
+import MyPage from "../components/pages/users/MyPage";
 import Page404 from "../components/pages/Page404";
-import PostCreate from "../components/pages/PostCreate";
-import PostView from "../components/pages/PostView";
-import UserProfileEdit from "../components/pages/UserEditProfile";
+import PostCreate from "../components/pages/posts/PostCreate";
+import PostEdit from "../components/pages/posts/PostEdit";
+import PostView from "../components/pages/posts/PostView";
+import UserProfileEdit from "../components/pages/users/UserEditProfile";
 
 export const AuthenticateRouter: VFC = () => {
   return (
@@ -18,6 +20,12 @@ export const AuthenticateRouter: VFC = () => {
             </Route>
             <Route exact path={`${url}/view/:id`}>
               <PostView />
+            </Route>
+            <Route exact path={`${url}/edit/:id`}>
+              <PostEdit />
+            </Route>
+            <Route exact path={`*`}>
+              <Page404 />
             </Route>
           </Switch>
         )}
@@ -38,6 +46,9 @@ export const AuthenticateRouter: VFC = () => {
             </Route>
             <Route exact path={`${url}/profile/edit/:id`}>
               <UserProfileEdit />
+            </Route>
+            <Route exact path={`*`}>
+              <Page404 />
             </Route>
           </Switch>
         )}

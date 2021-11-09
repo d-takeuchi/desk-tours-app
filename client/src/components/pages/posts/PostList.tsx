@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-import PostCard from "../organisms/PostCard";
-import { Post } from "../../types/post";
+import PostCard from "../../organisms/posts/PostCard";
+import { Post } from "../../../types/posts/post";
 
 const PostList = () => {
   const [posts, setPosts] = useState<Array<Post>>([]);

@@ -1,21 +1,28 @@
-import { Fragment, useContext } from "react";
+import { Fragment, useContext, VFC } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { useHistory } from "react-router";
 import { AuthContext } from "../../providers/AuthProvider";
 import { Link } from "react-router-dom";
+import { LoginUserContext } from "../../providers/LoginUserProvider";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function DropDownMenu() {
+type Props = {
+  icon: string | undefined;
+};
+
+export const DropDownMenu: VFC<Props> = ({ icon }) => {
   const history = useHistory();
 
   const { setIsAuth } = useContext(AuthContext);
+  const { setProfile } = useContext(LoginUserContext);
 
   const logout = () => {
     localStorage.removeItem("app-auth");
     localStorage.removeItem("app-meta");
+    setProfile(null);
     setIsAuth(false);
     history.push("/");
   };
@@ -24,11 +31,23 @@ export default function DropDownMenu() {
     <Menu as="div" className="relative inline-block text-left z-10">
       <div>
         <Menu.Button className="inline-flex justify-center w-full rounded-md   shadow-sm px-4 py-2  text-sm font-medium  ">
-          <img
-            className="ml-8 object-cover rounded-full h-16 w-16"
-            src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80"
-            alt="プロフィールアイコン"
-          />
+          {icon ? (
+            <img
+              className="ml-8 object-cover rounded-full h-16 w-16"
+              src={icon}
+              alt="プロフィールアイコン"
+            />
+          ) : (
+            <span className="inline-block h-16 w-16 rounded-full overflow-hidden bg-gray-100">
+              <svg
+                className="h-full w-full text-gray-300"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+            </span>
+          )}
         </Menu.Button>
       </div>
 
@@ -75,4 +94,4 @@ export default function DropDownMenu() {
       </Transition>
     </Menu>
   );
-}
+};

@@ -1,12 +1,12 @@
-import React, { VFC } from "react";
+import { VFC } from "react";
 import { Route, Switch } from "react-router";
 import AuthenticatedGuard from "../components/auth/AuthenticatedGuard";
 
 import Home from "../components/pages/Home";
-import Login from "../components/pages/Login";
+import Login from "../components/pages/users/Login";
 import Page404 from "../components/pages/Page404";
-import PostList from "../components/pages/PostList";
-import SignUp from "../components/pages/SignUp";
+import PostList from "../components/pages/posts/PostList";
+import SignUp from "../components/pages/users/SignUp";
 import { AuthenticateRouter } from "./AuthenticateRoute";
 
 export const Router: VFC = () => {

@@ -31,22 +31,11 @@ export class PostsService {
   }
 
   async findAll(): Promise<Post[]> {
-    return await this.postRepository
-      .createQueryBuilder('Post')
-      .select(['Post.id', 'Post.title', 'Post.imageFile'])
-      .loadRelationCountAndMap('Post.commentCount', 'Post.comments', 'comments')
-      .loadRelationCountAndMap('Post.likeCount', 'Post.likes', 'likes')
-      .getMany();
+    return await this.postRepository.find({ relations: ['tags'] });
   }
 
   async findOne(postId: number): Promise<Post> {
-    return await this.postRepository
-      .createQueryBuilder('Post')
-      .select(['Post.id', 'Post.title', 'Post.imageFile', 'Post.description'])
-      .where(`Post.id = ${postId}`)
-      .leftJoinAndSelect('Post.tags', 'tags')
-      .leftJoinAndSelect('Post.comments', 'comments')
-      .getOne();
+    return await this.postRepository.findOne(postId, { relations: ['tags'] });
   }
 
   async getNewArrivalPosts(): Promise<Post[]> {

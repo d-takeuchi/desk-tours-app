@@ -3,9 +3,15 @@ import { Link } from "react-router-dom";
 import { HeartIcon } from "@heroicons/react/outline";
 import { ChatAltIcon } from "@heroicons/react/outline";
 
-import { Post } from "../../types/post";
+type Props = {
+  id: number;
+  title: string;
+  imageFile: string;
+  likesCount: number;
+  commentsCount: number;
+};
 
-const PostCard: VFC<Post> = memo((props) => {
+const PostCard: VFC<Props> = memo((props) => {
   const { id, title, imageFile, commentsCount, likesCount } = props;
 
   return (

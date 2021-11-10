@@ -1,4 +1,10 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity({ name: 'tags' })
 export class Tag {
@@ -7,4 +13,10 @@ export class Tag {
 
   @Column()
   readonly name: string;
+
+  @CreateDateColumn()
+  readonly createdAt?: Date;
+
+  @UpdateDateColumn()
+  readonly updatedAt?: Date;
 }

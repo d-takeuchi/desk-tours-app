@@ -65,7 +65,10 @@ const PostView: VFC = () => {
 
                     <div className="mt-5">
                       {post?.tags.map((tag) => (
-                        <label className="bg-gray-200 px-4 py-2 rounded-lg border-solid border-4 border-light-blue-500 mr-10 p-10">
+                        <label
+                          key={tag.id}
+                          className="bg-gray-200 px-4 py-2 rounded-lg border-solid border-4 border-light-blue-500 mr-10 p-10"
+                        >
                           {tag.name}
                         </label>
                       ))}

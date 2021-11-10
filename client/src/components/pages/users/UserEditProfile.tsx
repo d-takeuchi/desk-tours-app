@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { memo, useContext, useEffect, useState, VFC } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-hot-toast";
@@ -16,7 +16,7 @@ type FormInputData = {
   icon: string;
 };
 
-const UserProfileEdit = () => {
+const UserProfileEdit: VFC = memo(() => {
   const [icon, setIcon] = useState("");
   const { profile, setProfile } = useContext(LoginUserContext);
   const { processImage } = useResizeFile();
@@ -149,6 +149,6 @@ const UserProfileEdit = () => {
       </div>
     </section>
   );
-};
+});
 
 export default UserProfileEdit;

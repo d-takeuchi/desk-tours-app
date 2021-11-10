@@ -4,11 +4,10 @@ import {
   MaxLength,
   IsArray,
   IsNotEmpty,
-  IsEmail,
   IsDataURI,
 } from 'class-validator';
 
-export class CreatePostDto {
+export class UpdatePostDto {
   @IsNotEmpty()
   @IsString()
   @MinLength(1)
@@ -28,8 +27,4 @@ export class CreatePostDto {
   @IsNotEmpty()
   @IsArray()
   readonly tagIds: number[];
-
-  @IsNotEmpty()
-  @IsEmail()
-  readonly email: string;
 }

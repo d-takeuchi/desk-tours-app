@@ -6,6 +6,8 @@ import {
   PrimaryGeneratedColumn,
   OneToMany,
   Unique,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -31,4 +33,10 @@ export class User {
 
   @OneToMany(() => Like, (like) => like.user)
   likes: Like[];
+
+  @CreateDateColumn()
+  readonly createdAt?: Date;
+
+  @UpdateDateColumn()
+  readonly updatedAt?: Date;
 }

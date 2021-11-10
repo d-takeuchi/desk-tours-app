@@ -1,4 +1,4 @@
-import React, { useEffect, useState, VFC } from "react";
+import React, { memo, useEffect, useState, VFC } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-hot-toast";
@@ -19,7 +19,7 @@ type FormInputData = {
   tagIds: number[];
 };
 
-const PostCreate: VFC = () => {
+const PostCreate: VFC = memo(() => {
   const [deskImageUrl, setDeskImageUrl] = useState("");
   const [tags, setTags] = useState<Array<Tag>>([]);
 
@@ -117,7 +117,7 @@ const PostCreate: VFC = () => {
                             id="imageFile"
                             accept="image/*"
                             onChange={onChangeFileResize}
-                            className=" border-gray-300 focus:ring-indigo-700 block w-full overflow-hidden cursor-pointer border text-gray-800 bg-white rounded-md shadow-sm focus:outline-none focus:ring-2 focus:border-transparent"
+                            className=" border-gray-300 focus:ring-indigo-700 block w-full overflow-hidden cursor-pointer border text-gray-800 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline"
                           />
                           <input type="hidden" {...register("imageFile")} />
                         </div>
@@ -195,6 +195,6 @@ const PostCreate: VFC = () => {
       </div>
     </div>
   );
-};
+});
 
 export default PostCreate;

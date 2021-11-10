@@ -4,6 +4,12 @@ type Props = {
   tagId: number;
   tagName: string;
   register?: any;
+  postTags?: [
+    {
+      id: number;
+      name: string;
+    }
+  ];
 };
 
 const PostCategoryTag: VFC<Props> = ({ tagId, tagName, register }) => {

@@ -19,7 +19,7 @@ const PostCard: VFC<Props> = memo((props) => {
       <div className="shadow-xl  rounded-xl bg-blueGray-50">
         <Link to={`/posts/view/${id}`}>
           <img
-            className="object-cover object-center w-full lg:h-60 md:h-36 rounded-t-xl"
+            className="object-cover object-center w-full md:h-60 rounded-t-xl"
             src={imageFile}
             alt="deskImg"
           />

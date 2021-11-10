@@ -1,4 +1,4 @@
-import { useContext, useEffect, VFC } from "react";
+import { memo, useContext, useEffect, VFC } from "react";
 import { Link } from "react-router-dom";
 import { PencilAltIcon } from "@heroicons/react/outline";
 
@@ -12,19 +12,14 @@ type Props = {
   display: "myFavorites" | "myPosts";
 };
 
-const MyPage: VFC<Props> = ({ display }) => {
+const MyPage: VFC<Props> = memo(({ display }) => {
   const { profile, setProfile } = useContext(LoginUserContext);
   const { email } = useDecodedToken()!;
 
   useEffect(() => {
     axios
       .get<Profile>(`http://localhost:3000/users/${email}`)
-      .then((res) => {
-        setProfile(res.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+      .then((res) => setProfile(res.data));
   }, []);
 
   return (
@@ -90,9 +85,9 @@ const MyPage: VFC<Props> = ({ display }) => {
             </div>
           </div>
           <div>
-            <div className="p-6 px-20 ">
-              {display === "myPosts"
-                ? profile?.posts.map((post) => (
+            {display === "myPosts"
+              ? profile?.posts.map((post) => (
+                  <div className="p-6 px-20 ">
                     <PostCard
                       key={post.id}
                       id={post.id}
@@ -101,8 +96,10 @@ const MyPage: VFC<Props> = ({ display }) => {
                       commentsCount={post.commentsCount}
                       likesCount={post.likesCount}
                     />
-                  ))
-                : profile?.likes.map((like) => (
+                  </div>
+                ))
+              : profile?.likes.map((like) => (
+                  <div className="p-6 px-20 ">
                     <PostCard
                       key={like.post.id}
                       id={like.post.id}
@@ -111,13 +108,13 @@ const MyPage: VFC<Props> = ({ display }) => {
                       commentsCount={like.post.commentsCount}
                       likesCount={like.post.likesCount}
                     />
-                  ))}
-            </div>
+                  </div>
+                ))}
           </div>
         </div>
       </div>
     </div>
   );
-};
+});
 
 export default MyPage;

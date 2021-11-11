@@ -1,4 +1,5 @@
 import { Post } from 'src/posts/post.entity';
+import { User } from 'src/users/users.entity';
 import {
   Column,
   CreateDateColumn,
@@ -17,14 +18,20 @@ export class Comment {
   readonly postId: number;
 
   @Column()
-  readonly comment: string;
+  readonly userId: number;
 
-  @ManyToOne(() => Post, (post) => post.comments)
-  post: Post;
+  @Column()
+  readonly comment: string;
 
   @CreateDateColumn()
   readonly createdAt?: Date;
 
   @UpdateDateColumn()
   readonly updatedAt?: Date;
+
+  @ManyToOne(() => Post, (post) => post.comments)
+  post!: Post;
+
+  @ManyToOne(() => User, (user) => user.comments)
+  user!: User;
 }

@@ -36,7 +36,9 @@ export class PostsService {
   }
 
   async findOne(postId: number): Promise<Post> {
-    return await this.postRepository.findOne(postId, { relations: ['tags'] });
+    return await this.postRepository.findOne(postId, {
+      relations: ['tags', 'comments', 'comments.user'],
+    });
   }
 
   async getNewArrivalPosts(): Promise<Post[]> {

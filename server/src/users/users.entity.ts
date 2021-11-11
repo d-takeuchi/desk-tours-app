@@ -1,3 +1,4 @@
+import { Comment } from 'src/comments/comments.entity';
 import { Like } from 'src/likes/likes.entity';
 import { Post } from 'src/posts/post.entity';
 import {
@@ -33,6 +34,9 @@ export class User {
 
   @OneToMany(() => Like, (like) => like.user)
   likes: Like[];
+
+  @OneToMany(() => Comment, (comment) => comment.user)
+  comments: Comment[];
 
   @CreateDateColumn()
   readonly createdAt?: Date;

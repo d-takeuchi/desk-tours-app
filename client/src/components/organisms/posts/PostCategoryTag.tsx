@@ -1,15 +1,11 @@
 import { VFC } from "react";
+import { Tag } from "../../../types/tags/tag";
 
 type Props = {
   tagId: number;
   tagName: string;
   register?: any;
-  postTags?: [
-    {
-      id: number;
-      name: string;
-    }
-  ];
+  postTags?: Tag[];
 };
 
 const PostCategoryTag: VFC<Props> = ({ tagId, tagName, register }) => {

@@ -48,14 +48,7 @@ const Home: VFC = () => {
 
           <div className="flex flex-wrap mb-12 text-left">
             {posts.map((post) => (
-              <PostCard
-                key={post.id}
-                title={post.title}
-                imageFile={post.imageFile}
-                likesCount={post.likesCount}
-                commentsCount={post.commentsCount}
-                id={post.id}
-              />
+              <PostCard key={post.id} id={post.id} />
             ))}
           </div>
         </div>

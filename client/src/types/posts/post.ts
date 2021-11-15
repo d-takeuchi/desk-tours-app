@@ -1,3 +1,7 @@
+import { Comment } from "../comments/comment";
+import { Like } from "../likes/like";
+import { Tag } from "../tags/tag";
+
 export type Post = {
   id: number;
   title: string;
@@ -5,31 +9,9 @@ export type Post = {
   imageFile: string;
   createdAt: string;
   updatedAt: string;
-  tags: [
-    {
-      id: number;
-      name: string;
-    }
-  ];
-  comments: [
-    {
-      id: number;
-      postId: number;
-      userId: number;
-      comment: string;
-      createdAt: string;
-      updatedAt: string;
-      user: {
-        createdAt: string;
-        email: string;
-        icon: string;
-        id: number;
-        name: string;
-        password: string;
-        updatedAt: string;
-      };
-    }
-  ];
-  likesCount: number;
+  tags: Tag[];
+  comments: Comment[];
+  likes: Like[];
   commentsCount: number;
+  likesCount: number;
 };

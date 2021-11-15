@@ -13,7 +13,6 @@ const PostList = memo(() => {
     axios
       .get<Array<Post>>("http://localhost:3000/posts")
       .then((res) => setPosts(res.data))
-      .catch((err) => console.error(err))
       .finally(() => setLoading(false));
   }, []);
 
@@ -25,16 +24,7 @@ const PostList = memo(() => {
           {loading ? (
             <p>ローディング中</p>
           ) : (
-            posts.map((post) => (
-              <PostCard
-                key={post.id}
-                id={post.id}
-                title={post.title}
-                imageFile={post.imageFile}
-                commentsCount={post.commentsCount}
-                likesCount={post.likesCount}
-              />
-            ))
+            posts.map((post) => <PostCard key={post.id} id={post.id} />)
           )}
         </div>
       </div>

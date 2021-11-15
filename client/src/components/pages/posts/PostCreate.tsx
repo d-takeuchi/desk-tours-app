@@ -9,7 +9,7 @@ import axios from "../../../http";
 import { schema } from "../../../validations/posts/create";
 import PostCategoryTag from "../../organisms/posts/PostCategoryTag";
 import { useDecodedToken } from "../../../hooks/useDecodedToken";
-import { Tag } from "../../../types/tag";
+import { Tag } from "../../../types/tags/tag";
 import { useResizeFile } from "../../../hooks/useResizeFile";
 
 type FormInputData = {

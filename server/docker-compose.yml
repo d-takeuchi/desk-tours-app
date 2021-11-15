@@ -1,0 +1,27 @@
+version: '3.7'
+services:
+  api-server:
+    build: .
+    tty: true
+    restart: always
+    ports:
+      - '3000:3000'
+    volumes:
+      - type: bind
+        source: .
+        target: /api-server
+    depends_on:
+      - db-server
+  db-server:
+    container_name: db-server
+    image: mysql:5.7.29
+    restart: always
+    ports:
+      - '3306:3306'
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    environment:
+      TZ: Asia/Tokyo
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE_NAME}
+      MYSQL_USER: ${DATABASE_USERNAME}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}

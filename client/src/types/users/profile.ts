@@ -1,42 +1,12 @@
+import { Like } from "../likes/like";
+import { Post } from "../posts/post";
+
 export type Profile = {
   id: number;
   name: string;
   password: string;
   email: string;
   icon: string;
-  posts: [
-    {
-      id: number;
-      title: string;
-      description: string;
-      imageFile: string;
-      createdAt: string;
-      updatedAt: string;
-      likesCount: number;
-      commentsCount: number;
-    }
-  ];
-  likes: [
-    {
-      id: number;
-      createdAt: string;
-      updatedAt: string;
-      post: {
-        id: number;
-        title: string;
-        description: string;
-        imageFile: string;
-        createdAt: string;
-        updatedAt: string;
-        likesCount: number;
-        commentsCount: number;
-      };
-      user: {
-        id: number;
-        name: string;
-        password: string;
-        email: string;
-      };
-    }
-  ];
+  posts: Post[];
+  likes: Like[];
 };

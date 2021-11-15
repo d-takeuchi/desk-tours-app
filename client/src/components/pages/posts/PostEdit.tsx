@@ -8,7 +8,7 @@ import { PhotographIcon } from "@heroicons/react/outline";
 import axios from "../../../http";
 import { schema } from "../../../validations/posts/create";
 import PostCategoryTag from "../../organisms/posts/PostCategoryTag";
-import { Tag } from "../../../types/tag";
+import { Tag } from "../../../types/tags/tag";
 import { useResizeFile } from "../../../hooks/useResizeFile";
 import { Post } from "../../../types/posts/post";
 

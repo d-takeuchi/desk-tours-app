@@ -32,7 +32,7 @@ const MyPage: VFC<Props> = memo(({ display }) => {
               <img
                 className="h-32 w-32 bg-white p-2 rounded-full"
                 src={profile?.icon}
-                alt=""
+                alt="アイコン"
               />
             ) : (
               <svg
@@ -88,26 +88,12 @@ const MyPage: VFC<Props> = memo(({ display }) => {
             {display === "myPosts"
               ? profile?.posts.map((post) => (
                   <div className="p-6 px-20 ">
-                    <PostCard
-                      key={post.id}
-                      id={post.id}
-                      title={post.title}
-                      imageFile={post.imageFile}
-                      commentsCount={post.commentsCount}
-                      likesCount={post.likesCount}
-                    />
+                    <PostCard key={post.id} id={post.id} />
                   </div>
                 ))
               : profile?.likes.map((like) => (
                   <div className="p-6 px-20 ">
-                    <PostCard
-                      key={like.post.id}
-                      id={like.post.id}
-                      title={like.post.title}
-                      imageFile={like.post.imageFile}
-                      commentsCount={like.post.commentsCount}
-                      likesCount={like.post.likesCount}
-                    />
+                    <PostCard key={like.post.id} id={like.post.id} />
                   </div>
                 ))}
           </div>

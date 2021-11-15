@@ -1,4 +1,4 @@
-import React, { memo, VFC } from "react";
+import { memo, VFC } from "react";
 
 type Props = {
   userName: string;

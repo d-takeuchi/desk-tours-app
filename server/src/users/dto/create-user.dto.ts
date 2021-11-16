@@ -22,4 +22,7 @@ export class CreateUserDto {
   @MinLength(8)
   @MaxLength(128)
   readonly password: string;
+
+  @IsString()
+  readonly icon: string;
 }

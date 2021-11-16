@@ -6,6 +6,7 @@ import * as bcrypt from 'bcryptjs';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './users.entity';
 import { EditUserDto } from './dto/edit-user.dto';
+import axios from 'axios';
 
 @Injectable()
 export class UsersService {
@@ -47,5 +48,11 @@ export class UsersService {
     }
 
     return user;
+  }
+
+  public async toBase64Url(url: string): Promise<string> {
+    const image = await axios.get(url, { responseType: 'arraybuffer' });
+    const raw = Buffer.from(image.data).toString('base64');
+    return 'data:' + image.headers['content-type'] + ';base64,' + raw;
   }
 }

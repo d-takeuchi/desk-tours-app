@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState, VFC } from "react";
+import React, { memo, useContext, useEffect, useState, VFC } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-hot-toast";
@@ -8,9 +8,9 @@ import { PhotographIcon } from "@heroicons/react/outline";
 import axios from "../../../http";
 import { schema } from "../../../validations/posts/create";
 import PostCategoryTag from "../../organisms/posts/PostCategoryTag";
-import { useDecodedToken } from "../../../hooks/useDecodedToken";
 import { Tag } from "../../../types/tags/tag";
 import { useResizeFile } from "../../../hooks/useResizeFile";
+import { LoginUserContext } from "../../../providers/LoginUserProvider";
 
 type FormInputData = {
   title: string;
@@ -46,13 +46,13 @@ const PostCreate: VFC = memo(() => {
   });
 
   const history = useHistory();
-  const currentUser = useDecodedToken();
+  const { profile } = useContext(LoginUserContext);
 
   const onSubmit = (data: FormInputData) => {
     axios
       .post("http://localhost:3000/posts", {
         ...data,
-        email: currentUser!.email,
+        email: profile!.email,
       })
       .then(() => {
         history.push("/");

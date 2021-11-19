@@ -6,7 +6,6 @@ import { useHistory } from "react-router";
 
 import { schema } from "../../../validations/users/edit";
 import { useResizeFile } from "../../../hooks/useResizeFile";
-import { useDecodedToken } from "../../../hooks/useDecodedToken";
 import axios from "../../../http";
 import { Profile } from "../../../types/users/profile";
 import { LoginUserContext } from "../../../providers/LoginUserProvider";
@@ -22,16 +21,17 @@ const UserProfileEdit: VFC = memo(() => {
   const { processImage } = useResizeFile();
 
   const history = useHistory();
-  const { email } = useDecodedToken()!;
 
   useEffect(() => {
-    axios.get<Profile>(`http://localhost:3000/users/${email}`).then((res) => {
-      setProfile(res.data);
-      setValue("name", res.data.name);
-      setIcon(res.data.icon);
-      setValue("icon", res.data.icon);
-    });
-  }, []);
+    axios
+      .get<Profile>(`http://localhost:3000/users/${profile?.email}`)
+      .then((res) => {
+        setProfile(res.data);
+        setValue("name", res.data.name);
+        setIcon(res.data.icon);
+        setValue("icon", res.data.icon);
+      });
+  }, [profile?.email]);
 
   const {
     register,
@@ -47,7 +47,7 @@ const UserProfileEdit: VFC = memo(() => {
     axios
       .post<Profile>("http://localhost:3000/users/edit", {
         ...data,
-        email,
+        email: profile?.email,
         icon,
       })
       .then((res) => {

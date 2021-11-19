@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState, VFC } from "react";
+import React, { useEffect, useState, VFC } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-hot-toast";
@@ -41,7 +41,7 @@ const PostEdit: VFC = () => {
     axios
       .get<Array<Tag>>("http://localhost:3000/tags")
       .then((res) => setTags(res.data));
-  }, []);
+  }, [id]);
 
   const {
     register,

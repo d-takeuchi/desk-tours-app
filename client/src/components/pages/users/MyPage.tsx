@@ -2,7 +2,6 @@ import { memo, useContext, useEffect, VFC } from "react";
 import { Link } from "react-router-dom";
 import { PencilAltIcon } from "@heroicons/react/outline";
 
-import { useDecodedToken } from "../../../hooks/useDecodedToken";
 import { Profile } from "../../../types/users/profile";
 import PostCard from "../../organisms/posts/PostCard";
 import axios from "../../../http";
@@ -14,13 +13,12 @@ type Props = {
 
 const MyPage: VFC<Props> = memo(({ display }) => {
   const { profile, setProfile } = useContext(LoginUserContext);
-  const { email } = useDecodedToken()!;
 
   useEffect(() => {
     axios
-      .get<Profile>(`http://localhost:3000/users/${email}`)
+      .get<Profile>(`http://localhost:3000/users/${profile?.email}`)
       .then((res) => setProfile(res.data));
-  }, []);
+  }, [profile?.email, setProfile]);
 
   return (
     <div className="flex-grow bg-primary">

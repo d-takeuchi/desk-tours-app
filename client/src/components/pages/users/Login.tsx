@@ -2,12 +2,10 @@ import { memo, useContext, VFC } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useHistory } from "react-router-dom";
-import axios from "axios";
-import jwt from "jwt-decode";
 import toast from "react-hot-toast";
 
+import axios from "../../../http";
 import { schema } from "../../../validations/login";
-import { DecodedToken } from "../../../types/types";
 import { AuthContext } from "../../../providers/AuthProvider";
 import { LoginUserContext } from "../../../providers/LoginUserProvider";
 import { Profile } from "../../../types/users/profile";
@@ -33,18 +31,11 @@ const Login: VFC = memo(() => {
 
   const onSubmit = async (data: FormInputData) => {
     try {
-      const loginResponse = await axios.post<{ access_token: string }>(
+      const loginResponse = await axios.post<Profile>(
         `http://localhost:3000/auth/login`,
         data
       );
-      const decodedToken: DecodedToken = jwt(loginResponse.data.access_token);
-      localStorage.setItem("app-auth", loginResponse.data.access_token);
-      localStorage.setItem("app-meta", JSON.stringify(decodedToken));
-
-      const loginUser = await axios.get<Profile>(
-        `http://localhost:3000/users/${decodedToken.email}`
-      );
-      setProfile(loginUser.data);
+      setProfile(loginResponse.data);
       toast.success("ログイン成功");
       setIsAuth(true);
       history.push("/");
@@ -52,7 +43,6 @@ const Login: VFC = memo(() => {
       toast.error("ログイン失敗");
     }
   };
-
   return (
     <section className="flex-grow flex text-blueGray-700 justify-center bg-primary">
       <div className="container items-center px-5 py-12 lg:px-20">
@@ -109,16 +99,18 @@ const Login: VFC = memo(() => {
               type="button"
               className="inline-flex w-full px-4 py-3 font-semibold text-black transition duration-500 ease-in-out transform bg-white border rounded-lg border-blueGray-300 hover:bg-gray-400 hover:text-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2"
             >
-              <div className="flex items-center justify-center">
+              <div className="flex items-center justify-center w-full">
                 <GoogleIcon />
-                <span className="ml-4">Googleアカウントでログイン</span>
+                <a href="http://localhost:3000/auth/google">
+                  <span className="ml-4">Googleアカウントでログイン</span>
+                </a>
               </div>
             </button>
             <button
               type="button"
               className="inline-flex w-full px-4 py-3 font-semibold text-black transition duration-500 ease-in-out transform bg-white border rounded-lg border-blueGray-300 hover:bg-gray-400 hover:text-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 mt-5"
             >
-              <div className="flex items-center justify-center">
+              <div className="flex items-center justify-center w-full">
                 <TwitterIcon />
                 <span className="ml-4"> Twitterアカウントでログイン</span>
               </div>

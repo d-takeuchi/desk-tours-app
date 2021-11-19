@@ -1,37 +1,34 @@
-import { memo, useEffect, useState, VFC } from "react";
+import { memo, useContext, useEffect, useState, VFC } from "react";
 import { Link } from "react-router-dom";
 import { HeartIcon } from "@heroicons/react/outline";
 import { ChatAltIcon } from "@heroicons/react/outline";
 
-import { useDecodedToken } from "../../../hooks/useDecodedToken";
 import axios from "../../../http";
 import { Post } from "../../../types/posts/post";
+import { LoginUserContext } from "../../../providers/LoginUserProvider";
 
 type Props = {
   id: number;
 };
 
-const PostCard: VFC<Props> = memo((props) => {
-  const { id } = props;
-  const decodedToken = useDecodedToken();
+const PostCard: VFC<Props> = memo(({ id }) => {
+  const { profile } = useContext(LoginUserContext);
   const [post, setPost] = useState<Post | null>(null);
 
   const toggleFavorite = () => {
-    if (decodedToken) {
-      axios
-        .post<Post>("http://localhost:3000/likes", {
-          email: decodedToken.email,
-          postId: id,
-        })
-        .then((res) => setPost(res.data));
-    }
+    axios
+      .post<Post>("http://localhost:3000/likes", {
+        userId: profile?.id,
+        postId: id,
+      })
+      .then((res) => setPost(res.data));
   };
 
   useEffect(() => {
     axios
       .get<Post>(`http://localhost:3000/posts/${id}`)
       .then((res) => setPost(res.data));
-  }, []);
+  }, [id]);
 
   return (
     <div className="w-full p-6 mx-auto lg:w-1/3 sm:w-2/3">
@@ -49,9 +46,7 @@ const PostCard: VFC<Props> = memo((props) => {
           <div className="flex">
             <HeartIcon
               className={`h-5 w-5  cursor-pointer ${
-                post?.likes.find(
-                  (like) => like.user.email === decodedToken?.email
-                )
+                post?.likes.find((like) => like.userId === profile?.id)
                   ? "text-red-600"
                   : "text-gray-400"
               }`}

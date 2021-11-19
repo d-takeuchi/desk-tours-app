@@ -3,25 +3,35 @@ import {
   Controller,
   Get,
   Post,
+  Redirect,
   Req,
+  Res,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 
+import { User } from 'src/users/users.entity';
+import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
 import { LoginDataDto } from './dto/login-data.dto';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly usersService: UsersService,
+  ) {}
 
   @Post('login')
-  public login(
+  public async login(
     @Body(ValidationPipe) loginData: LoginDataDto,
-  ): Promise<{ access_token: string }> {
-    return this.authService.login(loginData);
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<User> {
+    const jwt = await this.authService.login(loginData);
+    res.cookie('jwt', jwt, { httpOnly: true });
+    return await this.usersService.findByEmail(loginData.email);
   }
 
   @Get('google')
@@ -30,7 +40,17 @@ export class AuthController {
 
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
-  googleAuthRedirect(@Req() req: Request) {
-    return this.authService.googleLogin(req);
+  @Redirect('http://localhost:3001')
+  public async googleAuthRedirect(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<void> {
+    const jwt = await this.authService.googleLogin(req);
+    res.cookie('jwt', jwt, { httpOnly: true });
+  }
+
+  @Get('getJwt')
+  public getJwt(@Req() req: Request) {
+    return req.cookies.jwt;
   }
 }

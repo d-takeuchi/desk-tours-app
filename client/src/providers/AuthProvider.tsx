@@ -7,8 +7,6 @@ import {
   SetStateAction,
 } from "react";
 
-import { useAuth } from "../hooks/useAuth";
-
 type AuthContextType = {
   isAuth: boolean;
   setIsAuth: Dispatch<SetStateAction<boolean>>;
@@ -17,7 +15,7 @@ type AuthContextType = {
 export const AuthContext = createContext({} as AuthContextType);
 
 export const AuthProvider: VFC<{ children: ReactNode }> = ({ children }) => {
-  const [isAuth, setIsAuth] = useState<boolean>(useAuth());
+  const [isAuth, setIsAuth] = useState<boolean>(false);
 
   return (
     <AuthContext.Provider value={{ isAuth, setIsAuth }}>

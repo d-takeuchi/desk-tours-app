@@ -2,11 +2,10 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcryptjs';
-import { Request } from 'express';
-import { User } from 'src/users/users.entity';
+import { Repository } from 'typeorm';
 
 import { UsersService } from 'src/users/users.service';
-import { Repository } from 'typeorm';
+import { User } from 'src/users/users.entity';
 import { LoginDataDto } from './dto/login-data.dto';
 
 @Injectable()
@@ -30,23 +29,24 @@ export class AuthService {
     return isValid;
   }
 
-  public async login(
-    loginData: LoginDataDto,
-  ): Promise<{ access_token: string }> {
+  public async login(loginData: LoginDataDto): Promise<string> {
     if (await this.validateUser(loginData)) {
       const payload = {
         email: loginData.email,
       };
-      return {
-        access_token: this.jwtService.sign(payload),
-      };
+      return this.jwtService.sign(payload);
     }
   }
 
-  public async googleLogin(req: any): Promise<any> {
-    const { email, firstName, lastName, picture } = req.user;
-    const user = await this.userRepository.findOne({ email });
+  public async googleLogin(req: any): Promise<string> {
+    if (!req.user) {
+      throw new UnauthorizedException('invalid credentials');
+    }
 
+    const { email, firstName, lastName, picture } = req.user;
+    const user = await this.usersService.findByEmail(email);
+
+    //ユーザーがusersテーブルに存在しない場合は、作成する
     if (!user) {
       await this.usersService.create({
         name: lastName + firstName,
@@ -54,12 +54,12 @@ export class AuthService {
         password: '11111111',
         icon: await this.usersService.toBase64Url(picture),
       });
-      const payload = {
-        email: req.user.email,
-      };
-      return {
-        access_token: this.jwtService.sign(payload),
-      };
     }
+
+    const payload = {
+      email: req.user.email,
+    };
+
+    return this.jwtService.sign(payload);
   }
 }

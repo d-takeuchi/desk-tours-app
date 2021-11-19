@@ -1,6 +1,6 @@
-import { VFC } from "react";
+import { memo, VFC } from "react";
 
-export const Footer: VFC = () => {
+export const Footer: VFC = memo(() => {
   return (
     <footer className="text-gray-600 body-font border-t-2 border-gray-400">
       <div className="bg-secondary">
@@ -10,4 +10,4 @@ export const Footer: VFC = () => {
       </div>
     </footer>
   );
-};
+});

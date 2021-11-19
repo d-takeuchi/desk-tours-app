@@ -1,4 +1,4 @@
-import { useEffect, useState, VFC } from "react";
+import { useContext, useEffect, useState, VFC } from "react";
 import { useParams } from "react-router";
 import { PencilAltIcon, TrashIcon } from "@heroicons/react/outline";
 import { useForm } from "react-hook-form";
@@ -9,7 +9,7 @@ import { schema } from "../../../validations/comments/create";
 import axios from "../../../http";
 import { Post } from "../../../types/posts/post";
 import CommentField from "../../organisms/comments/CommentField";
-import { useDecodedToken } from "../../../hooks/useDecodedToken";
+import { LoginUserContext } from "../../../providers/LoginUserProvider";
 
 const PostView: VFC = () => {
   const { id } = useParams<{ id: string }>();
@@ -38,10 +38,14 @@ const PostView: VFC = () => {
     },
   });
 
-  const { email } = useDecodedToken()!;
+  const { profile } = useContext(LoginUserContext);
   const onSubmit = (data: { comment: string }) => {
     axios
-      .post("http://localhost:3000/comments", { ...data, postId: id, email })
+      .post("http://localhost:3000/comments", {
+        ...data,
+        postId: id,
+        email: profile?.email,
+      })
       .then(() => {
         fetchPost();
       });

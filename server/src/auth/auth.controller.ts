@@ -8,14 +8,14 @@ import {
   Res,
   UseGuards,
   ValidationPipe,
-} from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { Request, Response } from 'express';
+} from '@nestjs/common'
+import { AuthGuard } from '@nestjs/passport'
+import { Request, Response } from 'express'
 
-import { User } from 'src/users/users.entity';
-import { UsersService } from 'src/users/users.service';
-import { AuthService } from './auth.service';
-import { LoginDataDto } from './dto/login-data.dto';
+import { User } from 'src/users/users.entity'
+import { UsersService } from 'src/users/users.service'
+import { AuthService } from './auth.service'
+import { LoginDataDto } from './dto/login-data.dto'
 
 @Controller('auth')
 export class AuthController {
@@ -29,9 +29,13 @@ export class AuthController {
     @Body(ValidationPipe) loginData: LoginDataDto,
     @Res({ passthrough: true }) res: Response,
   ): Promise<User> {
-    const jwt = await this.authService.login(loginData);
-    res.cookie('jwt', jwt, { httpOnly: true });
-    return await this.usersService.findByEmail(loginData.email);
+    const jwt = await this.authService.login(loginData)
+    res.cookie('access_token', jwt, {
+      httpOnly: true,
+      // secure: true,
+      // sameSite: 'none',
+    })
+    return await this.usersService.findByEmail(loginData.email)
   }
 
   @Get('google')
@@ -45,12 +49,34 @@ export class AuthController {
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ): Promise<void> {
-    const jwt = await this.authService.googleLogin(req);
-    res.cookie('jwt', jwt, { httpOnly: true });
+    const jwt = await this.authService.googleLogin(req)
+    res.cookie('access_token', jwt, {
+      httpOnly: true,
+      // secure: true,
+      // sameSite: 'none',
+    })
   }
 
-  @Get('getJwt')
-  public getJwt(@Req() req: Request) {
-    return req.cookies.jwt;
+  @Get('csrfToken')
+  public createCsrfToken(@Req() req: Request) {
+    // return { csrf_token: req.csrfToken() }
+  }
+
+  @Post('logout')
+  public async logout(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    res.cookie('access_token', '', {
+      httpOnly: true,
+      // secure: true,
+      // sameSite: 'none',
+    })
+  }
+
+  @Get('getLoginUser')
+  @UseGuards(AuthGuard('jwt'))
+  public getLoginUser(@Req() req: Request) {
+    return this.authService.getLoginUser(req)
   }
 }

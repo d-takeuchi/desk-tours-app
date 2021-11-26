@@ -4,32 +4,30 @@ import {
   MaxLength,
   IsArray,
   IsNotEmpty,
-  IsEmail,
   IsDataURI,
-} from 'class-validator';
+} from 'class-validator'
 
 export class CreatePostDto {
   @IsNotEmpty()
   @IsString()
   @MinLength(1)
   @MaxLength(20)
-  readonly title: string;
+  readonly title: string
 
   @IsNotEmpty()
   @IsString()
   @MinLength(1)
   @MaxLength(300)
-  readonly description: string;
+  readonly description: string
 
   @IsNotEmpty()
   @IsDataURI()
-  readonly imageFile: string;
+  readonly imageFile: string
 
   @IsNotEmpty()
   @IsArray()
-  readonly tagIds: number[];
+  readonly tagIds: number[]
 
   @IsNotEmpty()
-  @IsEmail()
-  readonly email: string;
+  readonly userId: number
 }

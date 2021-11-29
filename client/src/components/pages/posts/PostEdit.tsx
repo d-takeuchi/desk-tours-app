@@ -1,96 +1,65 @@
-import React, { useEffect, useState, VFC } from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { toast } from "react-hot-toast";
-import { useHistory, useParams } from "react-router";
-import { PhotographIcon } from "@heroicons/react/outline";
+import React, { VFC } from 'react'
+import { useParams } from 'react-router'
+import { PhotographIcon } from '@heroicons/react/outline'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
 
-import axios from "../../../http";
-import { schema } from "../../../validations/posts/create";
-import PostCategoryTag from "../../organisms/posts/PostCategoryTag";
-import { Tag } from "../../../types/tags/tag";
-import { useResizeFile } from "../../../hooks/useResizeFile";
-import { Post } from "../../../types/posts/post";
+import { useResizeFile } from '../../../hooks/useResizeFile'
+import { useProcessPost } from '../../../hooks/useProcessPost'
+import { useQueryTags } from '../../../hooks/useQueryTags'
+import { PostCategoryTag } from '../../organisms/posts/PostCategoryTag'
+import { useQuerySinglePost } from '../../../hooks/useQuerySinglePost'
+import { UpdatePostData } from '../../../types/types'
+import { schema } from '../../../validations/posts/create'
+import { Spinner } from '../../atoms/Spinner'
 
-type FormInputData = {
-  title: string;
-  imageFile: string;
-  description: string;
-  tagIds: number[];
-};
-
-const PostEdit: VFC = () => {
-  const [deskImageUrl, setDeskImageUrl] = useState("");
-  const [tags, setTags] = useState<Array<Tag>>([]);
-  const { id } = useParams<{ id: string }>();
-
-  const [post, setPost] = useState<Post | null>(null);
-
-  useEffect(() => {
-    axios
-      .get<Post>(`http://localhost:3000/posts/${id}`)
-      .then((res) => {
-        setPost(res.data);
-        setValue("title", res.data.title);
-        setDeskImageUrl(res.data.imageFile);
-        setValue("imageFile", res.data.imageFile);
-        setValue("description", res.data.description);
-      })
-      .catch((err) => console.error(err));
-
-    axios
-      .get<Array<Tag>>("http://localhost:3000/tags")
-      .then((res) => setTags(res.data));
-  }, [id]);
+export const PostEdit: VFC = () => {
+  const { updatePost, deskImageUrl, setDeskImageUrl } = useProcessPost()
+  const { data: tags, isLoading: tagsIsLoading } = useQueryTags()
+  const { id } = useParams<{ id: string }>()
+  const { data: post, isLoading: postIsLoading } = useQuerySinglePost(id)
+  const { processImage } = useResizeFile()
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm<FormInputData>({
+  } = useForm<UpdatePostData>({
     shouldUnregister: false,
     resolver: yupResolver(schema),
     defaultValues: {
-      title: "",
+      title: '',
       tagIds: [],
-      imageFile: "",
-      description: "",
+      imageFile: '',
+      description: '',
     },
-  });
-
-  const history = useHistory();
-
-  const onSubmit = (data: FormInputData) => {
-    axios
-      .post(`http://localhost:3000/posts/${post!.id}`, data)
-      .then(() => {
-        history.push("/");
-        toast.success("更新成功");
-      })
-      .catch((err) => {
-        toast.error("更新失敗");
-      });
-  };
-
-  const { processImage } = useResizeFile();
-
+  })
   const onChangeFileResize = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const imageFile = event.target.files?.[0];
-    const resizedFile = await processImage(imageFile);
-    setDeskImageUrl(resizedFile);
-    setValue("imageFile", resizedFile);
-  };
+    const imageFile = event.target.files?.[0]
+    const resizedFile = await processImage(imageFile)
+    setDeskImageUrl(resizedFile)
+    setValue('imageFile', resizedFile)
+  }
 
+  if (post) {
+    // setValue('title', post?.title)
+    // setValue('imageFile', post?.imageFile)
+    // setValue('description', post?.description)
+    // setDeskImageUrl()
+    // b(post?.imageFile)
+  }
+
+  if (tagsIsLoading || postIsLoading) return <Spinner />
   return (
     <div className="flex-grow bg-primary">
-      <div className="container items-center px-5 pb-8 mx-auto lg:px-24 mt-10">
+      <div className="container items-center px-5 pb-8 mx-auto lg:px-24 pt-10">
         <h1 className="text-2xl text-white mb-5">投稿編集</h1>
         <div className="md:grid md:grid-cols-3 md:gap-6">
           <div className="mt-5 md:mt-0 md:col-span-3">
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(updatePost)}>
               <div className="shadow sm:rounded-md sm:overflow-hidden">
                 <div className="px-4 py-5 bg-white space-y-6 sm:p-6 ">
                   <div className="grid grid-cols-3 gap-6">
@@ -103,7 +72,7 @@ const PostEdit: VFC = () => {
                       </label>
                       <div className="mt-1">
                         <input
-                          {...register("title")}
+                          {...register('title')}
                           className="shadow-sm appearance-none border border-gray-300 rounded-md  w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                           id="title"
                           type="text"
@@ -128,7 +97,7 @@ const PostEdit: VFC = () => {
                             onChange={onChangeFileResize}
                             className=" border-gray-300 focus:ring-indigo-700 block w-full overflow-hidden cursor-pointer border text-gray-800 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline"
                           />
-                          <input type="hidden" {...register("imageFile")} />
+                          <input type="hidden" {...register('imageFile')} />
                         </div>
                         {deskImageUrl ? (
                           <img src={deskImageUrl} alt="deskImage" />
@@ -155,7 +124,7 @@ const PostEdit: VFC = () => {
                           id="description"
                           rows={3}
                           className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
-                          {...register("description")}
+                          {...register('description')}
                         />
                         <span className="text-xs text-red-700">
                           {errors.description?.message}
@@ -173,7 +142,7 @@ const PostEdit: VFC = () => {
                     </label>
 
                     <div className="flex flex-col sm:flex-row">
-                      {tags.map((tag) => (
+                      {tags?.map((tag) => (
                         <PostCategoryTag
                           key={tag.id}
                           tagId={tag.id}
@@ -204,7 +173,5 @@ const PostEdit: VFC = () => {
         </div>
       </div>
     </div>
-  );
-};
-
-export default PostEdit;
+  )
+}

@@ -1,4 +1,4 @@
-import { memo, VFC } from "react";
+import { memo, VFC } from 'react'
 
 export const Footer: VFC = memo(() => {
   return (
@@ -9,5 +9,5 @@ export const Footer: VFC = memo(() => {
         </div>
       </div>
     </footer>
-  );
-});
+  )
+})

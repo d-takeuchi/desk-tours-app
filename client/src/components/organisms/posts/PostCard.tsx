@@ -1,35 +1,29 @@
-import { memo, useContext, useEffect, useState, VFC } from "react";
-import { Link } from "react-router-dom";
-import { HeartIcon } from "@heroicons/react/outline";
-import { ChatAltIcon } from "@heroicons/react/outline";
+import { memo, VFC } from 'react'
+import { Link } from 'react-router-dom'
+import { HeartIcon } from '@heroicons/react/outline'
+import { ChatAltIcon } from '@heroicons/react/outline'
 
-import axios from "../../../http";
-import { Post } from "../../../types/posts/post";
-import { LoginUserContext } from "../../../providers/LoginUserProvider";
+import { useQuerySinglePost } from '../../../hooks/useQuerySinglePost'
+import { useQueryUser } from '../../../hooks/useQueryUser'
 
-type Props = {
-  id: number;
-};
+interface Props {
+  id: string
+}
 
-const PostCard: VFC<Props> = memo(({ id }) => {
-  const { profile } = useContext(LoginUserContext);
-  const [post, setPost] = useState<Post | null>(null);
+export const PostCard: VFC<Props> = memo(({ id }) => {
+  const { data: post, isLoading: postIsLoading } = useQuerySinglePost(id)
+  const { data: user, isLoading: userIsLoading } = useQueryUser()
 
-  const toggleFavorite = () => {
-    axios
-      .post<Post>("http://localhost:3000/likes", {
-        userId: profile?.id,
-        postId: id,
-      })
-      .then((res) => setPost(res.data));
-  };
+  // const toggleFavorite = () => {
+  //   axios
+  //     .post<Post>('http://localhost:3000/likes', {
+  //       userId: profile?.id,
+  //       postId: id,
+  //     })
+  //     .then((res) => setPost(res.data))
+  // }
 
-  useEffect(() => {
-    axios
-      .get<Post>(`http://localhost:3000/posts/${id}`)
-      .then((res) => setPost(res.data));
-  }, [id]);
-
+  if (postIsLoading || userIsLoading) return <p>Loading...</p>
   return (
     <div className="w-full p-6 mx-auto lg:w-1/3 sm:w-2/3">
       <div className="shadow-xl  rounded-xl bg-blueGray-50">
@@ -46,11 +40,11 @@ const PostCard: VFC<Props> = memo(({ id }) => {
           <div className="flex">
             <HeartIcon
               className={`h-5 w-5  cursor-pointer ${
-                post?.likes.find((like) => like.userId === profile?.id)
-                  ? "text-red-600"
-                  : "text-gray-400"
+                post?.likes.find((like) => like.userId === user?.id)
+                  ? 'text-red-600'
+                  : 'text-gray-400'
               }`}
-              onClick={toggleFavorite}
+              // onClick={toggleFavorite}
             />
             <p>{post?.likesCount}</p>
             <ChatAltIcon className="h-5 w-5 text-gray-400 ml-2 " />
@@ -59,7 +53,5 @@ const PostCard: VFC<Props> = memo(({ id }) => {
         </div>
       </div>
     </div>
-  );
-});
-
-export default PostCard;
+  )
+})

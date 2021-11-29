@@ -1,5 +1,5 @@
-import { useCallback } from "react";
-import Resizer from "react-image-file-resizer";
+import { useCallback } from 'react'
+import Resizer from 'react-image-file-resizer'
 
 export const useResizeFile = () => {
   const resizeFile = useCallback(
@@ -9,32 +9,32 @@ export const useResizeFile = () => {
           file,
           300,
           200,
-          "JPEG",
+          'JPEG',
           100,
           0,
           (uri) => {
-            resolve(uri);
+            resolve(uri)
           },
-          "base64"
-        );
+          'base64'
+        )
       }),
     []
-  );
+  )
 
   const processImage = useCallback(
     async (imageFile: File | undefined): Promise<string> => {
       if (imageFile !== undefined) {
         if (/image.*/.exec(imageFile.type)) {
-          return (await resizeFile(imageFile)) as string;
+          return (await resizeFile(imageFile)) as string
         } else {
-          return "";
+          return ''
         }
       } else {
-        return "";
+        return ''
       }
     },
     [resizeFile]
-  );
+  )
 
-  return { processImage };
-};
+  return { processImage }
+}

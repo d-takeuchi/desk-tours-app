@@ -3,7 +3,6 @@ import {
   MinLength,
   MaxLength,
   IsNotEmpty,
-  IsEmail,
 } from 'class-validator';
 
 export class CreateCommentDto {
@@ -18,6 +17,6 @@ export class CreateCommentDto {
   readonly postId: string;
 
   @IsNotEmpty()
-  @IsEmail()
-  readonly email: string;
+  @IsString()
+  readonly userId: string;
 }

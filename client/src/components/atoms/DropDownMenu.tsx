@@ -1,31 +1,21 @@
-import { Fragment, useContext, VFC } from "react";
-import { Menu, Transition } from "@headlessui/react";
-import { useHistory } from "react-router";
-import { AuthContext } from "../../providers/AuthProvider";
-import { Link } from "react-router-dom";
-import { LoginUserContext } from "../../providers/LoginUserProvider";
+import { Fragment, VFC } from 'react'
+import { Menu, Transition } from '@headlessui/react'
+import { Link } from 'react-router-dom'
+
+import { useProcessAuth } from '../../hooks/useProcessAuth'
+import { useQueryUser } from '../../hooks/useQueryUser'
 
 function classNames(...classes: string[]) {
-  return classes.filter(Boolean).join(" ");
+  return classes.filter(Boolean).join(' ')
 }
 
-type Props = {
-  icon: string | undefined;
-};
+interface Props {
+  icon: string | undefined
+}
 
 export const DropDownMenu: VFC<Props> = ({ icon }) => {
-  const history = useHistory();
-
-  const { setIsAuth } = useContext(AuthContext);
-  const { setProfile } = useContext(LoginUserContext);
-
-  const logout = () => {
-    localStorage.removeItem("app-auth");
-    localStorage.removeItem("app-meta");
-    setProfile(null);
-    setIsAuth(false);
-    history.push("/");
-  };
+  const { logout } = useProcessAuth()
+  const { data: user } = useQueryUser()
 
   return (
     <Menu as="div" className="relative inline-block text-left z-10">
@@ -65,10 +55,10 @@ export const DropDownMenu: VFC<Props> = ({ icon }) => {
             <Menu.Item>
               {({ active }) => (
                 <Link
-                  to="/users/profile/1"
+                  to={`/users/${user?.id}`}
                   className={classNames(
-                    active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                    "block px-4 py-2 text-sm"
+                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                    'block px-4 py-2 text-sm'
                   )}
                 >
                   プロフィール画面
@@ -80,8 +70,8 @@ export const DropDownMenu: VFC<Props> = ({ icon }) => {
                 <button
                   type="submit"
                   className={classNames(
-                    active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                    "block w-full text-left px-4 py-2 text-sm"
+                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                    'block w-full text-left px-4 py-2 text-sm'
                   )}
                   onClick={logout}
                 >
@@ -93,5 +83,5 @@ export const DropDownMenu: VFC<Props> = ({ icon }) => {
         </Menu.Items>
       </Transition>
     </Menu>
-  );
-};
+  )
+}

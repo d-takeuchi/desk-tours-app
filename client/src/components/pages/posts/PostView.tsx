@@ -1,62 +1,45 @@
-import { useContext, useEffect, useState, VFC } from "react";
-import { useParams } from "react-router";
-import { PencilAltIcon, TrashIcon } from "@heroicons/react/outline";
-import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import { yupResolver } from "@hookform/resolvers/yup";
+import { VFC } from 'react'
+import { useParams } from 'react-router'
+import { PencilAltIcon, TrashIcon } from '@heroicons/react/outline'
+import { useForm } from 'react-hook-form'
+import { Link } from 'react-router-dom'
+import { yupResolver } from '@hookform/resolvers/yup'
 
-import { schema } from "../../../validations/comments/create";
-import axios from "../../../http";
-import { Post } from "../../../types/posts/post";
-import CommentField from "../../organisms/comments/CommentField";
-import { LoginUserContext } from "../../../providers/LoginUserProvider";
+import { schema } from '../../../validations/comments/create'
+import { useQuerySinglePost } from '../../../hooks/useQuerySinglePost'
+import { CommentField } from '../../organisms/comments/CommentField'
+import { CommentData } from '../../../types/types'
+import { Spinner } from '../../atoms/Spinner'
+import { useProcessPost } from '../../../hooks/useProcessPost'
+import { useQueryUser } from '../../../hooks/useQueryUser'
 
-const PostView: VFC = () => {
-  const { id } = useParams<{ id: string }>();
-
-  const [post, setPost] = useState<Post | null>(null);
-
-  const fetchPost = () => {
-    axios
-      .get<Post>(`http://localhost:3000/posts/${id}`)
-      .then((res) => setPost(res.data))
-      .catch((err) => console.error(err));
-  };
-
-  useEffect(() => {
-    fetchPost();
-  }, []);
-
+export const PostView: VFC = () => {
+  const { id } = useParams<{ id: string }>()
+  const { data: post, isLoading: postIsLoading } = useQuerySinglePost(id)
+  const { deletePost, createComment } = useProcessPost()
+  const { data: user, isLoading: userIsLoading } = useQueryUser()
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<{ comment: string }>({
+  } = useForm<CommentData>({
     resolver: yupResolver(schema),
     defaultValues: {
-      comment: "",
+      comment: '',
     },
-  });
+  })
 
-  const { profile } = useContext(LoginUserContext);
-  const onSubmit = (data: { comment: string }) => {
-    axios
-      .post("http://localhost:3000/comments", {
-        ...data,
-        postId: id,
-        email: profile?.email,
-      })
-      .then(() => {
-        fetchPost();
-      });
-  };
+  if (postIsLoading || userIsLoading) return <Spinner />
 
   return (
     <div className="flex-grow bg-primary">
-      <div className="container items-center px-5 pb-8 mx-auto lg:px-24 mt-10">
+      <div className="container items-center px-5 pb-8 mx-auto lg:px-24 pt-10">
         <div className="flex items-center mb-5">
           <h1 className="text-2xl text-white ">投稿詳細</h1>
-          <TrashIcon className="h-7 text-white cursor-pointer" />
+          <TrashIcon
+            className="h-7 text-white cursor-pointer"
+            onClick={() => deletePost(Number(id))}
+          />
           <Link to={`/posts/edit/${id}`}>
             <PencilAltIcon className="h-7 text-white cursor-pointer" />
           </Link>
@@ -99,25 +82,43 @@ const PostView: VFC = () => {
                         comment={comment.comment}
                       />
                     ))}
-                    <div className="ml-12 mt-5">
-                      <form onSubmit={handleSubmit(onSubmit)}>
-                        <label className="text-gray-700" htmlFor="name">
-                          <textarea
-                            className="flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-                            id="comment"
-                            rows={1}
-                            cols={30}
-                            {...register("comment")}
-                          ></textarea>
-                        </label>
-                        <div className="mt-5">
-                          <span className="text-xs text-red-700 ">
-                            {errors.comment?.message}
-                          </span>
+                    <div className="mt-3">
+                      <form onSubmit={handleSubmit(createComment)}>
+                        <div className="flex">
+                          <img
+                            className="object-cover rounded-full h-8 w-8 mr-5"
+                            src={user?.icon}
+                            alt="プロフィールアイコン"
+                          />
+                          <label className="text-gray-700" htmlFor="name">
+                            <textarea
+                              className="flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                              id="comment"
+                              rows={1}
+                              cols={30}
+                              {...register('comment')}
+                            ></textarea>
+                            <span className="text-xs text-red-700 ">
+                              {errors.comment?.message}
+                            </span>
+                          </label>
                         </div>
-                        <button className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primaryButton hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                          コメントを投稿
-                        </button>
+
+                        <input
+                          type="hidden"
+                          value={id}
+                          {...register('postId')}
+                        />
+                        <input
+                          type="hidden"
+                          value={user?.id}
+                          {...register('userId')}
+                        />
+                        <div className="mt-5">
+                          <button className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primaryButton hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            コメントを投稿
+                          </button>
+                        </div>
                       </form>
                     </div>
                   </div>
@@ -128,7 +129,5 @@ const PostView: VFC = () => {
         </div>
       </div>
     </div>
-  );
-};
-
-export default PostView;
+  )
+}

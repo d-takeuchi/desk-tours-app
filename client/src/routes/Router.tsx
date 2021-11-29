@@ -1,27 +1,36 @@
-import { VFC } from "react";
-import { Route, Switch } from "react-router";
-import AuthenticatedGuard from "../components/auth/AuthenticatedGuard";
+import { VFC } from 'react'
+import { Redirect, Route, Switch, useLocation } from 'react-router'
 
-import Home from "../components/pages/Home";
-import Login from "../components/pages/users/Login";
-import Page404 from "../components/pages/Page404";
-import PostList from "../components/pages/posts/PostList";
-import SignUp from "../components/pages/users/SignUp";
-import { AuthenticateRouter } from "./AuthenticateRoute";
+import { Spinner } from '../components/atoms/Spinner'
+import { Login } from '../components/pages/auth/Login'
+import { SignUp } from '../components/pages/auth/SignUp'
+import { Home } from '../components/pages/Home'
+import { Page404 } from '../components/pages/Page404'
+import PostList from '../components/pages/posts/PostList'
+import { useQueryUser } from '../hooks/useQueryUser'
+import { AuthenticateRouter } from './AuthenticateRouter'
 
 export const Router: VFC = () => {
+  const location = useLocation()
+  const { data, isLoading } = useQueryUser()
+  if (isLoading) return <Spinner />
   return (
     <Switch>
       <Route exact path="/" component={Home} />
       <Route exact path="/login" component={Login} />
       <Route exact path="/sign-up" component={SignUp} />
       <Route exact path="/posts" component={PostList} />
-
-      {/* ログインしていない場合に、投稿画面等への遷移を阻止 */}
-      <AuthenticatedGuard>
+      {data ? (
         <AuthenticateRouter />
-      </AuthenticatedGuard>
+      ) : (
+        <Redirect
+          to={{
+            pathname: '/login',
+            state: { from: location },
+          }}
+        />
+      )}
       <Route path="*" component={Page404} />
     </Switch>
-  );
-};
+  )
+}

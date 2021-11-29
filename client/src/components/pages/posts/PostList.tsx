@@ -1,35 +1,25 @@
-import axios from "axios";
-import { memo, useEffect, useState } from "react";
-
-import PostCard from "../../organisms/posts/PostCard";
-import { Post } from "../../../types/posts/post";
+import { memo } from 'react'
+import { useQueryPosts } from '../../../hooks/useQueryPosts'
+import { Spinner } from '../../atoms/Spinner'
+import { PostCard } from '../../organisms/posts/PostCard'
 
 const PostList = memo(() => {
-  const [posts, setPosts] = useState<Array<Post>>([]);
-  const [loading, setLoading] = useState(false);
+  const { data: posts, isLoading } = useQueryPosts()
 
-  useEffect(() => {
-    setLoading(true);
-    axios
-      .get<Array<Post>>("http://localhost:3000/posts")
-      .then((res) => setPosts(res.data))
-      .finally(() => setLoading(false));
-  }, []);
+  if (isLoading) return <Spinner />
 
   return (
     <div className="flex-grow bg-primary">
-      <div className="container items-center px-5 py-8 mx-auto lg:px-24">
+      <div className="container items-center px-5 py-8 mx-auto lg:px-24 min-h-screen">
         <h1 className="text-2xl text-white mb-5">投稿一覧</h1>
         <div className="flex flex-wrap mb-12 text-left">
-          {loading ? (
-            <p>ローディング中</p>
-          ) : (
-            posts.map((post) => <PostCard key={post.id} id={post.id} />)
-          )}
+          {posts?.map((post) => (
+            <PostCard key={post.id} id={String(post.id)} />
+          ))}
         </div>
       </div>
     </div>
-  );
-});
+  )
+})
 
-export default PostList;
+export default PostList

@@ -1,4 +1,4 @@
-import { memo, VFC } from "react";
+import { memo, VFC } from 'react'
 
 const GoogleIcon: VFC = memo(() => {
   return (
@@ -33,7 +33,7 @@ const GoogleIcon: VFC = memo(() => {
         d="M48 48L17 24l-4-3 35-10z"
       ></path>
     </svg>
-  );
-});
+  )
+})
 
-export default GoogleIcon;
+export default GoogleIcon

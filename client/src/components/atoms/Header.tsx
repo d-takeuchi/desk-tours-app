@@ -1,15 +1,13 @@
-import { Fragment, useContext, VFC } from "react";
-import { Popover, Transition } from "@headlessui/react";
-import { MenuIcon, XIcon } from "@heroicons/react/outline";
-import { Link } from "react-router-dom";
+import { Fragment, VFC } from 'react'
+import { Popover, Transition } from '@headlessui/react'
+import { MenuIcon, XIcon } from '@heroicons/react/outline'
+import { Link } from 'react-router-dom'
 
-import { DropDownMenu } from "./DropDownMenu";
-import { AuthContext } from "../../providers/AuthProvider";
-import { LoginUserContext } from "../../providers/LoginUserProvider";
+import { DropDownMenu } from './DropDownMenu'
+import { useQueryUser } from '../../hooks/useQueryUser'
 
 export const Header: VFC = () => {
-  const { isAuth } = useContext(AuthContext);
-  const { profile } = useContext(LoginUserContext);
+  const { data: user } = useQueryUser()
 
   return (
     <Popover className="bg-secondary">
@@ -43,7 +41,9 @@ export const Header: VFC = () => {
               投稿一覧
             </Link>
 
-            {!isAuth ? (
+            {user ? (
+              <DropDownMenu icon={user?.icon} />
+            ) : (
               <>
                 <Link
                   to="/login"
@@ -58,8 +58,6 @@ export const Header: VFC = () => {
                   新規登録
                 </Link>
               </>
-            ) : (
-              <DropDownMenu icon={profile?.icon} />
             )}
           </div>
         </div>
@@ -126,5 +124,5 @@ export const Header: VFC = () => {
         </Popover.Panel>
       </Transition>
     </Popover>
-  );
-};
+  )
+}

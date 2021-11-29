@@ -1,4 +1,6 @@
-const Page404 = () => {
+import { VFC } from 'react'
+
+export const Page404: VFC = () => {
   return (
     <div className="flex-grow">
       <div className="bg-primary relative overflow-hidden h-screen">
@@ -15,7 +17,5 @@ const Page404 = () => {
         </div>
       </div>
     </div>
-  );
-};
-
-export default Page404;
+  )
+}

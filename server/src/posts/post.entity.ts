@@ -10,52 +10,52 @@ import {
   PrimaryGeneratedColumn,
   RelationCount,
   UpdateDateColumn,
-} from 'typeorm';
+} from 'typeorm'
 
-import { Comment } from 'src/comments/comments.entity';
-import { Like } from 'src/likes/likes.entity';
-import { Tag } from 'src/tags/tags.entity';
-import { User } from 'src/users/users.entity';
+import { Comment } from 'src/comments/comments.entity'
+import { Like } from 'src/likes/likes.entity'
+import { Tag } from 'src/tags/tags.entity'
+import { User } from 'src/users/users.entity'
 
 @Entity({ name: 'posts' })
 export class Post {
   @PrimaryGeneratedColumn()
-  readonly id: number;
+  readonly id: number
 
   @Column()
-  title: string;
+  title: string
 
   @Column()
-  description: string;
+  description: string
 
   @Column('mediumtext')
-  imageFile: string;
+  imageFile: string
 
   @ManyToOne(() => User, (user) => user.posts, {
     nullable: false,
   })
   @JoinColumn({ name: 'userId' })
-  user: User;
+  user: User
 
   @ManyToMany(() => Tag)
   @JoinTable({ name: 'post_tags' })
-  tags: Tag[];
+  tags: Tag[]
 
   @OneToMany(() => Comment, (comment) => comment.post)
-  comments: Comment[];
+  comments: Comment[]
 
   @OneToMany(() => Like, (like) => like.post)
-  likes: Like[];
+  likes: Like[]
 
   @RelationCount('likes')
-  likesCount?: number;
+  likesCount?: number
 
   @RelationCount('comments')
-  commentsCount?: number;
+  commentsCount?: number
 
   @CreateDateColumn()
-  readonly createdAt?: Date;
+  readonly createdAt?: Date
 
   @UpdateDateColumn()
-  readonly updatedAt?: Date;
+  readonly updatedAt?: Date
 }

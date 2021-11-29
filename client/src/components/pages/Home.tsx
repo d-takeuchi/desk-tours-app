@@ -1,19 +1,14 @@
-import axios from "axios";
-import { useEffect, useState, VFC } from "react";
-import { Link } from "react-router-dom";
+import { VFC } from 'react'
+import { Link } from 'react-router-dom'
 
-import { Post } from "../../types/posts/post";
-import PostCard from "../organisms/posts/PostCard";
+import { useQueryPosts } from '../../hooks/useQueryPosts'
+import { Spinner } from '../atoms/Spinner'
+import { PostCard } from '../organisms/posts/PostCard'
 
-const Home: VFC = () => {
-  const [posts, setPosts] = useState<Array<Post>>([]);
+export const Home: VFC = () => {
+  const { data: posts, isLoading } = useQueryPosts()
 
-  useEffect(() => {
-    axios
-      .get<Array<Post>>("http://localhost:3000/posts/getNewArrivalPosts")
-      .then((res) => setPosts(res.data));
-  }, []);
-
+  if (isLoading) return <Spinner />
   return (
     <>
       {/* メインビジュアル */}
@@ -47,14 +42,12 @@ const Home: VFC = () => {
           </div>
 
           <div className="flex flex-wrap mb-12 text-left">
-            {posts.map((post) => (
-              <PostCard key={post.id} id={post.id} />
-            ))}
+            {posts?.map((post, i) => {
+              if (i <= 2) return <PostCard key={post.id} id={String(post.id)} />
+            })}
           </div>
         </div>
       </section>
     </>
-  );
-};
-
-export default Home;
+  )
+}

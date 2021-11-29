@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -40,5 +41,12 @@ export class PostsController {
     @Body(ValidationPipe) postData: UpdatePostDto,
   ) {
     return this.postsService.edit(id, postData)
+  }
+
+
+  @Delete(':id')
+  @UseGuards(AuthGuard('jwt'))
+  public delete(@Param('id') id: number){
+    return this.postsService.delete(id)
   }
 }

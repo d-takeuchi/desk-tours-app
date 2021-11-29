@@ -1,13 +1,13 @@
-import { memo, VFC } from "react";
+import { memo, VFC } from 'react'
 
-type Props = {
-  userName: string;
-  userIcon: string;
-  comment: string;
-};
+interface Props {
+  userName: string
+  userIcon: string
+  comment: string
+}
 
-const CommentField: VFC<Props> = memo((props) => {
-  const { userName, userIcon, comment } = props;
+export const CommentField: VFC<Props> = memo((props) => {
+  const { userName, userIcon, comment } = props
 
   return (
     <div className="flex max-w-lg mb-5">
@@ -40,7 +40,5 @@ const CommentField: VFC<Props> = memo((props) => {
         </div>
       </div>
     </div>
-  );
-});
-
-export default CommentField;
+  )
+})

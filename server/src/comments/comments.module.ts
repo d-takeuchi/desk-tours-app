@@ -6,10 +6,10 @@ import { CommentsController } from './comments.controller';
 import { Comment } from './comments.entity';
 import { Post } from 'src/posts/post.entity';
 import { User } from 'src/users/users.entity';
-import { UsersModule } from 'src/users/users.module';
+import { PostsModule } from 'src/posts/posts.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Comment, Post, User]), UsersModule],
+  imports: [TypeOrmModule.forFeature([Comment, Post, User]),PostsModule],
   exports: [TypeOrmModule],
   providers: [CommentsService],
   controllers: [CommentsController],

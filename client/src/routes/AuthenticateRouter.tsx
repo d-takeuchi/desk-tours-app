@@ -1,12 +1,12 @@
-import { VFC } from "react";
-import { Route, Switch } from "react-router-dom";
+import { VFC } from 'react'
+import { Route, Switch } from 'react-router-dom'
 
-import MyPage from "../components/pages/users/MyPage";
-import Page404 from "../components/pages/Page404";
-import PostCreate from "../components/pages/posts/PostCreate";
-import PostEdit from "../components/pages/posts/PostEdit";
-import PostView from "../components/pages/posts/PostView";
-import UserProfileEdit from "../components/pages/users/UserEditProfile";
+import { Page404 } from '../components/pages/Page404'
+import { PostCreate } from '../components/pages/posts/PostCreate'
+import { PostEdit } from '../components/pages/posts/PostEdit'
+import { PostView } from '../components/pages/posts/PostView'
+import { MyPage } from '../components/pages/users/MyPage'
+import { ProfileEdit } from '../components/pages/users/ProfileEdit'
 
 export const AuthenticateRouter: VFC = () => {
   return (
@@ -35,17 +35,17 @@ export const AuthenticateRouter: VFC = () => {
         path="/users"
         render={({ match: { url } }) => (
           <Switch>
-            <Route exact path={`${url}/profile/:id`}>
+            <Route exact path={`${url}/:id`}>
               <MyPage display="myPosts" />
             </Route>
-            <Route exact path={`${url}/profile/:id/myPosts`}>
+            <Route exact path={`${url}/:id/myPosts`}>
               <MyPage display="myPosts" />
             </Route>
-            <Route exact path={`${url}/profile/:id/myFavorites`}>
+            <Route exact path={`${url}/:id/myFavorites`}>
               <MyPage display="myFavorites" />
             </Route>
-            <Route exact path={`${url}/profile/edit/:id`}>
-              <UserProfileEdit />
+            <Route exact path={`${url}/edit/:id`}>
+              <ProfileEdit />
             </Route>
             <Route exact path={`*`}>
               <Page404 />
@@ -55,5 +55,5 @@ export const AuthenticateRouter: VFC = () => {
       />
       <Route path="*" component={Page404} />
     </Switch>
-  );
-};
+  )
+}

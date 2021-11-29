@@ -66,4 +66,8 @@ export class PostsService {
       tags,
     })
   }
+
+  async delete(id:number){
+    return await this.postRepository.delete({id})
+  }
 }

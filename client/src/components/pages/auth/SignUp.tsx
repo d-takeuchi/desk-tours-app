@@ -1,54 +1,49 @@
-import { memo, useContext, VFC } from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useHistory } from "react-router-dom";
-import toast from "react-hot-toast";
+import { VFC } from 'react'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
 
-import axios from "../../../http";
-import { schema } from "../../../validations/login";
-import { AuthContext } from "../../../providers/AuthProvider";
-import { LoginUserContext } from "../../../providers/LoginUserProvider";
-import { Profile } from "../../../types/users/profile";
-import TwitterIcon from "../../atoms/TwitterIcon";
-import GoogleIcon from "../../atoms/GoogleIcon";
+import { schema } from '../../../validations/auth/signup'
+import GoogleIcon from '../../atoms/GoogleIcon'
+import TwitterIcon from '../../atoms/TwitterIcon'
+import { useProcessAuth } from '../../../hooks/useProcessAuth'
+import { Spinner } from '../../atoms/Spinner'
 
-const Login: VFC = memo(() => {
-  const history = useHistory();
-  const { setIsAuth } = useContext(AuthContext);
-  const { setProfile } = useContext(LoginUserContext);
+export const SignUp: VFC = () => {
+  const { signUp, signUpMutation } = useProcessAuth()
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-  });
+  })
 
-  type FormInputData = {
-    email: string;
-    password: string;
-  };
+  if (signUpMutation.isLoading) return <Spinner />
 
-  const onSubmit = async (data: FormInputData) => {
-    try {
-      const loginResponse = await axios.post<Profile>(
-        `http://localhost:3000/auth/login`,
-        data
-      );
-      setProfile(loginResponse.data);
-      toast.success("ログイン成功");
-      setIsAuth(true);
-      history.push("/");
-    } catch (error) {
-      toast.error("ログイン失敗");
-    }
-  };
   return (
     <section className="flex-grow flex text-blueGray-700 justify-center bg-primary">
       <div className="container items-center px-5 py-12 lg:px-20">
         <div className="flex flex-col w-full p-10 mx-auto my-6 transition duration-500 ease-in-out transform bg-white border rounded-lg lg:w-2/6 md:w-1/2 md:mt-0">
-          <h1 className="text-center">ログイン</h1>
-          <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+          <h1 className="text-center">新規ユーザー登録</h1>
+          <form onSubmit={handleSubmit(signUp)} autoComplete="off">
+            <div className="relative mt-4">
+              <label
+                htmlFor="name"
+                className="text-base leading-7 text-blueGray-500"
+              >
+                ユーザー名
+              </label>
+              <input
+                type="text"
+                id="name"
+                {...register('name')}
+                className="w-full px-4 py-2 mt-2 text-base text-black transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 "
+              />
+              <span className="text-xs text-red-700">
+                {errors.name?.message}
+              </span>
+            </div>
             <div className="relative mt-4">
               <label
                 htmlFor="email"
@@ -59,8 +54,8 @@ const Login: VFC = memo(() => {
               <input
                 type="email"
                 id="email"
-                {...register("email")}
-                className="w-full px-4 py-2 mt-2 text-base text-black transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2"
+                {...register('email')}
+                className="w-full px-4 py-2 mt-2 text-base text-black transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 "
               />
               <span className="text-xs text-red-700">
                 {errors.email?.message}
@@ -76,7 +71,7 @@ const Login: VFC = memo(() => {
               <input
                 type="password"
                 id="password"
-                {...register("password")}
+                {...register('password')}
                 className="w-full px-4 py-2 mt-2 text-base text-black transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2"
               />
               <span className="text-xs text-red-700">
@@ -86,9 +81,9 @@ const Login: VFC = memo(() => {
             <div className="mt-10">
               <button
                 type="submit"
-                className="w-full px-16 py-2 my-2 mr-2 text-base text-white transition duration-500 ease-in-out transform bg-primaryButton border-blue-600 rounded-md focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 hover:bg-gray-200 "
+                className="w-full px-16 py-2 my-2 mr-2 text-base text-white transition duration-500 ease-in-out transform bg-primaryButton border-blue-600 rounded-md focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 hover:bg-gray-200"
               >
-                ログイン
+                新規登録
               </button>
             </div>
           </form>
@@ -99,27 +94,23 @@ const Login: VFC = memo(() => {
               type="button"
               className="inline-flex w-full px-4 py-3 font-semibold text-black transition duration-500 ease-in-out transform bg-white border rounded-lg border-blueGray-300 hover:bg-gray-400 hover:text-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2"
             >
-              <div className="flex items-center justify-center w-full">
+              <div className="flex items-center justify-center">
                 <GoogleIcon />
-                <a href="http://localhost:3000/auth/google">
-                  <span className="ml-4">Googleアカウントでログイン</span>
-                </a>
+                <span className="ml-4">Googleアカウントで登録</span>
               </div>
             </button>
             <button
               type="button"
               className="inline-flex w-full px-4 py-3 font-semibold text-black transition duration-500 ease-in-out transform bg-white border rounded-lg border-blueGray-300 hover:bg-gray-400 hover:text-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 mt-5"
             >
-              <div className="flex items-center justify-center w-full">
+              <div className="flex items-center justify-center">
                 <TwitterIcon />
-                <span className="ml-4"> Twitterアカウントでログイン</span>
+                <span className="ml-4"> Twitterアカウントで登録</span>
               </div>
             </button>
           </div>
         </div>
       </div>
     </section>
-  );
-});
-
-export default Login;
+  )
+}

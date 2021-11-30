@@ -20,7 +20,6 @@ export const useQueryUser = () => {
     queryKey: 'user',
     queryFn: getCurrentUser,
     staleTime: 3600000,
-    cacheTime: 3600000,
     refetchInterval: 3600000,
     onError: () => history.push('/login'),
   })

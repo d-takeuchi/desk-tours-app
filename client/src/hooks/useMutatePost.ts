@@ -10,6 +10,7 @@ import {
   CreatePostData,
   LoginUserInfo,
   Post,
+  SearchParams,
   UpdatePostData,
 } from '../types/types'
 
@@ -18,6 +19,7 @@ export const useMutatePost = () => {
   const dispatch = useAppDispatch()
   const queryClient = useQueryClient()
   const user = queryClient.getQueryData<LoginUserInfo>('user')
+
   const createPostMutation = useMutation(
     (post: CreatePostData) =>
       axios.post<Post>(
@@ -126,7 +128,20 @@ export const useMutatePost = () => {
         }
       },
     }
-  )  
+  ) 
 
-  return { createPostMutation, updatePostMutation, deletePostMutation,createCommentMutation }
+  const searchPostsMutation = useMutation(
+    ({ title }:SearchParams) =>
+    axios.get<Post[]>(`${process.env.REACT_APP_API_URL}/posts?title=${title}`),
+    {
+      onSuccess :(res) => {
+        queryClient.setQueryData<Post[]>(
+          'posts',
+          res.data
+        )
+      }
+    }
+  )
+
+  return { createPostMutation, updatePostMutation, deletePostMutation,createCommentMutation,searchPostsMutation }
 }

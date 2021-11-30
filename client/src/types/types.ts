@@ -98,3 +98,7 @@ export interface UpdateUserData {
   name: string
   icon: string
 }
+
+export interface SearchParams{
+  title:string
+}

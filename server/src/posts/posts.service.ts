@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository } from 'typeorm'
+import { Like, Repository } from 'typeorm'
 
 import { Tag } from 'src/tags/tags.entity'
 import { UsersService } from 'src/users/users.service'
@@ -8,6 +8,7 @@ import { CreatePostDto } from './dto/create-post.dto'
 import { Post } from './post.entity'
 import { UpdatePostDto } from './dto/update-post.dto'
 import { User } from 'src/users/users.entity'
+import { SearchParamsDto } from './dto/search-params.dto'
 
 @Injectable()
 export class PostsService {
@@ -34,12 +35,16 @@ export class PostsService {
     return await this.postRepository.save(post)
   }
 
-  async findAll(): Promise<Post[]> {
+  async findAll({title} : SearchParamsDto): Promise<Post[]> {
+
     return await this.postRepository.find({
       relations: this.relations,
       order: {
         id: 'DESC',
       },
+      where:{
+        title:Like(`%${title}%`)
+      }
     })
   }
 

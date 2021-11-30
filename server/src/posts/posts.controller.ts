@@ -5,12 +5,14 @@ import {
   Get,
   Param,
   Post,
+  Query,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
 
 import { CreatePostDto } from './dto/create-post.dto'
+import { SearchParamsDto } from './dto/search-params.dto'
 import { UpdatePostDto } from './dto/update-post.dto'
 import { PostsService } from './posts.service'
 
@@ -19,8 +21,8 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Get()
-  public findAll() {
-    return this.postsService.findAll()
+  public findAll(@Query() query:SearchParamsDto) {
+    return this.postsService.findAll(query)
   }
 
   @Get(':id')

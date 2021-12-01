@@ -18,7 +18,7 @@ export const PostEdit: VFC = () => {
   const { data: tags, isLoading: tagsIsLoading } = useQueryTags()
   const { id } = useParams<{ id: string }>()
   const { data: post, isLoading: postIsLoading } = useQuerySinglePost(id)
-  const { processImage } = useResizeFile()
+  const { processImage, imageSize } = useResizeFile()
 
   const {
     register,
@@ -28,31 +28,19 @@ export const PostEdit: VFC = () => {
   } = useForm<UpdatePostData>({
     shouldUnregister: false,
     resolver: yupResolver(schema),
-    defaultValues: {
-      title: '',
-      tagIds: [],
-      imageFile: '',
-      description: '',
-    },
   })
   const onChangeFileResize = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const imageFile = event.target.files?.[0]
-    const resizedFile = await processImage(imageFile)
+    const { width, height } = await imageSize(imageFile)
+    const resizedFile = await processImage(imageFile, width, height)
     setDeskImageUrl(resizedFile)
     setValue('imageFile', resizedFile)
   }
 
-  if (post) {
-    // setValue('title', post?.title)
-    // setValue('imageFile', post?.imageFile)
-    // setValue('description', post?.description)
-    // setDeskImageUrl()
-    // b(post?.imageFile)
-  }
-
   if (tagsIsLoading || postIsLoading) return <Spinner />
+
   return (
     <div className="flex-grow bg-primary">
       <div className="container items-center px-5 pb-8 mx-auto lg:px-24 pt-10">
@@ -76,6 +64,7 @@ export const PostEdit: VFC = () => {
                           className="shadow-sm appearance-none border border-gray-300 rounded-md  w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                           id="title"
                           type="text"
+                          defaultValue={post?.title}
                         />
                         <span className="text-xs text-red-700">
                           {errors.title?.message}
@@ -97,11 +86,28 @@ export const PostEdit: VFC = () => {
                             onChange={onChangeFileResize}
                             className=" border-gray-300 focus:ring-indigo-700 block w-full overflow-hidden cursor-pointer border text-gray-800 bg-white rounded-md shadow-sm focus:outline-none focus:shadow-outline"
                           />
-                          <input type="hidden" {...register('imageFile')} />
                         </div>
-                        {deskImageUrl ? (
-                          <img src={deskImageUrl} alt="deskImage" />
-                        ) : (
+                        {deskImageUrl && (
+                          <>
+                            <img src={deskImageUrl} alt="deskImage" />
+                            <input
+                              type="hidden"
+                              {...register('imageFile')}
+                              value={deskImageUrl}
+                            />
+                          </>
+                        )}
+                        {!deskImageUrl && post?.imageFile && (
+                          <>
+                            <img src={post.imageFile} alt="deskImage" />
+                            <input
+                              type="hidden"
+                              {...register('imageFile')}
+                              value={post.imageFile}
+                            />
+                          </>
+                        )}
+                        {!deskImageUrl && !post?.imageFile && (
                           <PhotographIcon className="sm:h-1/2 sm:w-1/2 bg-gray-500 text-gray-200 rounded-md mx-2 my-2" />
                         )}
                       </div>
@@ -125,6 +131,7 @@ export const PostEdit: VFC = () => {
                           rows={3}
                           className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
                           {...register('description')}
+                          defaultValue={post?.description}
                         />
                         <span className="text-xs text-red-700">
                           {errors.description?.message}
@@ -159,6 +166,7 @@ export const PostEdit: VFC = () => {
                     </div>
                   </div>
                 </div>
+                <input type="hidden" {...register('id')} defaultValue={id} />
                 <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
                   <button
                     type="submit"

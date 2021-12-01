@@ -1,4 +1,4 @@
-import { IsString, IsNotEmpty, IsEmail, IsNumber } from 'class-validator';
+import {  IsNotEmpty, IsEmail, IsNumber } from 'class-validator';
 
 export class FavoriteDto {
   @IsNotEmpty()
@@ -6,6 +6,6 @@ export class FavoriteDto {
   readonly postId: number;
 
   @IsNotEmpty()
-  @IsEmail()
-  readonly email: string;
+  @IsNumber()
+  readonly userId: number;
 }

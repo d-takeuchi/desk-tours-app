@@ -5,6 +5,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   Query,
   UseGuards,
   ValidationPipe,
@@ -36,7 +37,7 @@ export class PostsController {
     return this.postsService.create(postData)
   }
 
-  @Post(':id')
+  @Put(':id')
   @UseGuards(AuthGuard('jwt'))
   public edit(
     @Param('id') id: number,

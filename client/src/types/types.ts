@@ -102,3 +102,8 @@ export interface UpdateUserData {
 export interface SearchParams{
   title:string
 }
+
+export interface FavoriteData{
+  userId? : number
+  postId? : number
+}

@@ -8,7 +8,6 @@ import { useQueryUser } from '../../hooks/useQueryUser'
 
 export const Header: VFC = () => {
   const { data: user } = useQueryUser()
-
   return (
     <Popover className="bg-secondary">
       <div className="mx-auto px-4 sm:px-6">

@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { User } from './users/users.entity';
@@ -12,10 +13,10 @@ import { Post } from './posts/post.entity';
 import { CommentsModule } from './comments/comments.module';
 import { Comment } from './comments/comments.entity';
 import { Like } from './likes/likes.entity';
+import { LikesModule } from './likes/likes.module';
 
 @Module({
   imports: [
-    UsersModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'db-server',
@@ -26,10 +27,12 @@ import { Like } from './likes/likes.entity';
       entities: [User, Tag, Post, Comment, Like],
       synchronize: true,
     }),
+    UsersModule,
     AuthModule,
     PostsModule,
     TagsModule,
     CommentsModule,
+    LikesModule
   ],
   controllers: [AppController],
   providers: [AppService],

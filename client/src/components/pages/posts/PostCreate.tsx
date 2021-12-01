@@ -19,13 +19,14 @@ export const PostCreate: VFC = () => {
   } = useProcessPost()
   const { data: tags, isLoading: tagsIsLoading } = useQueryTags()
 
-  const { processImage } = useResizeFile()
+  const { processImage, imageSize } = useResizeFile()
 
   const onChangeFileResize = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const imageFile = event.target.files?.[0]
-    const resizedFile = await processImage(imageFile)
+    const { width, height } = await imageSize(imageFile)
+    const resizedFile = await processImage(imageFile, width, height)
     setDeskImageUrl(resizedFile)
     setValue('imageFile', resizedFile)
   }
@@ -81,7 +82,11 @@ export const PostCreate: VFC = () => {
                           <input type="hidden" {...register('imageFile')} />
                         </div>
                         {deskImageUrl ? (
-                          <img src={deskImageUrl} alt="deskImage" />
+                          <img
+                            src={deskImageUrl}
+                            alt="deskImage"
+                            id="deskImage"
+                          />
                         ) : (
                           <PhotographIcon className="sm:h-1/2 sm:w-1/2 bg-gray-500 text-gray-200 rounded-md mx-2 my-2" />
                         )}

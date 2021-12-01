@@ -12,6 +12,7 @@ import {
   Post,
   SearchParams,
   UpdatePostData,
+  FavoriteData
 } from '../types/types'
 
 export const useMutatePost = () => {
@@ -143,5 +144,28 @@ export const useMutatePost = () => {
     }
   )
 
-  return { createPostMutation, updatePostMutation, deletePostMutation,createCommentMutation,searchPostsMutation }
+  const toggleFavoriteMutation = useMutation(
+    ({userId,postId}:FavoriteData) =>
+        axios.post<Post>('http://localhost:3000/likes', {
+        userId,
+        postId
+      },{withCredentials:true}),
+      {
+        onSuccess: (res) => {
+          queryClient.setQueryData<Post>(
+            ['singlePost',String(res.data.id)],
+            res.data
+          )
+        },
+        onError: (err: any) => {
+          toast.error('いいね失敗')
+          dispatch(toggleCsrfState())
+          if (err.response.data.message === 'Unauthorized') {
+            history.push('/login')
+          }
+        },
+      }
+  )
+
+  return { createPostMutation, updatePostMutation, deletePostMutation,createCommentMutation,searchPostsMutation,toggleFavoriteMutation }
 }

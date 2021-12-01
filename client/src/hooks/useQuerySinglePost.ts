@@ -24,7 +24,7 @@ export const useQuerySinglePost = (id: string) => {
     queryKey: ['singlePost', id],
     queryFn: () => getSinglePost(id),
     enabled: !!id,
-    staleTime: Infinity,
+    staleTime: 0,
     onError: (err: any) => {
       toast.error('取得失敗')
       dispatch(toggleCsrfState())

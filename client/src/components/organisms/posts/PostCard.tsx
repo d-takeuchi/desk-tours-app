@@ -5,6 +5,8 @@ import { ChatAltIcon } from '@heroicons/react/outline'
 
 import { useQuerySinglePost } from '../../../hooks/useQuerySinglePost'
 import { useQueryUser } from '../../../hooks/useQueryUser'
+import { useMutatePost } from '../../../hooks/useMutatePost'
+import { Spinner } from '../../atoms/Spinner'
 
 interface Props {
   id: string
@@ -13,17 +15,9 @@ interface Props {
 export const PostCard: VFC<Props> = memo(({ id }) => {
   const { data: post, isLoading: postIsLoading } = useQuerySinglePost(id)
   const { data: user, isLoading: userIsLoading } = useQueryUser()
+  const { toggleFavoriteMutation } = useMutatePost()
 
-  // const toggleFavorite = () => {
-  //   axios
-  //     .post<Post>('http://localhost:3000/likes', {
-  //       userId: profile?.id,
-  //       postId: id,
-  //     })
-  //     .then((res) => setPost(res.data))
-  // }
-
-  if (postIsLoading || userIsLoading) return <p>Loading...</p>
+  if (postIsLoading || userIsLoading) return <Spinner />
   return (
     <div className="w-full p-6 mx-auto lg:w-1/3 sm:w-2/3">
       <div className="shadow-xl  rounded-xl bg-blueGray-50">
@@ -44,7 +38,12 @@ export const PostCard: VFC<Props> = memo(({ id }) => {
                   ? 'text-red-600'
                   : 'text-gray-400'
               }`}
-              // onClick={toggleFavorite}
+              onClick={() =>
+                toggleFavoriteMutation.mutate({
+                  userId: user?.id,
+                  postId: post?.id,
+                })
+              }
             />
             <p>{post?.likesCount}</p>
             <ChatAltIcon className="h-5 w-5 text-gray-400 ml-2 " />

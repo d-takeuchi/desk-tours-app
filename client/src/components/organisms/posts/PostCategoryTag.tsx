@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const PostCategoryTag: VFC<Props> = memo(
-  ({ tagId, tagName, register }) => {
+  ({ tagId, tagName, register, postTags }) => {
     return (
       <div className="pb-10">
         <input
@@ -19,6 +19,7 @@ export const PostCategoryTag: VFC<Props> = memo(
           value={tagId}
           id={`tags_${tagId}`}
           {...register('tagIds')}
+          defaultChecked={postTags?.find((postTag) => postTag.id === tagId)}
         />
         <label
           htmlFor={`tags_${tagId}`}

@@ -18,13 +18,14 @@ export const ProfileEdit: VFC = memo(() => {
     updateUser,
   } = useProcessUser()
   const { data: user, isLoading } = useQueryUser()
-  const { processImage } = useResizeFile()
+  const { processImage, imageSize } = useResizeFile()
 
   const onChangeFileResize = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const imageFile = event.target.files?.[0]
-    const resizedFile = await processImage(imageFile)
+    const { width, height } = await imageSize(imageFile)
+    const resizedFile = await processImage(imageFile, width, height)
     setIcon(resizedFile)
     setValue('icon', resizedFile)
   }

@@ -4,21 +4,20 @@ import { Repository } from 'typeorm';
 
 import { Post } from 'src/posts/post.entity';
 import { PostsService } from 'src/posts/posts.service';
-import { UsersService } from 'src/users/users.service';
 import { FavoriteDto } from './dto/favorite.dto';
 import { Like } from './likes.entity';
+import { User } from 'src/users/users.entity';
 
 @Injectable()
 export class LikesService {
   constructor(
     @InjectRepository(Like) private readonly likeRepository: Repository<Like>,
-    private readonly usersService: UsersService,
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly postsService: PostsService,
   ) {}
 
-  public async toggleLike({ email, postId }: FavoriteDto): Promise<Post> {
-    const user = await this.usersService.findByEmail(email);
-
+  public async toggleLike({ userId, postId }: FavoriteDto): Promise<Post> {
+    const user = await this.userRepository.findOne(userId);
     const like = await this.likeRepository.findOne({
       userId: user.id,
       postId,

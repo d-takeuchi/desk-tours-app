@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   UseGuards,
   ValidationPipe,
@@ -13,6 +14,11 @@ import { LikesService } from './likes.service';
 @Controller('likes')
 export class LikesController {
   constructor(private readonly likesService: LikesService) {}
+
+  @Get()
+  public hello(){
+    return 'hello-world'
+  }
 
   @Post()
   @UseGuards(AuthGuard('jwt'))

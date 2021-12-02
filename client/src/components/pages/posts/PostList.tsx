@@ -5,10 +5,8 @@ import { Spinner } from '../../atoms/Spinner'
 import { PostCard } from '../../organisms/posts/PostCard'
 import { SearchInput } from '../../organisms/posts/SearchInput'
 
-const PostList = memo(() => {
+export const PostList = memo(() => {
   const { data: posts, isLoading } = useQueryPosts()
-
-  if (isLoading) return <Spinner />
 
   return (
     <div className="flex-grow bg-primary">
@@ -19,6 +17,7 @@ const PostList = memo(() => {
         </div>
 
         <div className="flex flex-wrap mb-12 text-left">
+          {isLoading && <Spinner />}
           {posts?.map((post) => (
             <PostCard key={post.id} id={String(post.id)} />
           ))}
@@ -27,5 +26,3 @@ const PostList = memo(() => {
     </div>
   )
 })
-
-export default PostList

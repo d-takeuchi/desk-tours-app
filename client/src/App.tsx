@@ -7,8 +7,6 @@ import { CsrfToken } from './types/types'
 import { useAppSelector } from './app/hooks'
 import { selectCsrfState } from './slices/csrfSlice'
 import { Router } from './routes/Router'
-import { Header } from './components/atoms/Header'
-import { Footer } from './components/atoms/Footer'
 
 const App = () => {
   const csrf = useAppSelector(selectCsrfState)
@@ -28,9 +26,7 @@ const App = () => {
       <Toaster
         toastOptions={{ className: 'px-20 py-3 bg-primary text-white' }}
       />
-      <Header />
       <Router />
-      <Footer />
     </BrowserRouter>
   )
 }

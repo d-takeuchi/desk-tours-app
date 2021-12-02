@@ -8,7 +8,6 @@ import { PostCard } from '../organisms/posts/PostCard'
 export const Home: VFC = () => {
   const { data: posts, isLoading } = useQueryPosts()
 
-  if (isLoading) return <Spinner />
   return (
     <>
       {/* メインビジュアル */}
@@ -42,6 +41,7 @@ export const Home: VFC = () => {
           </div>
 
           <div className="flex flex-wrap mb-12 text-left">
+            {isLoading && <Spinner />}
             {posts?.map((post, i) => {
               if (i <= 2) return <PostCard key={post.id} id={String(post.id)} />
             })}

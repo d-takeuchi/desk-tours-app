@@ -12,16 +12,19 @@ import { CommentData } from '../../../types/types'
 import { Spinner } from '../../atoms/Spinner'
 import { useProcessPost } from '../../../hooks/useProcessPost'
 import { useQueryUser } from '../../../hooks/useQueryUser'
+import { useMutatePost } from '../../../hooks/useMutatePost'
 
 export const PostView: VFC = () => {
   const { id } = useParams<{ id: string }>()
   const { data: post, isLoading: postIsLoading } = useQuerySinglePost(id)
-  const { deletePost, createComment } = useProcessPost()
+  const { deletePost } = useProcessPost()
   const { data: user, isLoading: userIsLoading } = useQueryUser()
+  const { createCommentMutation } = useMutatePost()
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<CommentData>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -30,6 +33,11 @@ export const PostView: VFC = () => {
   })
 
   if (postIsLoading || userIsLoading) return <Spinner />
+
+  const onSubmit = (comment: CommentData) => {
+    createCommentMutation.mutate(comment)
+    reset()
+  }
 
   return (
     <div className="flex-grow bg-primary">
@@ -83,7 +91,7 @@ export const PostView: VFC = () => {
                       />
                     ))}
                     <div className="mt-3">
-                      <form onSubmit={handleSubmit(createComment)}>
+                      <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="flex">
                           <img
                             className="object-cover rounded-full h-8 w-8 mr-5"

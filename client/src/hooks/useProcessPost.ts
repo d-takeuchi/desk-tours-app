@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 import { useMutatePost } from './useMutatePost'
-import { CommentData, CreatePostData, UpdatePostData } from '../types/types'
+import { CreatePostData, UpdatePostData } from '../types/types'
 import { schema } from '../validations/posts/create'
 
 export const useProcessPost = () => {
@@ -37,15 +37,10 @@ export const useProcessPost = () => {
     deletePostMutation.mutate(id)
   }
 
-  const createComment = (comment:CommentData) => {
-    createCommentMutation.mutate(comment)
-  }
-
   return {
     createPost,
     updatePost,
     deletePost,
-    createComment,
     register,
     handleSubmit,
     setValue,

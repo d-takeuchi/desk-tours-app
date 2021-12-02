@@ -6,10 +6,9 @@ import { schema } from '../../../validations/auth/login'
 import TwitterIcon from '../../atoms/TwitterIcon'
 import GoogleIcon from '../../atoms/GoogleIcon'
 import { useProcessAuth } from '../../../hooks/useProcessAuth'
-import { Spinner } from '../../atoms/Spinner'
 
 export const Login: VFC = () => {
-  const { login, loginMutation } = useProcessAuth()
+  const { login } = useProcessAuth()
 
   const {
     register,
@@ -19,10 +18,8 @@ export const Login: VFC = () => {
     resolver: yupResolver(schema),
   })
 
-  if (loginMutation.isLoading) return <Spinner />
-
   return (
-    <section className="flex-grow flex text-blueGray-700 justify-center bg-primary">
+    <section className="flex-grow flex text-blueGray-700 justify-center bg-primary min-h-screen items-center">
       <div className="container items-center px-5 py-12 lg:px-20">
         <div className="flex flex-col w-full p-10 mx-auto my-6 transition duration-500 ease-in-out transform bg-white border rounded-lg lg:w-2/6 md:w-1/2 md:mt-0">
           <h1 className="text-center">ログイン</h1>

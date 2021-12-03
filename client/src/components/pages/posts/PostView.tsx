@@ -69,14 +69,13 @@ export const PostView: VFC = () => {
 
                     <p className="leading-relaxed my-10">{post?.description}</p>
 
-                    <div className="mt-5">
+                    <div className="flex flex-col sm:flex-row">
                       {post?.tags.map((tag) => (
-                        <label
-                          key={tag.id}
-                          className="bg-gray-200 px-4 py-2 rounded-lg border-solid border-4 border-light-blue-500 mr-10 p-10"
-                        >
-                          {tag.name}
-                        </label>
+                        <div key={tag.id} className="pb-10">
+                          <label className="bg-gray-200 px-4 py-2 rounded-lg border-solid border-4 border-light-blue-500 mr-10 p-10">
+                            {tag.name}
+                          </label>
+                        </div>
                       ))}
                     </div>
                   </div>

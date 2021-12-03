@@ -8,17 +8,6 @@ import { useProcessAuth } from '../../hooks/useProcessAuth'
 import { useQueryClient } from 'react-query'
 import { LoginUserInfo } from '../../types/types'
 
-const popupLinks = [
-  {
-    path: '/posts',
-    name: '投稿一覧',
-  },
-  {
-    path: '/posts/create',
-    name: '新規投稿',
-  },
-]
-
 export const Header: VFC = () => {
   const queryClient = useQueryClient()
   const user = queryClient.getQueryData<LoginUserInfo>('user')
@@ -44,12 +33,6 @@ export const Header: VFC = () => {
           {/* ヘッダーメニュー */}
           <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
             <Link
-              to="/posts/create"
-              className="ml-8 whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
-            >
-              新規投稿
-            </Link>
-            <Link
               to="/posts"
               className="ml-8 whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
             >
@@ -57,7 +40,15 @@ export const Header: VFC = () => {
             </Link>
 
             {user ? (
-              <DropDownMenu icon={user?.icon} />
+              <>
+                <Link
+                  to="/posts/create"
+                  className="ml-8 whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
+                >
+                  新規投稿
+                </Link>
+                <DropDownMenu icon={user?.icon} />
+              </>
             ) : (
               <>
                 <Link
@@ -110,44 +101,58 @@ export const Header: VFC = () => {
               </div>
               <div className="mt-6">
                 <nav className="grid gap-y-8">
-                  {popupLinks.map((item, index) => (
-                    <Link
-                      key={index}
-                      to={item.path}
-                      className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50"
-                    >
-                      <span className="ml-3 text-base font-medium text-gray-900">
-                        {item.name}
-                      </span>
-                    </Link>
-                  ))}
-                  <button
-                    className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50 ml-1 text-base font-medium text-gray-900"
-                    onClick={logout}
-                  >
-                    ログアウト
-                  </button>
+                  <Link to="/posts">
+                    <span className="ml-3 text-base font-medium text-gray-900">
+                      投稿一覧
+                    </span>
+                  </Link>
+                  {user && (
+                    <>
+                      <Link to="/posts/create">
+                        <span className="ml-3 text-base font-medium text-gray-900">
+                          新規投稿
+                        </span>
+                      </Link>
+                      <Link to={`/users/${user.id}`}>
+                        <span className="ml-3 text-base font-medium text-gray-900">
+                          プロフィール画面
+                        </span>
+                      </Link>
+                    </>
+                  )}
                 </nav>
               </div>
             </div>
             <div className="py-6 px-5 space-y-6">
-              <div>
-                <Link
-                  to="/sign-up"
-                  className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-primaryButton hover:bg-gray-300"
-                >
-                  サインアップ
-                </Link>
-                <p className="mt-6 text-center text-base font-medium text-gray-500">
-                  既にアカウントをお持ちの場合
+              {user ? (
+                <div>
                   <Link
-                    to="/login"
-                    className="text-indigo-600 hover:text-indigo-500"
+                    to="/sign-up"
+                    className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-primaryButton hover:bg-gray-300"
+                    onClick={logout}
                   >
-                    ログイン
+                    ログアウト
                   </Link>
-                </p>
-              </div>
+                </div>
+              ) : (
+                <div>
+                  <Link
+                    to="/sign-up"
+                    className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-primaryButton hover:bg-gray-300"
+                  >
+                    サインアップ
+                  </Link>
+                  <p className="mt-6 text-center text-base font-medium text-gray-500">
+                    既にアカウントをお持ちの場合
+                    <Link
+                      to="/login"
+                      className="text-indigo-600 hover:text-indigo-500"
+                    >
+                      ログイン
+                    </Link>
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </Popover.Panel>

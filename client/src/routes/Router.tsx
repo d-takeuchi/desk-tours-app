@@ -13,7 +13,6 @@ import { AuthenticateRouter } from './AuthenticateRouter'
 
 export const Router: VFC = () => {
   const location = useLocation()
-  // const { data, isLoading } = useQueryUser()
   const queryClient = useQueryClient()
   const user = queryClient.getQueryData<LoginUserInfo>('user')
   return (

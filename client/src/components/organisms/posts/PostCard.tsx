@@ -4,20 +4,22 @@ import { HeartIcon } from '@heroicons/react/outline'
 import { ChatAltIcon } from '@heroicons/react/outline'
 
 import { useQuerySinglePost } from '../../../hooks/useQuerySinglePost'
-import { useQueryUser } from '../../../hooks/useQueryUser'
 import { useMutatePost } from '../../../hooks/useMutatePost'
 import { Spinner } from '../../atoms/Spinner'
+import { useQueryClient } from 'react-query'
+import { LoginUserInfo } from '../../../types/types'
 
 interface Props {
   id: string
 }
 
 export const PostCard: VFC<Props> = memo(({ id }) => {
+  const queryClient = useQueryClient()
+  const user = queryClient.getQueryData<LoginUserInfo>('user')
   const { data: post, isLoading: postIsLoading } = useQuerySinglePost(id)
-  const { data: user, isLoading: userIsLoading } = useQueryUser()
   const { toggleFavoriteMutation } = useMutatePost()
 
-  if (postIsLoading || userIsLoading) return <Spinner />
+  if (postIsLoading) return <Spinner />
   return (
     <div className="w-full p-6 mx-auto lg:w-1/3 sm:w-2/3">
       <div className="shadow-xl  rounded-xl bg-blueGray-50">

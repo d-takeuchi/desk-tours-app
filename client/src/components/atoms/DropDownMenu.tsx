@@ -3,7 +3,8 @@ import { Menu, Transition } from '@headlessui/react'
 import { Link } from 'react-router-dom'
 
 import { useProcessAuth } from '../../hooks/useProcessAuth'
-import { useQueryUser } from '../../hooks/useQueryUser'
+import { useQueryClient } from 'react-query'
+import { LoginUserInfo } from '../../types/types'
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
@@ -15,12 +16,13 @@ interface Props {
 
 export const DropDownMenu: VFC<Props> = ({ icon }) => {
   const { logout } = useProcessAuth()
-  const { data: user } = useQueryUser()
+  const queryClient = useQueryClient()
+  const user = queryClient.getQueryData<LoginUserInfo>('user')
 
   return (
     <Menu as="div" className="relative inline-block text-left z-10">
       <div>
-        <Menu.Button className="inline-flex justify-center w-full rounded-md   shadow-sm px-4 py-2  text-sm font-medium  ">
+        <Menu.Button>
           {icon ? (
             <img
               className="ml-8 object-cover rounded-full h-16 w-16"

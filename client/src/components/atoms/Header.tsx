@@ -4,10 +4,26 @@ import { MenuIcon, XIcon } from '@heroicons/react/outline'
 import { Link } from 'react-router-dom'
 
 import { DropDownMenu } from './DropDownMenu'
-import { useQueryUser } from '../../hooks/useQueryUser'
+import { useProcessAuth } from '../../hooks/useProcessAuth'
+import { useQueryClient } from 'react-query'
+import { LoginUserInfo } from '../../types/types'
+
+const popupLinks = [
+  {
+    path: '/posts',
+    name: '投稿一覧',
+  },
+  {
+    path: '/posts/create',
+    name: '新規投稿',
+  },
+]
 
 export const Header: VFC = () => {
-  const { data: user } = useQueryUser()
+  const queryClient = useQueryClient()
+  const user = queryClient.getQueryData<LoginUserInfo>('user')
+  const { logout } = useProcessAuth()
+
   return (
     <Popover className="bg-secondary">
       <div className="mx-auto px-4 sm:px-6">
@@ -54,7 +70,7 @@ export const Header: VFC = () => {
                   to="/sign-up"
                   className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-primaryButton hover:bg-gray-300"
                 >
-                  新規登録
+                  サインアップ
                 </Link>
               </>
             )}
@@ -79,7 +95,9 @@ export const Header: VFC = () => {
             <div className="pt-5 pb-6 px-5">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2>DeskTourApp</h2>
+                  <Link to="/">
+                    <h2>DeskTourApp</h2>
+                  </Link>
                 </div>
 
                 {/* {閉じるボタン} */}
@@ -90,23 +108,35 @@ export const Header: VFC = () => {
                   </Popover.Button>
                 </div>
               </div>
+              <div className="mt-6">
+                <nav className="grid gap-y-8">
+                  {popupLinks.map((item, index) => (
+                    <Link
+                      key={index}
+                      to={item.path}
+                      className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50"
+                    >
+                      <span className="ml-3 text-base font-medium text-gray-900">
+                        {item.name}
+                      </span>
+                    </Link>
+                  ))}
+                  <button
+                    className="-m-3 p-3 flex items-center rounded-md hover:bg-gray-50 ml-1 text-base font-medium text-gray-900"
+                    onClick={logout}
+                  >
+                    ログアウト
+                  </button>
+                </nav>
+              </div>
             </div>
             <div className="py-6 px-5 space-y-6">
-              <div className="grid grid-cols-2 gap-y-4 gap-x-8">
-                <Link
-                  to="/users/profile/1"
-                  className="text-gray-700 block px-4 py-2 text-sm"
-                >
-                  プロフィール画面
-                </Link>
-                <button className="text-sm">ログアウト</button>
-              </div>
               <div>
                 <Link
                   to="/sign-up"
                   className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-primaryButton hover:bg-gray-300"
                 >
-                  新規登録
+                  サインアップ
                 </Link>
                 <p className="mt-6 text-center text-base font-medium text-gray-500">
                   既にアカウントをお持ちの場合

@@ -42,9 +42,9 @@ export const Home: VFC = () => {
 
           <div className="flex flex-wrap mb-12 text-left">
             {isLoading && <Spinner />}
-            {posts?.map((post, i) => {
-              if (i <= 2) return <PostCard key={post.id} id={String(post.id)} />
-            })}
+            {posts?.slice(0, 3).map((post) => (
+              <PostCard key={post.id} id={String(post.id)} />
+            ))}
           </div>
         </div>
       </section>

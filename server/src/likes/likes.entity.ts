@@ -20,6 +20,7 @@ export class Like {
   @ManyToOne(() => Post, (post) => post.likes, {
     eager: true,
     nullable: false,
+    onDelete: "CASCADE",
   })
   public post!: Post;
 
@@ -29,6 +30,7 @@ export class Like {
   @ManyToOne(() => User, (user) => user.likes, {
     eager: true,
     nullable: false,
+    onDelete: "CASCADE",
   })
   public user!: User;
 

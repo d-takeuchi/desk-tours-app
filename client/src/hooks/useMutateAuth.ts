@@ -74,7 +74,7 @@ export const useMutateAuth = () => {
       },
       onError: (err: any) => {
         toast.error('ログアウト失敗')
-        if (err.response.data.detail === 'The CSRF token has expired.') {
+        if (err.response.data.message === 'invalid csrf token') {
           dispatch(toggleCsrfState())
           history.push('/login')
         }

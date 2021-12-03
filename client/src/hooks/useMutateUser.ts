@@ -6,11 +6,13 @@ import { useHistory } from 'react-router-dom'
 import { useAppDispatch } from '../app/hooks'
 import { toggleCsrfState } from '../slices/csrfSlice'
 import { LoginUserInfo, UpdateUserData } from '../types/types'
+import { useProcessAuth } from './useProcessAuth'
 
 export const useMutateUser = () => {
   const history = useHistory()
   const dispatch = useAppDispatch()
   const queryClient = useQueryClient()
+  const {logout} = useProcessAuth()
 
   const updateUserMutation = useMutation(
     async (user: UpdateUserData) =>
@@ -29,7 +31,7 @@ export const useMutateUser = () => {
         toast.error('更新失敗')
         dispatch(toggleCsrfState())
         if (err.response.data.message === 'Unauthorized') {
-          history.push('/login')
+          logout()
         }
       },
     }

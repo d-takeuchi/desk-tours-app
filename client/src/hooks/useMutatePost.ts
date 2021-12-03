@@ -14,12 +14,14 @@ import {
   UpdatePostData,
   FavoriteData
 } from '../types/types'
+import { useProcessAuth } from './useProcessAuth'
 
 export const useMutatePost = () => {
   const history = useHistory()
   const dispatch = useAppDispatch()
   const queryClient = useQueryClient()
   const user = queryClient.getQueryData<LoginUserInfo>('user')
+  const {logout} = useProcessAuth()
 
   const createPostMutation = useMutation(
     (post: CreatePostData) =>
@@ -43,7 +45,7 @@ export const useMutatePost = () => {
         toast.error('作成失敗')
         dispatch(toggleCsrfState())
         if (err.response.data.message === 'Unauthorized') {
-          history.push('/login')
+          logout()
         }
       },
     }
@@ -76,7 +78,7 @@ export const useMutatePost = () => {
         toast.error('更新失敗')
         dispatch(toggleCsrfState())
         if (err.response.data.message === 'Unauthorized') {
-          history.push('/login')
+          logout()
         }
       },
     }
@@ -103,7 +105,7 @@ export const useMutatePost = () => {
         toast.error('削除失敗')
         dispatch(toggleCsrfState())
         if (err.response.data.message === 'Unauthorized') {
-          history.push('/login')
+          logout()
         }
       },
     }
@@ -125,7 +127,7 @@ export const useMutatePost = () => {
         toast.error('コメント投稿失敗')
         dispatch(toggleCsrfState())
         if (err.response.data.message === 'Unauthorized') {
-          history.push('/login')
+          logout()
         }
       },
     }
@@ -161,7 +163,7 @@ export const useMutatePost = () => {
           toast.error('いいね失敗')
           dispatch(toggleCsrfState())
           if (err.response.data.message === 'Unauthorized') {
-            history.push('/login')
+            logout()
           }
         },
       }

@@ -14,9 +14,14 @@ import { CommentsModule } from './comments/comments.module';
 import { Comment } from './comments/comments.entity';
 import { Like } from './likes/likes.entity';
 import { LikesModule } from './likes/likes.module';
+import { EmailModule } from './email/email.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath:'.env'
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'db-server',
@@ -32,7 +37,8 @@ import { LikesModule } from './likes/likes.module';
     PostsModule,
     TagsModule,
     CommentsModule,
-    LikesModule
+    LikesModule,
+    EmailModule
   ],
   controllers: [AppController],
   providers: [AppService],

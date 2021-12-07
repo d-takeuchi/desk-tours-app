@@ -12,6 +12,8 @@ services:
         target: /api-server
     depends_on:
       - db-server
+    environment:
+      TZ: Asia/Tokyo      
   db-server:
     container_name: db-server
     image: mysql:5.7.29

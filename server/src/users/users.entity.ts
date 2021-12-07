@@ -44,4 +44,7 @@ export class User {
 
   @UpdateDateColumn()
   readonly updatedAt?: Date;
+
+  @Column({ nullable:true })
+  emailVerifiedAt?:Date
 }

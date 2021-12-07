@@ -23,11 +23,12 @@ export class AuthService {
   }: LoginDataDto): Promise<boolean> {
     const user = await this.usersService.findByEmail(email)
 
-    const isValid = await bcrypt.compare(password, user.password)
-    if (!isValid) {
+    const isPasswordValid = await bcrypt.compare(password, user.password)
+    if (!isPasswordValid || !user.emailVerifiedAt) {
       throw new UnauthorizedException('invalid credentials')
     }
-    return isValid
+    
+    return true
   }
 
   public async login(loginData: LoginDataDto): Promise<string> {

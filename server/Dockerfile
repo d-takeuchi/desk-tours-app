@@ -6,4 +6,7 @@ WORKDIR /api-server
 COPY package*.json /api-server/
 
 RUN npm i
+
+ENV TZ Asia/Tokyo
+
 CMD [ "npm", "run", "start:dev"]

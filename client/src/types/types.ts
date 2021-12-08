@@ -107,3 +107,12 @@ export interface FavoriteData{
   userId? : number
   postId? : number
 }
+
+export interface GoogleLoginData{
+  email: string
+  familyName: string
+  givenName: string
+  googleId: string
+  imageUrl: string
+  name: string
+}

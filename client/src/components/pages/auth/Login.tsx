@@ -1,14 +1,14 @@
 import { VFC } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+import GoogleLogin from 'react-google-login'
 
 import { schema } from '../../../validations/auth/login'
 import TwitterIcon from '../../atoms/TwitterIcon'
-import GoogleIcon from '../../atoms/GoogleIcon'
 import { useProcessAuth } from '../../../hooks/useProcessAuth'
 
 export const Login: VFC = () => {
-  const { login } = useProcessAuth()
+  const { login, googleLogin } = useProcessAuth()
 
   const {
     register,
@@ -17,7 +17,6 @@ export const Login: VFC = () => {
   } = useForm({
     resolver: yupResolver(schema),
   })
-
   return (
     <section className="flex-grow flex text-blueGray-700 justify-center bg-primary min-h-screen items-center">
       <div className="container items-center px-5 py-12 lg:px-20">
@@ -69,18 +68,14 @@ export const Login: VFC = () => {
           </form>
           <p className="mx-auto mt-3 text-xs text-blueGray-500 mb-5">または</p>
 
-          <div className="flex justify-enter\ flex-col">
-            <button
-              type="button"
-              className="inline-flex w-full px-4 py-3 font-semibold text-black transition duration-500 ease-in-out transform bg-white border rounded-lg border-blueGray-300 hover:bg-gray-400 hover:text-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2"
-            >
-              <div className="flex items-center justify-center w-full">
-                <GoogleIcon />
-                <a href="http://localhost:3000/auth/google">
-                  <span className="ml-4">Googleアカウントでログイン</span>
-                </a>
-              </div>
-            </button>
+          <div className="flex justify-center flex-col">
+            <GoogleLogin
+              clientId="150873333936-vbk9fj9jf8gtssmi9bj6p879tv3bh9go.apps.googleusercontent.com"
+              buttonText="Googleアカウントでログイン"
+              onSuccess={googleLogin}
+              onFailure={googleLogin}
+              cookiePolicy={'single_host_origin'}
+            />
             <button
               type="button"
               className="inline-flex w-full px-4 py-3 font-semibold text-black transition duration-500 ease-in-out transform bg-white border rounded-lg border-blueGray-300 hover:bg-gray-400 hover:text-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 mt-5"

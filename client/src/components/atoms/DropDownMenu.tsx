@@ -21,7 +21,7 @@ export const DropDownMenu: VFC<Props> = ({ icon }) => {
 
   return (
     <Menu as="div" className="relative inline-block text-left z-10">
-      <div>
+      <div className="ml-8">
         <Menu.Button>
           {icon ? (
             <img

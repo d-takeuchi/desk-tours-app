@@ -1,15 +1,15 @@
 import { VFC } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
+import GoogleLogin from 'react-google-login'
 
 import { schema } from '../../../validations/auth/signup'
-import GoogleIcon from '../../atoms/GoogleIcon'
 import TwitterIcon from '../../atoms/TwitterIcon'
 import { useProcessAuth } from '../../../hooks/useProcessAuth'
 import { Spinner } from '../../atoms/Spinner'
 
 export const SignUp: VFC = () => {
-  const { signUp, signUpMutation } = useProcessAuth()
+  const { signUp, signUpMutation, googleLogin } = useProcessAuth()
 
   const {
     register,
@@ -90,22 +90,20 @@ export const SignUp: VFC = () => {
           <p className="mx-auto mt-3 text-xs text-blueGray-500 mb-5">または</p>
 
           <div className="flex justify-enter\ flex-col">
-            <button
-              type="button"
-              className="inline-flex w-full px-4 py-3 font-semibold text-black transition duration-500 ease-in-out transform bg-white border rounded-lg border-blueGray-300 hover:bg-gray-400 hover:text-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2"
-            >
-              <div className="flex items-center justify-center">
-                <GoogleIcon />
-                <span className="ml-4">Googleアカウントで登録</span>
-              </div>
-            </button>
+            <GoogleLogin
+              clientId="150873333936-vbk9fj9jf8gtssmi9bj6p879tv3bh9go.apps.googleusercontent.com"
+              buttonText="Googleアカウントでログイン"
+              onSuccess={googleLogin}
+              onFailure={googleLogin}
+              cookiePolicy={'single_host_origin'}
+            />
             <button
               type="button"
               className="inline-flex w-full px-4 py-3 font-semibold text-black transition duration-500 ease-in-out transform bg-white border rounded-lg border-blueGray-300 hover:bg-gray-400 hover:text-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 mt-5"
             >
-              <div className="flex items-center justify-center">
+              <div className="flex items-center justify-center w-full">
                 <TwitterIcon />
-                <span className="ml-4"> Twitterアカウントで登録</span>
+                <span className="ml-4"> Twitterアカウントでログイン</span>
               </div>
             </button>
           </div>

@@ -15,7 +15,7 @@ export const MyPage: VFC<Props> = memo(({ display }) => {
 
   if (isLoading) return <Spinner />
   return (
-    <div className="flex-grow bg-primary">
+    <div className="flex-grow bg-primary min-h-screen">
       <div className="flex flex-wrap items-center justify-center">
         <div className="w-full bg-primary shadow-lg transform duration-200 easy-in-out ">
           <div className="h-32 overflow-hidden"></div>

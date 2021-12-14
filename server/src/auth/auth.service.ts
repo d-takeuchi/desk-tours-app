@@ -3,18 +3,24 @@ import { JwtService } from '@nestjs/jwt'
 import { InjectRepository } from '@nestjs/typeorm'
 import * as bcrypt from 'bcryptjs'
 import { Repository } from 'typeorm'
+import { OAuth } from 'oauth'
 
 import { UsersService } from 'src/users/users.service'
 import { User } from 'src/users/users.entity'
 import { LoginDataDto } from './dto/login-data.dto'
 import { Request } from 'express'
+import { GoogleLoginDataDto } from './dto/google-login-data.dto'
 
 @Injectable()
 export class AuthService {
+  private readonly requestSecrets: { [token: string]: string }
+  private readonly callbackUrl: string
+  private readonly oauth: OAuth
+
   constructor(
     private readonly jwtService: JwtService,
     private readonly usersService: UsersService,
-    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(User) private readonly userRepository: Repository<User>
   ) {}
 
   public async validateUser({
@@ -27,7 +33,7 @@ export class AuthService {
     if (!isPasswordValid || !user.emailVerifiedAt) {
       throw new UnauthorizedException('invalid credentials')
     }
-    
+
     return true
   }
 
@@ -40,26 +46,26 @@ export class AuthService {
     }
   }
 
-  public async googleLogin(req: any): Promise<string> {
-    if (!req.user) {
+  public async googleLogin(loginData: GoogleLoginDataDto): Promise<string> {
+    if (!loginData) {
       throw new UnauthorizedException('invalid credentials')
     }
 
-    const { email, firstName, lastName, picture } = req.user
-    const user = await this.usersService.findByEmail(email)
+    const { email, name, imageUrl } = loginData
+    const user = await this.userRepository.findOne({ email })
 
     //ユーザーがusersテーブルに存在しない場合は、作成する
     if (!user) {
       await this.usersService.create({
-        name: lastName + firstName,
+        name,
         email,
-        password: '11111111',
-        icon: await this.usersService.toBase64Url(picture),
+        password: 'password',
+        icon: await this.usersService.toBase64Url(imageUrl),
       })
     }
 
     const payload = {
-      email: req.user.email,
+      email,
     }
 
     return this.jwtService.sign(payload)
@@ -70,12 +76,33 @@ export class AuthService {
 
     if (!token) {
       throw new UnauthorizedException(
-        'No JWT exist: may not set yet or deleted',
+        'No JWT exist: may not set yet or deleted'
       )
     }
 
     const payload = this.jwtService.decode(token) as any
 
     return await this.usersService.findByEmail(payload.email)
+  }
+
+  public async twitterLogin(req: any) {
+    if (!req.user) {
+      throw new UnauthorizedException('invalid credentials')
+    }
+    const { email, name, imageUrl } = req.user
+    const user = await this.userRepository.findOne({ email })
+    //ユーザーがusersテーブルに存在しない場合は、作成する
+    if (!user) {
+      await this.usersService.create({
+        name,
+        email,
+        password: 'password',
+        icon: await this.usersService.toBase64Url(imageUrl),
+      })
+    }
+    const payload = {
+      email: req.user.email,
+    }
+    return this.jwtService.sign(payload)
   }
 }

@@ -21,6 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.44.0",
     "@aws-sdk/client-ses": "^3.32.0",
     "@aws-sdk/node-http-handler": "^3.32.0",
     "@aws-sdk/types": "^3.32.0",
@@ -39,16 +40,18 @@
     "crypto-js": "^4.1.1",
     "csurf": "^1.11.0",
     "dotenv": "^10.0.0",
+    "express-session": "^1.17.2",
     "mysql": "^2.18.1",
     "nest": "^0.1.6",
     "node-fetch": "2.6",
     "passport": "^0.5.0",
-    "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.0",
+    "passport-twitter": "^1.0.4",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
-    "typeorm": "^0.2.38"
+    "typeorm": "^0.2.38",
+    "urlsafe-base64": "^1.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
@@ -58,10 +61,11 @@
     "@types/cookie-parser": "^1.4.2",
     "@types/csurf": "^1.11.2",
     "@types/express": "^4.17.13",
+    "@types/express-session": "^1.17.4",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.0.0",
-    "@types/passport-google-oauth20": "^2.0.11",
     "@types/passport-jwt": "^3.0.6",
+    "@types/passport-twitter": "^1.0.37",
     "@types/supertest": "^2.0.11",
     "@typescript-eslint/eslint-plugin": "^4.28.2",
     "@typescript-eslint/parser": "^4.28.2",

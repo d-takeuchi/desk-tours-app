@@ -6,8 +6,8 @@ import { User } from 'src/users/users.entity'
 import { UsersModule } from 'src/users/users.module'
 import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
-import { GoogleStrategy } from './google.strategy'
 import { JwtStrategy } from './jwt.strategy'
+import { TwitterStrategy } from './twitter.strategy'
 
 @Module({
   imports: [
@@ -19,6 +19,6 @@ import { JwtStrategy } from './jwt.strategy'
     UsersModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, GoogleStrategy],
+  providers: [AuthService, JwtStrategy, TwitterStrategy],
 })
 export class AuthModule {}

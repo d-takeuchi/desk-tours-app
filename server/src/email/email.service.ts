@@ -47,8 +47,7 @@ export class EmailService {
   }
 
   public async sendEmail(user: User) {
-    const REGION = 'ap-northeast-1'
-    const sesClient = new SESClient({ region: REGION })
+    const sesClient = new SESClient({ region: process.env.AWS_REGION })
     const params = this.getEmailData(user)
     try {
       const data = await sesClient.send(new SendEmailCommand(params))

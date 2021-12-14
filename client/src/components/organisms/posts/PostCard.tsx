@@ -5,7 +5,6 @@ import { ChatAltIcon } from '@heroicons/react/outline'
 
 import { useQuerySinglePost } from '../../../hooks/useQuerySinglePost'
 import { useMutatePost } from '../../../hooks/useMutatePost'
-import { Spinner } from '../../atoms/Spinner'
 import { useQueryClient } from 'react-query'
 import { LoginUserInfo } from '../../../types/types'
 
@@ -16,17 +15,16 @@ interface Props {
 export const PostCard: VFC<Props> = memo(({ id }) => {
   const queryClient = useQueryClient()
   const user = queryClient.getQueryData<LoginUserInfo>('user')
-  const { data: post, isLoading: postIsLoading } = useQuerySinglePost(id)
+  const { data: post } = useQuerySinglePost(id)
   const { toggleFavoriteMutation } = useMutatePost()
 
-  if (postIsLoading) return <Spinner />
   return (
     <div className="w-full p-6 mx-auto lg:w-1/3 sm:w-2/3">
       <div className="shadow-xl  rounded-xl bg-blueGray-50">
         <Link to={`/posts/view/${id}`}>
           <img
             className="object-cover object-center w-full md:h-60 rounded-t-xl"
-            src={post?.imageFile}
+            src={post?.imageFileUrl}
             alt="deskImg"
           />
         </Link>

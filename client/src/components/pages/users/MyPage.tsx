@@ -5,15 +5,17 @@ import { PencilAltIcon } from '@heroicons/react/outline'
 import { useQueryUser } from '../../../hooks/useQueryUser'
 import { PostCard } from '../../organisms/posts/PostCard'
 import { Spinner } from '../../atoms/Spinner'
+import { useQueryPosts } from '../../../hooks/useQueryPosts'
 
 interface Props {
   display: 'myFavorites' | 'myPosts'
 }
 
 export const MyPage: VFC<Props> = memo(({ display }) => {
-  const { data: user, isLoading } = useQueryUser()
+  const { data: user, isLoading: userIsLoading } = useQueryUser()
+  const { data: posts, isLoading: postsIsLoading } = useQueryPosts()
 
-  if (isLoading) return <Spinner />
+  if (userIsLoading || postsIsLoading) return <Spinner />
   return (
     <div className="flex-grow bg-primary min-h-screen">
       <div className="flex flex-wrap items-center justify-center">
@@ -75,16 +77,24 @@ export const MyPage: VFC<Props> = memo(({ display }) => {
           </div>
           <div>
             {display === 'myPosts'
-              ? user?.posts.map((post) => (
-                  <div className="p-6 px-20 ">
-                    <PostCard key={post.id} id={String(post.id)} />
-                  </div>
-                ))
-              : user?.likes.map((like) => (
-                  <div className="p-6 px-20 ">
-                    <PostCard key={like.post.id} id={String(like.post.id)} />
-                  </div>
-                ))}
+              ? posts?.map(
+                  (post) =>
+                    post.userId === user?.id && (
+                      <div className="p-6 px-20" key={post.id}>
+                        <PostCard id={String(post.id)} />
+                      </div>
+                    )
+                )
+              : posts?.map((post) =>
+                  post.likes.map(
+                    (like) =>
+                      like.userId === user?.id && (
+                        <div className="p-6 px-20" key={like.postId}>
+                          <PostCard id={String(like.postId)} />
+                        </div>
+                      )
+                  )
+                )}
           </div>
         </div>
       </div>

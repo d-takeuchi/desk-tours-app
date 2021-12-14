@@ -97,17 +97,17 @@ export const PostEdit: VFC = () => {
                             />
                           </>
                         )}
-                        {!deskImageUrl && post?.imageFile && (
+                        {!deskImageUrl && post?.imageFileUrl && (
                           <>
-                            <img src={post.imageFile} alt="deskImage" />
+                            <img src={post.imageFileUrl} alt="deskImage" />
                             <input
                               type="hidden"
                               {...register('imageFile')}
-                              value={post.imageFile}
+                              value={post.imageFileUrl}
                             />
                           </>
                         )}
-                        {!deskImageUrl && !post?.imageFile && (
+                        {!deskImageUrl && !post?.imageFileUrl && (
                           <PhotographIcon className="sm:h-1/2 sm:w-1/2 bg-gray-500 text-gray-200 rounded-md mx-2 my-2" />
                         )}
                       </div>

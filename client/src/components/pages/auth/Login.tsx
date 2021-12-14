@@ -6,10 +6,10 @@ import GoogleLogin from 'react-google-login'
 import { schema } from '../../../validations/auth/login'
 import TwitterIcon from '../../atoms/TwitterIcon'
 import { useProcessAuth } from '../../../hooks/useProcessAuth'
+import GoogleIcon from '../../atoms/GoogleIcon'
 
 export const Login: VFC = () => {
   const { login, googleLogin } = useProcessAuth()
-
   const {
     register,
     handleSubmit,
@@ -75,6 +75,19 @@ export const Login: VFC = () => {
               onSuccess={googleLogin}
               onFailure={googleLogin}
               cookiePolicy={'single_host_origin'}
+              render={(renderProps) => (
+                <button
+                  onClick={renderProps.onClick}
+                  disabled={renderProps.disabled}
+                  className="inline-flex w-full px-4 py-3 font-semibold text-black transition duration-500 ease-in-out transform bg-white border rounded-lg border-blueGray-300 hover:bg-gray-400 hover:text-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 mt-5"
+                >
+                  <div className="flex items-center justify-center w-full">
+                    <GoogleIcon />
+
+                    <span className="ml-4">Googleアカウントでログイン</span>
+                  </div>
+                </button>
+              )}
             />
             <button
               type="button"
@@ -82,7 +95,9 @@ export const Login: VFC = () => {
             >
               <div className="flex items-center justify-center w-full">
                 <TwitterIcon />
-                <span className="ml-4"> Twitterアカウントでログイン</span>
+                <a href={`${process.env.REACT_APP_API_URL}/auth/twitter`}>
+                  <span className="ml-4">Twitterアカウントでログイン</span>
+                </a>
               </div>
             </button>
           </div>

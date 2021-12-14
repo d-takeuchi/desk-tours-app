@@ -7,6 +7,7 @@ import { SearchInput } from '../../organisms/posts/SearchInput'
 
 export const PostList = memo(() => {
   const { data: posts, isLoading } = useQueryPosts()
+
   return (
     <div className="flex-grow bg-primary">
       <div className="container items-center px-5 py-8 mx-auto lg:px-24 min-h-screen">

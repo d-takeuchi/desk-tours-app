@@ -7,7 +7,8 @@ import { useMutateAuth } from './useMutateAuth'
 export const useProcessAuth = () => {
   const history = useHistory()
   const queryClient = useQueryClient()
-  const { loginMutation, logoutMutation, signUpMutation,googleLoginMutation } = useMutateAuth()
+  const { loginMutation, logoutMutation, signUpMutation, googleLoginMutation } =
+    useMutateAuth()
 
   const login = async (loginData: LoginData) => {
     loginMutation.mutate(loginData)
@@ -22,13 +23,13 @@ export const useProcessAuth = () => {
     queryClient.removeQueries('posts')
     queryClient.removeQueries('tags')
     queryClient.removeQueries('user')
+    queryClient.removeQueries('singlePost')
     history.push('/login')
   }
 
-
-  const googleLogin = async (response : any) => {
+  const googleLogin = async (response: any) => {
     googleLoginMutation.mutate(response.profileObj)
   }
 
-  return { login, signUp, logout, loginMutation, signUpMutation , googleLogin }
+  return { login, signUp, logout, loginMutation, signUpMutation, googleLogin }
 }

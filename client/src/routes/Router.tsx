@@ -1,5 +1,4 @@
 import { VFC } from 'react'
-import { useQueryClient } from 'react-query'
 import { Redirect, Route, Switch, useLocation } from 'react-router'
 
 import { Login } from '../components/pages/auth/Login'
@@ -8,13 +7,12 @@ import { Home } from '../components/pages/Home'
 import { Page404 } from '../components/pages/Page404'
 import { PostList } from '../components/pages/posts/PostList'
 import { Layout } from '../components/templates/Layout'
-import { LoginUserInfo } from '../types/types'
+import { useQueryUser } from '../hooks/useQueryUser'
 import { AuthenticateRouter } from './AuthenticateRouter'
 
 export const Router: VFC = () => {
   const location = useLocation()
-  const queryClient = useQueryClient()
-  const user = queryClient.getQueryData<LoginUserInfo>('user')
+  const { data: user } = useQueryUser()
   return (
     <Switch>
       <Route exact path="/">

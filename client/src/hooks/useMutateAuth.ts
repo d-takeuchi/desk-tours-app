@@ -5,7 +5,12 @@ import { useHistory } from 'react-router-dom'
 
 import { useAppDispatch } from '../app/hooks'
 import { toggleCsrfState } from '../slices/csrfSlice'
-import { GoogleLoginData, LoginData, LoginUserInfo, SignUpData } from '../types/types'
+import {
+  GoogleLoginData,
+  LoginData,
+  LoginUserInfo,
+  SignUpData,
+} from '../types/types'
 
 export const useMutateAuth = () => {
   const history = useHistory()
@@ -51,6 +56,7 @@ export const useMutateAuth = () => {
         history.push('/login')
       },
       onError: (err: any) => {
+        console.log(err)
         toast.error('ユーザー作成失敗')
         if (err.response.data.message === 'invalid csrf token') {
           dispatch(toggleCsrfState())
@@ -83,7 +89,7 @@ export const useMutateAuth = () => {
   )
 
   const googleLoginMutation = useMutation(
-    async (loginData : GoogleLoginData) => 
+    async (loginData: GoogleLoginData) =>
       await axios.post(
         `${process.env.REACT_APP_API_URL}/auth/googleLogin`,
         loginData,
@@ -91,19 +97,25 @@ export const useMutateAuth = () => {
           withCredentials: true,
         }
       ),
-      {
-        onSuccess: (res) => {
-          queryClient.setQueryData('user', res.data)
-          toast.success('ログイン成功')
-          history.push('/')
-        },
-        onError: (err: any) => {
-          toast.error('ログイン失敗')
-          if (err.response.data.message === 'invalid csrf token') {
-            dispatch(toggleCsrfState())
-          }
-        },
-      }
+    {
+      onSuccess: (res) => {
+        queryClient.setQueryData('user', res.data)
+        toast.success('ログイン成功')
+        history.push('/')
+      },
+      onError: (err: any) => {
+        toast.error('ログイン失敗')
+        if (err.response.data.message === 'invalid csrf token') {
+          dispatch(toggleCsrfState())
+        }
+      },
+    }
   )
-  return { loginMutation, signUpMutation, logoutMutation ,googleLoginMutation}
+
+  return {
+    loginMutation,
+    signUpMutation,
+    logoutMutation,
+    googleLoginMutation,
+  }
 }

@@ -42,9 +42,10 @@ export interface Post {
   id: number
   title: string
   description: string
-  imageFile: string
+  imageFileUrl: string
   createdAt: string
   updatedAt: string
+  userId: number
   tags: Tag[]
   comments: Comment[]
   likes: Like[]
@@ -89,8 +90,8 @@ export interface CreatePostData {
 
 export interface CommentData {
   comment: string
-  userId:number
-  postId:number
+  userId: number
+  postId: number
 }
 
 export interface UpdateUserData {
@@ -99,16 +100,16 @@ export interface UpdateUserData {
   icon: string
 }
 
-export interface SearchParams{
-  title:string
+export interface SearchParams {
+  title: string
 }
 
-export interface FavoriteData{
-  userId? : number
-  postId? : number
+export interface FavoriteData {
+  userId?: number
+  postId?: number
 }
 
-export interface GoogleLoginData{
+export interface GoogleLoginData {
   email: string
   familyName: string
   givenName: string

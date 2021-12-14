@@ -13,6 +13,6 @@ export const useQueryPosts = () => {
   return useQuery<Post[], Error>({
     queryKey: 'posts',
     queryFn: getPosts,
-    staleTime: Infinity,
+    staleTime: 0,
   })
 }

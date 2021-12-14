@@ -3,8 +3,8 @@ import { useParams } from 'react-router'
 
 import { useResizeFile } from '../../../hooks/useResizeFile'
 import { useProcessUser } from '../../../hooks/useProcessUser'
-import { useQueryUser } from '../../../hooks/useQueryUser'
-import { Spinner } from '../../atoms/Spinner'
+import { useQueryClient } from 'react-query'
+import { LoginUserInfo } from '../../../types/types'
 
 export const ProfileEdit: VFC = memo(() => {
   const { id } = useParams<{ id: string }>()
@@ -17,7 +17,8 @@ export const ProfileEdit: VFC = memo(() => {
     setValue,
     updateUser,
   } = useProcessUser()
-  const { data: user, isLoading } = useQueryUser()
+  const queryClient = useQueryClient()
+  const user = queryClient.getQueryData<LoginUserInfo>('user')
   const { processImage, imageSize } = useResizeFile()
 
   const onChangeFileResize = async (
@@ -29,8 +30,6 @@ export const ProfileEdit: VFC = memo(() => {
     setIcon(resizedFile)
     setValue('icon', resizedFile)
   }
-
-  if (isLoading) return <Spinner />
 
   return (
     <section className="flex-grow flex text-blueGray-700 justify-center bg-primary min-h-screen">

@@ -7,7 +7,6 @@ import { PostCard } from '../organisms/posts/PostCard'
 
 export const Home: VFC = () => {
   const { data: posts, isLoading } = useQueryPosts()
-
   return (
     <>
       {/* メインビジュアル */}

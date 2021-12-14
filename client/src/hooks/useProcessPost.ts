@@ -7,7 +7,8 @@ import { CreatePostData, UpdatePostData } from '../types/types'
 import { schema } from '../validations/posts/create'
 
 export const useProcessPost = () => {
-  const { createPostMutation, updatePostMutation,deletePostMutation } = useMutatePost()
+  const { createPostMutation, updatePostMutation, deletePostMutation } =
+    useMutatePost()
   const [deskImageUrl, setDeskImageUrl] = useState('')
   const {
     register,
@@ -33,7 +34,7 @@ export const useProcessPost = () => {
     updatePostMutation.mutate(post)
   }
 
-  const deletePost = (id:number) => {
+  const deletePost = (id: number) => {
     deletePostMutation.mutate(id)
   }
 

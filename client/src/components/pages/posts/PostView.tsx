@@ -8,17 +8,18 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { schema } from '../../../validations/comments/create'
 import { useQuerySinglePost } from '../../../hooks/useQuerySinglePost'
 import { CommentField } from '../../organisms/comments/CommentField'
-import { CommentData } from '../../../types/types'
+import { CommentData, LoginUserInfo } from '../../../types/types'
 import { Spinner } from '../../atoms/Spinner'
 import { useProcessPost } from '../../../hooks/useProcessPost'
-import { useQueryUser } from '../../../hooks/useQueryUser'
 import { useMutatePost } from '../../../hooks/useMutatePost'
+import { useQueryClient } from 'react-query'
 
 export const PostView: VFC = () => {
+  const queryClient = useQueryClient()
   const { id } = useParams<{ id: string }>()
   const { data: post, isLoading: postIsLoading } = useQuerySinglePost(id)
   const { deletePost } = useProcessPost()
-  const { data: user, isLoading: userIsLoading } = useQueryUser()
+  const user = queryClient.getQueryData<LoginUserInfo>('user')
   const { createCommentMutation } = useMutatePost()
   const {
     register,
@@ -32,7 +33,7 @@ export const PostView: VFC = () => {
     },
   })
 
-  if (postIsLoading || userIsLoading) return <Spinner />
+  if (postIsLoading) return <Spinner />
 
   const onSubmit = (comment: CommentData) => {
     createCommentMutation.mutate(comment)
@@ -44,13 +45,17 @@ export const PostView: VFC = () => {
       <div className="container items-center px-5 pb-8 mx-auto lg:px-24 pt-10">
         <div className="flex items-center mb-5">
           <h1 className="text-2xl text-white ">投稿詳細</h1>
-          <TrashIcon
-            className="h-7 text-white cursor-pointer"
-            onClick={() => deletePost(Number(id))}
-          />
-          <Link to={`/posts/edit/${id}`}>
-            <PencilAltIcon className="h-7 text-white cursor-pointer" />
-          </Link>
+          {user?.id === post?.userId && (
+            <>
+              <TrashIcon
+                className="h-7 text-white cursor-pointer"
+                onClick={() => deletePost(Number(id))}
+              />
+              <Link to={`/posts/edit/${id}`}>
+                <PencilAltIcon className="h-7 text-white cursor-pointer" />
+              </Link>
+            </>
+          )}
         </div>
         <div className="md:grid md:grid-cols-3 md:gap-6">
           <div className="mt-5 md:mt-0 md:col-span-3">
@@ -60,7 +65,7 @@ export const PostView: VFC = () => {
                   <img
                     alt="デスクイメージ"
                     className="lg:w-1/2 w-full object-cover object-center rounded border border-gray-200"
-                    src={post?.imageFile}
+                    src={post?.imageFileUrl}
                   />
                   <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
                     <h1 className="text-gray-900 text-3xl title-font font-medium mb-1">

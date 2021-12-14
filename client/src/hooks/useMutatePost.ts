@@ -12,7 +12,7 @@ import {
   Post,
   SearchParams,
   UpdatePostData,
-  FavoriteData
+  FavoriteData,
 } from '../types/types'
 import { useProcessAuth } from './useProcessAuth'
 
@@ -21,7 +21,7 @@ export const useMutatePost = () => {
   const dispatch = useAppDispatch()
   const queryClient = useQueryClient()
   const user = queryClient.getQueryData<LoginUserInfo>('user')
-  const {logout} = useProcessAuth()
+  const { logout } = useProcessAuth()
 
   const createPostMutation = useMutation(
     (post: CreatePostData) =>
@@ -38,11 +38,11 @@ export const useMutatePost = () => {
         if (previousPosts) {
           queryClient.setQueryData('posts', [...previousPosts, res.data])
         }
-        toast.success('作成成功')
+        toast.success('投稿成功')
         history.push('/posts')
       },
       onError: (err: any) => {
-        toast.error('作成失敗')
+        toast.error('投稿失敗')
         dispatch(toggleCsrfState())
         if (err.response.data.message === 'Unauthorized') {
           logout()
@@ -113,13 +113,13 @@ export const useMutatePost = () => {
 
   const createCommentMutation = useMutation(
     (comment: CommentData) =>
-      axios.post<Post>(`${process.env.REACT_APP_API_URL}/comments`,comment, {
+      axios.post<Post>(`${process.env.REACT_APP_API_URL}/comments`, comment, {
         withCredentials: true,
       }),
     {
       onSuccess: (res) => {
         queryClient.setQueryData<Post>(
-          ['singlePost',String(res.data.id)],
+          ['singlePost', String(res.data.id)],
           res.data
         )
       },
@@ -131,43 +131,53 @@ export const useMutatePost = () => {
         }
       },
     }
-  ) 
+  )
 
   const searchPostsMutation = useMutation(
-    ({ title }:SearchParams) =>
-    axios.get<Post[]>(`${process.env.REACT_APP_API_URL}/posts?title=${title}`),
+    ({ title }: SearchParams) =>
+      axios.get<Post[]>(
+        `${process.env.REACT_APP_API_URL}/posts?title=${title}`
+      ),
     {
-      onSuccess :(res) => {
-        queryClient.setQueryData<Post[]>(
-          'posts',
-          res.data
-        )
-      }
+      onSuccess: (res) => {
+        queryClient.setQueryData<Post[]>('posts', res.data)
+      },
     }
   )
 
   const toggleFavoriteMutation = useMutation(
-    ({userId,postId}:FavoriteData) =>
-        axios.post<Post>('http://localhost:3000/likes', {
-        userId,
-        postId
-      },{withCredentials:true}),
-      {
-        onSuccess: (res) => {
-          queryClient.setQueryData<Post>(
-            ['singlePost',String(res.data.id)],
-            res.data
-          )
+    ({ userId, postId }: FavoriteData) =>
+      axios.post<Post>(
+        'http://localhost:3000/likes',
+        {
+          userId,
+          postId,
         },
-        onError: (err: any) => {
-          toast.error('いいね失敗')
-          dispatch(toggleCsrfState())
-          if (err.response.data.message === 'Unauthorized') {
-            logout()
-          }
-        },
-      }
+        { withCredentials: true }
+      ),
+    {
+      onSuccess: (res) => {
+        queryClient.setQueryData<Post>(
+          ['singlePost', String(res.data.id)],
+          res.data
+        )
+      },
+      onError: (err: any) => {
+        toast.error('いいね失敗')
+        dispatch(toggleCsrfState())
+        if (err.response.data.message === 'Unauthorized') {
+          logout()
+        }
+      },
+    }
   )
 
-  return { createPostMutation, updatePostMutation, deletePostMutation,createCommentMutation,searchPostsMutation,toggleFavoriteMutation }
+  return {
+    createPostMutation,
+    updatePostMutation,
+    deletePostMutation,
+    createCommentMutation,
+    searchPostsMutation,
+    toggleFavoriteMutation,
+  }
 }

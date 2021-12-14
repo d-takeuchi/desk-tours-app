@@ -22,7 +22,7 @@ export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Get()
-  public findAll(@Query() query:SearchParamsDto) {
+  public findAll(@Query() query: SearchParamsDto) {
     return this.postsService.findAll(query)
   }
 
@@ -32,7 +32,7 @@ export class PostsController {
   }
 
   @Post()
-  @UseGuards(AuthGuard('jwt'))
+  // @UseGuards(AuthGuard('jwt'))
   public create(@Body(ValidationPipe) postData: CreatePostDto) {
     return this.postsService.create(postData)
   }
@@ -41,15 +41,14 @@ export class PostsController {
   @UseGuards(AuthGuard('jwt'))
   public edit(
     @Param('id') id: number,
-    @Body(ValidationPipe) postData: UpdatePostDto,
+    @Body(ValidationPipe) postData: UpdatePostDto
   ) {
     return this.postsService.edit(id, postData)
   }
 
-
   @Delete(':id')
   @UseGuards(AuthGuard('jwt'))
-  public delete(@Param('id') id: number){
+  public delete(@Param('id') id: number) {
     return this.postsService.delete(id)
   }
 }

@@ -9,6 +9,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   RelationCount,
+  RelationId,
   UpdateDateColumn,
 } from 'typeorm'
 
@@ -28,14 +29,17 @@ export class Post {
   @Column()
   description: string
 
-  @Column('mediumtext')
-  imageFile: string
+  @Column('text')
+  imageFileUrl: string
 
   @ManyToOne(() => User, (user) => user.posts, {
     nullable: false,
   })
   @JoinColumn({ name: 'userId' })
   user: User
+
+  @RelationId((post: Post) => post.user)
+  userId: number
 
   @ManyToMany(() => Tag)
   @JoinTable({ name: 'post_tags' })

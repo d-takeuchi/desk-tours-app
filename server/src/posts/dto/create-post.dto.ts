@@ -21,7 +21,6 @@ export class CreatePostDto {
   readonly description: string
 
   @IsNotEmpty()
-  @IsDataURI()
   readonly imageFile: string
 
   @IsNotEmpty()

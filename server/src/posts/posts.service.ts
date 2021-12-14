@@ -9,6 +9,7 @@ import { Post } from './post.entity'
 import { UpdatePostDto } from './dto/update-post.dto'
 import { User } from 'src/users/users.entity'
 import { SearchParamsDto } from './dto/search-params.dto'
+import { PhotoService } from 'src/photo/photo.service'
 
 @Injectable()
 export class PostsService {
@@ -18,33 +19,36 @@ export class PostsService {
     @InjectRepository(Tag) private readonly tagRepository: Repository<Tag>,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly usersService: UsersService,
+    private readonly photoSerice: PhotoService
   ) {}
 
-  async create(postData: CreatePostDto): Promise<Post> {
+  async create(postData: CreatePostDto) {
     const { title, description, imageFile, tagIds, userId } = postData
     const tags = await this.tagRepository.findByIds(tagIds)
     const user = await this.userRepository.findOne(userId)
-    const post = this.postRepository.create({
+    let post = this.postRepository.create({
       title,
       description,
-      imageFile,
+      imageFileUrl: '',
       tags,
       user,
     })
 
+    post = await this.postRepository.save(post)
+    const imageFileUrl = await this.photoSerice.uploadPhoto(post, imageFile)
+    post.imageFileUrl = imageFileUrl
     return await this.postRepository.save(post)
   }
 
-  async findAll({title} : SearchParamsDto): Promise<Post[]> {
-
+  async findAll({ title }: SearchParamsDto): Promise<Post[]> {
     return await this.postRepository.find({
       relations: this.relations,
       order: {
         id: 'DESC',
       },
-      where:{
-        title:Like(`%${title}%`)
-      }
+      where: {
+        title: Like(`%${title}%`),
+      },
     })
   }
 
@@ -72,7 +76,7 @@ export class PostsService {
     })
   }
 
-  async delete(id:number){
-    return await this.postRepository.delete({id})
+  async delete(id: number) {
+    return await this.postRepository.delete({ id })
   }
 }

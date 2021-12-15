@@ -17,7 +17,6 @@ export const PostCard: VFC<Props> = memo(({ id }) => {
   const user = queryClient.getQueryData<LoginUserInfo>('user')
   const { data: post } = useQuerySinglePost(id)
   const { toggleFavoriteMutation } = useMutatePost()
-
   return (
     <div className="w-full p-6 mx-auto lg:w-1/3 sm:w-2/3">
       <div className="shadow-xl  rounded-xl bg-blueGray-50">
@@ -34,7 +33,7 @@ export const PostCard: VFC<Props> = memo(({ id }) => {
           <div className="flex">
             <HeartIcon
               className={`h-5 w-5  cursor-pointer ${
-                post?.likes.find((like) => like.userId === user?.id)
+                post?.likes?.find((like) => like.userId === user?.id)
                   ? 'text-red-600'
                   : 'text-gray-400'
               }`}

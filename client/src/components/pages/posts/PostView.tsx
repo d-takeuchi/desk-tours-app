@@ -41,7 +41,7 @@ export const PostView: VFC = () => {
   }
 
   return (
-    <div className="flex-grow bg-primary">
+    <div className="flex-grow bg-primary min-h-screen">
       <div className="container items-center px-5 pb-8 mx-auto lg:px-24 pt-10">
         <div className="flex items-center mb-5">
           <h1 className="text-2xl text-white ">投稿詳細</h1>

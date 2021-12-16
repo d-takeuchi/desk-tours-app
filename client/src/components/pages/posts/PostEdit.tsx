@@ -29,6 +29,7 @@ export const PostEdit: VFC = () => {
     shouldUnregister: false,
     resolver: yupResolver(schema),
   })
+
   const onChangeFileResize = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -42,7 +43,7 @@ export const PostEdit: VFC = () => {
   if (tagsIsLoading || postIsLoading) return <Spinner />
 
   return (
-    <div className="flex-grow bg-primary">
+    <div className="flex-grow bg-primary min-h-screen">
       <div className="container items-center px-5 pb-8 mx-auto lg:px-24 pt-10">
         <h1 className="text-2xl text-white mb-5">投稿編集</h1>
         <div className="md:grid md:grid-cols-3 md:gap-6">
@@ -78,7 +79,7 @@ export const PostEdit: VFC = () => {
                         デスク写真
                       </label>
                       <div className="flex flex-col lg:flex-row justify-between">
-                        <div className="relative mb-2 mr-2">
+                        <div className="mb-2 mr-2">
                           <input
                             type="file"
                             id="imageFile"
@@ -89,7 +90,11 @@ export const PostEdit: VFC = () => {
                         </div>
                         {deskImageUrl && (
                           <>
-                            <img src={deskImageUrl} alt="deskImage" />
+                            <img
+                              src={deskImageUrl}
+                              alt="deskImage"
+                              className="sm:h-1/2 sm:w-1/2 bg-gray-500 text-gray-200 rounded-md mx-2 my-2"
+                            />
                             <input
                               type="hidden"
                               {...register('imageFile')}
@@ -99,7 +104,11 @@ export const PostEdit: VFC = () => {
                         )}
                         {!deskImageUrl && post?.imageFileUrl && (
                           <>
-                            <img src={post.imageFileUrl} alt="deskImage" />
+                            <img
+                              src={post.imageFileUrl}
+                              alt="deskImage"
+                              className="sm:h-1/2 sm:w-1/2 bg-gray-500 text-gray-200 rounded-md mx-2 my-2"
+                            />
                             <input
                               type="hidden"
                               {...register('imageFile')}

@@ -18,7 +18,7 @@ export const PostCategoryTag: VFC<Props> = memo(
           className="hidden"
           value={tagId}
           id={`tags_${tagId}`}
-          {...register('tagIds')}
+          {...register(`tagIds`)}
           defaultChecked={postTags?.find((postTag) => postTag.id === tagId)}
         />
         <label

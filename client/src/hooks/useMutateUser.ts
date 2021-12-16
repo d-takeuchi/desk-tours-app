@@ -12,7 +12,7 @@ export const useMutateUser = () => {
   const history = useHistory()
   const dispatch = useAppDispatch()
   const queryClient = useQueryClient()
-  const {logout} = useProcessAuth()
+  const { logout } = useProcessAuth()
 
   const updateUserMutation = useMutation(
     async (user: UpdateUserData) =>
@@ -31,6 +31,7 @@ export const useMutateUser = () => {
         toast.error('更新失敗')
         dispatch(toggleCsrfState())
         if (err.response.data.message === 'Unauthorized') {
+          toast.error('再度ログインしてください')
           logout()
         }
       },

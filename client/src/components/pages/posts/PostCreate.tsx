@@ -33,7 +33,7 @@ export const PostCreate: VFC = () => {
 
   if (tagsIsLoading) return <Spinner />
   return (
-    <div className="flex-grow bg-primary">
+    <div className="flex-grow bg-primary min-h-screen">
       <div className="container items-center px-5 pb-8 mx-auto lg:px-24 pt-10">
         <h1 className="text-2xl text-white mb-5">新規投稿</h1>
         <div className="md:grid md:grid-cols-3 md:gap-6">
@@ -86,6 +86,7 @@ export const PostCreate: VFC = () => {
                             src={deskImageUrl}
                             alt="deskImage"
                             id="deskImage"
+                            className="sm:h-1/2 sm:w-1/2 bg-gray-500 text-gray-200 rounded-md mx-2 my-2"
                           />
                         ) : (
                           <PhotographIcon className="sm:h-1/2 sm:w-1/2 bg-gray-500 text-gray-200 rounded-md mx-2 my-2" />

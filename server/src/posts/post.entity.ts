@@ -1,4 +1,5 @@
 import {
+  AfterLoad,
   Column,
   CreateDateColumn,
   Entity,
@@ -62,4 +63,10 @@ export class Post {
 
   @UpdateDateColumn()
   readonly updatedAt?: Date
+
+  @AfterLoad()
+  cacheBustingImageUrl(): void {
+    const now = new Date()
+    this.imageFileUrl = `${this.imageFileUrl}?${now.getTime()}`
+  }
 }

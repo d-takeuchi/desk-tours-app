@@ -6,45 +6,55 @@ import {
   Unique,
   CreateDateColumn,
   UpdateDateColumn,
-} from 'typeorm';
+  AfterLoad,
+} from 'typeorm'
+import * as isBase64 from 'is-base64'
 
-import { Comment } from 'src/comments/comments.entity';
-import { Like } from 'src/likes/likes.entity';
-import { Post } from 'src/posts/post.entity';
+import { Comment } from 'src/comments/comments.entity'
+import { Like } from 'src/likes/likes.entity'
+import { Post } from 'src/posts/post.entity'
 
 @Entity()
 @Unique(['email'])
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: number
 
   @Column({ length: 20 })
-  name: string;
+  name: string
 
   @Column({ length: 128 })
-  password: string;
+  password: string
 
   @Column({ length: 50 })
-  email: string;
+  email: string
 
-  @Column('longtext', { nullable: true })
-  icon: string;
+  @Column('text', { nullable: true })
+  icon: string
 
   @OneToMany(() => Post, (post) => post.user)
-  posts: Post[];
+  posts: Post[]
 
   @OneToMany(() => Like, (like) => like.user)
-  likes: Like[];
+  likes: Like[]
 
   @OneToMany(() => Comment, (comment) => comment.user)
-  comments: Comment[];
+  comments: Comment[]
 
   @CreateDateColumn()
-  readonly createdAt?: Date;
+  readonly createdAt?: Date
 
   @UpdateDateColumn()
-  readonly updatedAt?: Date;
+  readonly updatedAt?: Date
 
-  @Column({ nullable:true })
-  emailVerifiedAt?:Date
+  @Column({ nullable: true })
+  emailVerifiedAt?: Date
+
+  @AfterLoad()
+  cacheBustingIcon(): void {
+    if (!isBase64(this.icon, { allowMime: true })) {
+      const now = new Date()
+      this.icon = `${this.icon}?${now.getTime()}`
+    }
+  }
 }

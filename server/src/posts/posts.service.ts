@@ -19,7 +19,7 @@ export class PostsService {
     @InjectRepository(Tag) private readonly tagRepository: Repository<Tag>,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly usersService: UsersService,
-    private readonly photoSerice: PhotoService
+    private readonly photoService: PhotoService
   ) {}
 
   async create(postData: CreatePostDto) {
@@ -35,7 +35,10 @@ export class PostsService {
     })
 
     post = await this.postRepository.save(post)
-    const imageFileUrl = await this.photoSerice.uploadPhoto(post, imageFile)
+    const imageFileUrl = await this.photoService.uploadPhoto(
+      `post-${post.id}`,
+      imageFile
+    )
     post.imageFileUrl = imageFileUrl
     return await this.postRepository.save(post)
   }
@@ -67,11 +70,16 @@ export class PostsService {
     if (!post) {
       throw new NotFoundException()
     }
+    const imageFileUrl = await this.photoService.uploadPhoto(
+      `post-${id}`,
+      imageFile
+    )
+    post.imageFileUrl = imageFileUrl
     return await this.postRepository.save({
       ...post,
       title,
       description,
-      imageFile,
+      imageFileUrl,
       tags,
     })
   }

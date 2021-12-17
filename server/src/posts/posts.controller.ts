@@ -32,7 +32,7 @@ export class PostsController {
   }
 
   @Post()
-  // @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'))
   public create(@Body(ValidationPipe) postData: CreatePostDto) {
     return this.postsService.create(postData)
   }

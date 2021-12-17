@@ -6,6 +6,7 @@ import { PostCategoryTag } from '../../organisms/posts/PostCategoryTag'
 import { useResizeFile } from '../../../hooks/useResizeFile'
 import { useQueryTags } from '../../../hooks/useQueryTags'
 import { Spinner } from '../../atoms/Spinner'
+import { ItemSearchInput } from '../../organisms/posts/ItemSearchInput'
 
 export const PostCreate: VFC = () => {
   const {
@@ -99,7 +100,7 @@ export const PostCreate: VFC = () => {
                     <div className="col-span-3 sm:col-span-2">
                       <label
                         htmlFor="description"
-                        className="block text-sm font-medium text-gray-700"
+                        className="block text-sm font-medium text-gray-700 mb-2"
                       >
                         紹介文
                       </label>
@@ -152,6 +153,7 @@ export const PostCreate: VFC = () => {
                 </div>
               </div>
             </form>
+            <ItemSearchInput />
           </div>
         </div>
       </div>

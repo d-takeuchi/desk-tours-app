@@ -17,6 +17,7 @@ import { LikesModule } from './likes/likes.module';
 import { EmailModule } from './email/email.module';
 import { ConfigModule } from '@nestjs/config';
 import { PhotoModule } from './photo/photo.module';
+import { ItemsModule } from './items/items.module';
 
 @Module({
   imports: [
@@ -40,7 +41,8 @@ import { PhotoModule } from './photo/photo.module';
     CommentsModule,
     LikesModule,
     EmailModule,
-    PhotoModule
+    PhotoModule,
+    ItemsModule
   ],
   controllers: [AppController],
   providers: [AppService],

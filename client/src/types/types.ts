@@ -117,3 +117,11 @@ export interface GoogleLoginData {
   imageUrl: string
   name: string
 }
+
+export interface Item {
+  itemCode: string
+  itemName: string
+  itemUrl: string
+  itemImageUrl: string
+  itemPrice: number
+}

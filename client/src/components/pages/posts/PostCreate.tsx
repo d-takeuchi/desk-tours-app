@@ -7,6 +7,7 @@ import { useResizeFile } from '../../../hooks/useResizeFile'
 import { useQueryTags } from '../../../hooks/useQueryTags'
 import { Spinner } from '../../atoms/Spinner'
 import { ItemSearchInput } from '../../organisms/posts/ItemSearchInput'
+import { ItemCard } from '../../organisms/posts/ItemCard'
 
 export const PostCreate: VFC = () => {
   const {
@@ -17,6 +18,9 @@ export const PostCreate: VFC = () => {
     setValue,
     deskImageUrl,
     setDeskImageUrl,
+    addItem,
+    removeItem,
+    selectedItems,
   } = useProcessPost()
   const { data: tags, isLoading: tagsIsLoading } = useQueryTags()
 
@@ -142,6 +146,20 @@ export const PostCreate: VFC = () => {
                       </span>
                     </div>
                   </div>
+                  <div>
+                    <ItemSearchInput addItem={addItem} />
+
+                    <div className="mt-5">
+                      {selectedItems.map((item) => (
+                        <ItemCard
+                          item={item}
+                          key={item.id}
+                          removeItem={removeItem}
+                        />
+                      ))}
+                    </div>
+                    <input type="hidden" {...register('items')} />
+                  </div>
                 </div>
                 <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
                   <button
@@ -153,7 +171,6 @@ export const PostCreate: VFC = () => {
                 </div>
               </div>
             </form>
-            <ItemSearchInput />
           </div>
         </div>
       </div>

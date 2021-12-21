@@ -13,6 +13,7 @@ import { Spinner } from '../../atoms/Spinner'
 import { useProcessPost } from '../../../hooks/useProcessPost'
 import { useMutatePost } from '../../../hooks/useMutatePost'
 import { useQueryClient } from 'react-query'
+import { ItemCard } from '../../organisms/posts/ItemCard'
 
 export const PostView: VFC = () => {
   const queryClient = useQueryClient()
@@ -74,6 +75,11 @@ export const PostView: VFC = () => {
 
                     <p className="leading-relaxed my-10">{post?.description}</p>
 
+                    <div className="flex flex-col mb-10">
+                      {post?.items.map((item) => (
+                        <ItemCard item={item} key={item.id} />
+                      ))}
+                    </div>
                     <div className="flex flex-col sm:flex-row">
                       {post?.tags.map((tag) => (
                         <div key={tag.id} className="pb-10">

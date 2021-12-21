@@ -4,8 +4,8 @@ import {
   MaxLength,
   IsArray,
   IsNotEmpty,
-  IsDataURI,
 } from 'class-validator'
+import { Item } from 'src/items/items.entity'
 
 export class CreatePostDto {
   @IsNotEmpty()
@@ -29,4 +29,7 @@ export class CreatePostDto {
 
   @IsNotEmpty()
   readonly userId: number
+
+  @IsArray()
+  readonly items: Item[]
 }

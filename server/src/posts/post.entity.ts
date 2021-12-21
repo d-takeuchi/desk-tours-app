@@ -18,6 +18,7 @@ import { Comment } from 'src/comments/comments.entity'
 import { Like } from 'src/likes/likes.entity'
 import { Tag } from 'src/tags/tags.entity'
 import { User } from 'src/users/users.entity'
+import { Item } from 'src/items/items.entity'
 
 @Entity({ name: 'posts' })
 export class Post {
@@ -45,6 +46,10 @@ export class Post {
   @ManyToMany(() => Tag)
   @JoinTable({ name: 'post_tags' })
   tags: Tag[]
+
+  @ManyToMany(() => Item)
+  @JoinTable({ name: 'post_items' })
+  items: Item[]
 
   @OneToMany(() => Comment, (comment) => comment.post)
   comments: Comment[]

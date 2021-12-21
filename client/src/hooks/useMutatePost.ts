@@ -42,7 +42,7 @@ export const useMutatePost = () => {
         history.push('/posts')
       },
       onError: (err: any) => {
-        toast.success('投稿失敗')
+        toast.error('投稿失敗')
         dispatch(toggleCsrfState())
         if (err.response.data.message === 'Unauthorized') {
           toast.error('再度ログインしてください')

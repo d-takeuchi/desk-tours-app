@@ -14,7 +14,14 @@ import { schema } from '../../../validations/posts/create'
 import { Spinner } from '../../atoms/Spinner'
 
 export const PostEdit: VFC = () => {
-  const { updatePost, deskImageUrl, setDeskImageUrl } = useProcessPost()
+  const {
+    updatePost,
+    deskImageUrl,
+    setDeskImageUrl,
+    addItem,
+    removeItem,
+    selectedItems,
+  } = useProcessPost()
   const { data: tags, isLoading: tagsIsLoading } = useQueryTags()
   const { id } = useParams<{ id: string }>()
   const { data: post, isLoading: postIsLoading } = useQuerySinglePost(id)

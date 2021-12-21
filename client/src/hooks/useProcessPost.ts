@@ -3,13 +3,28 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 import { useMutatePost } from './useMutatePost'
-import { CreatePostData, UpdatePostData } from '../types/types'
+import { CreatePostData, Item, UpdatePostData } from '../types/types'
 import { schema } from '../validations/posts/create'
 
 export const useProcessPost = () => {
   const { createPostMutation, updatePostMutation, deletePostMutation } =
     useMutatePost()
   const [deskImageUrl, setDeskImageUrl] = useState('')
+
+  const [selectedItems, setSelectedItems] = useState<Item[]>([])
+
+  const addItem = (item: Item) => {
+    if (!selectedItems.find((selectedItem) => selectedItem.id === item.id)) {
+      setSelectedItems([...selectedItems, item])
+    }
+  }
+
+  const removeItem = (itemCode: string) => {
+    setSelectedItems(
+      selectedItems.filter((selectedItem) => selectedItem.id !== itemCode)
+    )
+  }
+
   const {
     register,
     handleSubmit,
@@ -23,11 +38,12 @@ export const useProcessPost = () => {
       tagIds: [],
       imageFile: '',
       description: '',
+      items: [],
     },
   })
 
   const createPost = (post: CreatePostData) => {
-    createPostMutation.mutate(post)
+    createPostMutation.mutate({ ...post, items: selectedItems })
   }
 
   const updatePost = (post: UpdatePostData) => {
@@ -48,5 +64,9 @@ export const useProcessPost = () => {
     errors,
     deskImageUrl,
     setDeskImageUrl,
+    addItem,
+    removeItem,
+    selectedItems,
+    setSelectedItems,
   }
 }

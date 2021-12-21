@@ -51,6 +51,7 @@ export interface Post {
   likes: Like[]
   commentsCount: number
   likesCount: number
+  items: Item[]
 }
 
 export interface Like {
@@ -86,6 +87,7 @@ export interface CreatePostData {
   imageFile: string
   description: string
   tagIds: number[]
+  items: Item[]
 }
 
 export interface CommentData {
@@ -119,9 +121,9 @@ export interface GoogleLoginData {
 }
 
 export interface Item {
-  itemCode: string
-  itemName: string
-  itemUrl: string
-  itemImageUrl: string
-  itemPrice: number
+  id: string
+  name: string
+  url: string
+  imageUrl: string
+  price: number
 }

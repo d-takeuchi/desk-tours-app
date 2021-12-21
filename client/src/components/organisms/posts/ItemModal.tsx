@@ -6,10 +6,11 @@ interface Props {
   isModalOpen: boolean
   setIsModalOpen: Dispatch<SetStateAction<boolean>>
   items: Item[]
+  addItem: (item: Item) => void
 }
 
 export const ItemModal: VFC<Props> = (props) => {
-  const { setIsModalOpen, isModalOpen, items } = props
+  const { setIsModalOpen, isModalOpen, items, addItem } = props
 
   return (
     <>
@@ -33,7 +34,14 @@ export const ItemModal: VFC<Props> = (props) => {
                 <div className="relative p-6 flex-auto">
                   <div className="overflow-x-scroll pb-10 hide-scroll-bar">
                     <div className="flex flex-nowrap">
-                      {items && items.map((item) => <ItemCard item={item} />)}
+                      {items &&
+                        items.map((item) => (
+                          <ItemCard
+                            key={item.id}
+                            item={item}
+                            addItem={addItem}
+                          />
+                        ))}
                     </div>
                   </div>
                 </div>

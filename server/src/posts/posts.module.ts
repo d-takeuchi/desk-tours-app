@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
 import { Comment } from 'src/comments/comments.entity'
+import { Item } from 'src/items/items.entity'
 import { PhotoModule } from 'src/photo/photo.module'
 import { Tag } from 'src/tags/tags.entity'
 import { UsersModule } from 'src/users/users.module'
@@ -11,7 +12,7 @@ import { PostsService } from './posts.service'
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Post, Tag, Comment]),
+    TypeOrmModule.forFeature([Post, Tag, Comment, Item]),
     UsersModule,
     PhotoModule,
   ],

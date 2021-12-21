@@ -13,6 +13,8 @@ export const schema = yup.object().shape({
 
   tagIds: yup.array().min(1, '1つ以上選択してください').ensure(),
 
+  items: yup.array().ensure(),
+
   imageFile: yup.lazy((value) =>
     /^data/.test(value)
       ? yup

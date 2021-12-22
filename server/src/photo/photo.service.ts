@@ -26,7 +26,6 @@ export class PhotoService {
 
       return this.getPhotoUrl(`${key}.jpg`)
     } catch (err) {
-      console.log(err)
       throw new Error()
     }
   }

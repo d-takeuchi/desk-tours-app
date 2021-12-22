@@ -88,11 +88,11 @@ export const SignUp: VFC = () => {
               </button>
             </div>
           </form>
-          <p className="mx-auto mt-3 text-xs text-blueGray-500 mb-5">または</p>
+          <p className="mx-auto mt-3 text-xs text-blueGray-500">または</p>
 
           <div className="flex justify-enter\ flex-col">
             <GoogleLogin
-              clientId="150873333936-vbk9fj9jf8gtssmi9bj6p879tv3bh9go.apps.googleusercontent.com"
+              clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID!}
               buttonText="Googleアカウントでログイン"
               onSuccess={googleLogin}
               onFailure={googleLogin}

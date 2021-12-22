@@ -1,4 +1,4 @@
-import React, { VFC } from 'react'
+import React, { useEffect, VFC } from 'react'
 import { useParams } from 'react-router'
 import { PhotographIcon } from '@heroicons/react/outline'
 import { useForm } from 'react-hook-form'
@@ -12,6 +12,8 @@ import { useQuerySinglePost } from '../../../hooks/useQuerySinglePost'
 import { UpdatePostData } from '../../../types/types'
 import { schema } from '../../../validations/posts/create'
 import { Spinner } from '../../atoms/Spinner'
+import { ItemSearchInput } from '../../organisms/posts/ItemSearchInput'
+import { ItemCard } from '../../organisms/posts/ItemCard'
 
 export const PostEdit: VFC = () => {
   const {
@@ -21,6 +23,7 @@ export const PostEdit: VFC = () => {
     addItem,
     removeItem,
     selectedItems,
+    setSelectedItems,
   } = useProcessPost()
   const { data: tags, isLoading: tagsIsLoading } = useQueryTags()
   const { id } = useParams<{ id: string }>()
@@ -46,6 +49,10 @@ export const PostEdit: VFC = () => {
     setDeskImageUrl(resizedFile)
     setValue('imageFile', resizedFile)
   }
+
+  useEffect(() => {
+    setSelectedItems(post ? post.items : [])
+  }, [post, setSelectedItems])
 
   if (tagsIsLoading || postIsLoading) return <Spinner />
 
@@ -180,6 +187,20 @@ export const PostEdit: VFC = () => {
                         {(errors.tagIds as any)?.message}
                       </span>
                     </div>
+                  </div>
+                  <div>
+                    <ItemSearchInput addItem={addItem} />
+
+                    <div className="mt-5">
+                      {selectedItems.map((item) => (
+                        <ItemCard
+                          item={item}
+                          key={item.id}
+                          removeItem={removeItem}
+                        />
+                      ))}
+                    </div>
+                    <input type="hidden" {...register('items')} />
                   </div>
                 </div>
                 <input type="hidden" {...register('id')} defaultValue={id} />

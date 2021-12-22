@@ -1,17 +1,16 @@
-import { Post } from 'src/posts/post.entity'
-import { User } from 'src/users/users.entity'
 import {
   Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
-  Unique,
   UpdateDateColumn,
 } from 'typeorm'
 
+import { Post } from 'src/posts/post.entity'
+import { User } from 'src/users/users.entity'
+
 @Entity({ name: 'comments' })
-@Unique(['userId', 'postId'])
 export class Comment {
   @PrimaryGeneratedColumn()
   readonly id: number

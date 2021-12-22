@@ -6,6 +6,7 @@ import {
   IsNotEmpty,
   IsDataURI,
 } from 'class-validator'
+import { Item } from 'src/items/items.entity'
 
 export class UpdatePostDto {
   @IsNotEmpty()
@@ -26,4 +27,7 @@ export class UpdatePostDto {
   @IsNotEmpty()
   @IsArray()
   readonly tagIds: number[]
+
+  @IsArray()
+  readonly items: Item[]
 }

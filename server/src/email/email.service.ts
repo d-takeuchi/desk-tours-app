@@ -51,10 +51,9 @@ export class EmailService {
     const params = this.getEmailData(user)
     try {
       const data = await sesClient.send(new SendEmailCommand(params))
-      console.log('Success', data)
       return data
     } catch (err) {
-      console.log('Error', err)
+      throw new Error()
     }
   }
 }

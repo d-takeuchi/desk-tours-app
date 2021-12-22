@@ -56,7 +56,6 @@ export const useMutateAuth = () => {
         history.push('/login')
       },
       onError: (err: any) => {
-        console.log(err)
         toast.error('ユーザー作成失敗')
         if (err.response.data.message === 'invalid csrf token') {
           dispatch(toggleCsrfState())

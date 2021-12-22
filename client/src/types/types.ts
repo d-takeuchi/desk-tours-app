@@ -80,6 +80,7 @@ export interface UpdatePostData {
   imageFile: string
   description: string
   tagIds: number[]
+  items: Item[]
 }
 
 export interface CreatePostData {

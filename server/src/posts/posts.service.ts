@@ -74,7 +74,7 @@ export class PostsService {
   }
 
   public async edit(id: number, postData: UpdatePostDto): Promise<Post> {
-    const { title, description, imageFile, tagIds } = postData
+    const { title, description, imageFile, tagIds, items } = postData
     const post = await this.postRepository.findOne(id, {
       relations: this.relations,
     })
@@ -86,6 +86,12 @@ export class PostsService {
       `post-${id}`,
       imageFile
     )
+    items.map(async (item) => {
+      if (!(await this.itemRepository.findOne(item.id))) {
+        const newItem = this.itemRepository.create(item)
+        await this.itemRepository.save(newItem)
+      }
+    })
     post.imageFileUrl = imageFileUrl
     return await this.postRepository.save({
       ...post,
@@ -93,6 +99,9 @@ export class PostsService {
       description,
       imageFileUrl,
       tags,
+      items: items.map((item) => ({
+        id: item.id,
+      })),
     })
   }
 

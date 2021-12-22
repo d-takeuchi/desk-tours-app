@@ -152,7 +152,7 @@ export const useMutatePost = () => {
   const toggleFavoriteMutation = useMutation(
     ({ userId, postId }: FavoriteData) =>
       axios.post<Post>(
-        'http://localhost:3000/likes',
+        `${process.env.REACT_APP_API_URL}/likes`,
         {
           userId,
           postId,

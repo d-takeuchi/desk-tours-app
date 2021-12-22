@@ -47,7 +47,7 @@ export const useProcessPost = () => {
   }
 
   const updatePost = (post: UpdatePostData) => {
-    updatePostMutation.mutate(post)
+    updatePostMutation.mutate({ ...post, items: selectedItems })
   }
 
   const deletePost = (id: number) => {

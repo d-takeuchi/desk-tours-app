@@ -52,7 +52,7 @@ export const useMutateAuth = () => {
       ),
     {
       onSuccess: () => {
-        toast.success('本人確認メールを送信しました。\nご確認ください。')
+        toast.success(`本人確認メールを送信しました。\nご確認ください。`)
         history.push('/login')
       },
       onError: (err: any) => {

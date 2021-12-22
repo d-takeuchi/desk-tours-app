@@ -24,7 +24,9 @@ const App = () => {
   return (
     <BrowserRouter>
       <Toaster
-        toastOptions={{ className: 'px-20 py-3 bg-primary text-white' }}
+        toastOptions={{
+          className: 'px-20 py-3 bg-primary text-white whitespace-pre-wrap',
+        }}
       />
       <Router />
     </BrowserRouter>

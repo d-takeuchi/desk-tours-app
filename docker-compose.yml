@@ -1,20 +1,28 @@
 version: '3.7'
 services:
-  api-server:
-    build: .
-    tty: true
-    restart: always
+  frontend:
+    build: /client
+    command: 'yarn start'
     ports:
       - '3000:3000'
     volumes:
+      - ./client:/frontend
+    tty: true
+  api:
+    build: /server
+    tty: true
+    restart: always
+    ports:
+      - '3001:3001'
+    volumes:
       - type: bind
-        source: .
+        source: /server
         target: /api-server
     depends_on:
       - db-server
     environment:
-      TZ: Asia/Tokyo      
-  db-server:
+      TZ: Asia/Tokyo
+  db:
     container_name: db-server
     image: mysql:5.7.29
     restart: always

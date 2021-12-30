@@ -1,9 +1,9 @@
 FROM node:16.13
 
-RUN npm i -g @nestjs/cli
+WORKDIR /backend
+COPY package*.json /backend/
 
-WORKDIR /api-server
-COPY package*.json /api-server/
+RUN npm i -g @nestjs/cli
 
 RUN npm i
 

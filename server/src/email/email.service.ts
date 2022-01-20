@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { SendEmailCommand, SESClient } from '@aws-sdk/client-ses'
 
-import { User } from 'src/users/users.entity'
+import { User } from 'src/users/entities/users.entity'
 import { createHash, createHmac } from 'crypto'
 
 @Injectable()

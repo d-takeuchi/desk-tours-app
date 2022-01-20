@@ -4,7 +4,7 @@ import { Repository } from 'typeorm'
 import * as bcrypt from 'bcryptjs'
 
 import { CreateUserDto } from './dto/create-user.dto'
-import { User } from './users.entity'
+import { User } from './entities/users.entity'
 import { EditUserDto } from './dto/edit-user.dto'
 import axios from 'axios'
 import { Request, Response } from 'express'

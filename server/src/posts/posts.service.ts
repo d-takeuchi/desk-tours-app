@@ -2,14 +2,14 @@ import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Like, Repository } from 'typeorm'
 
-import { Tag } from 'src/tags/tags.entity'
+import { Tag } from 'src/tags/entities/tags.entity'
 import { CreatePostDto } from './dto/create-post.dto'
-import { Post } from './post.entity'
+import { Post } from './entities/post.entity'
 import { UpdatePostDto } from './dto/update-post.dto'
-import { User } from 'src/users/users.entity'
+import { User } from 'src/users/entities/users.entity'
 import { SearchParamsDto } from './dto/search-params.dto'
 import { PhotoService } from 'src/photo/photo.service'
-import { Item } from 'src/items/items.entity'
+import { Item } from 'src/items/entities/items.entity'
 
 @Injectable()
 export class PostsService {

@@ -17,6 +17,6 @@ async function bootstrap() {
   app.use(json({ limit: '10mb' }))
   app.use(urlencoded({ limit: '10mb', extended: true }))
   app.use(expressSession({ secret: 'SECRET' }))
-  await app.listen(3000)
+  await app.listen(3001)
 }
 bootstrap()

@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { EmailModule } from 'src/email/email.module'
 import { PhotoModule } from 'src/photo/photo.module'
 import { UsersController } from './users.controller'
-import { User } from './users.entity'
+import { User } from './entities/users.entity'
 import { UsersService } from './users.service'
 
 @Module({

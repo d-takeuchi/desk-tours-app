@@ -6,7 +6,7 @@ import {
   IsNotEmpty,
   IsDataURI,
 } from 'class-validator'
-import { Item } from 'src/items/items.entity'
+import { Item } from 'src/items/entities/items.entity'
 
 export class UpdatePostDto {
   @IsNotEmpty()

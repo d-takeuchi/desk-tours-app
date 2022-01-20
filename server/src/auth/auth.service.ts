@@ -6,7 +6,7 @@ import { Repository } from 'typeorm'
 import { OAuth } from 'oauth'
 
 import { UsersService } from 'src/users/users.service'
-import { User } from 'src/users/users.entity'
+import { User } from 'src/users/entities/users.entity'
 import { LoginDataDto } from './dto/login-data.dto'
 import { Request } from 'express'
 import { GoogleLoginDataDto } from './dto/google-login-data.dto'

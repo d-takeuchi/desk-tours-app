@@ -1,12 +1,20 @@
+# FROM node:12.20.0
 FROM node:16.13
-
-WORKDIR /backend
-COPY package*.json /backend/
 
 RUN npm i -g @nestjs/cli
 
-RUN npm i
+WORKDIR /backend
 
 ENV TZ Asia/Tokyo
+COPY package.json .
+COPY package-lock.json .
+RUN npm i
 
-CMD [ "npm", "run", "start:dev"]
+COPY . .
+COPY .env.production .env
+
+RUN npm run build
+
+EXPOSE 3001
+
+CMD [ "npm", "run", "start:prod"]

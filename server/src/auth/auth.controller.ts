@@ -11,7 +11,7 @@ import {
 import { AuthGuard } from '@nestjs/passport'
 import { Request, Response } from 'express'
 
-import { User } from 'src/users/users.entity'
+import { User } from 'src/users/entities/users.entity'
 import { UsersService } from 'src/users/users.service'
 import { AuthService } from './auth.service'
 import { GoogleLoginDataDto } from './dto/google-login-data.dto'
@@ -32,6 +32,8 @@ export class AuthController {
     const jwt = await this.authService.login(loginData)
     res.cookie('access_token', jwt, {
       httpOnly: true,
+      sameSite: 'none',
+      secure: true,
     })
     return await this.usersService.findByEmail(loginData.email)
   }
@@ -44,6 +46,8 @@ export class AuthController {
     const jwt = await this.authService.googleLogin(loginData)
     res.cookie('access_token', jwt, {
       httpOnly: true,
+      sameSite: 'none',
+      secure: true,
     })
     return await this.usersService.findByEmail(loginData.email)
   }
@@ -58,6 +62,8 @@ export class AuthController {
   ) {
     res.cookie('access_token', '', {
       httpOnly: true,
+      sameSite: 'none',
+      secure: true,
     })
   }
 
@@ -80,6 +86,8 @@ export class AuthController {
     const jwt = await this.authService.twitterLogin(req)
     res.cookie('access_token', jwt, {
       httpOnly: true,
+      sameSite: 'none',
+      secure: true,
     })
     res.redirect(process.env.FRONT_APP_URL)
   }

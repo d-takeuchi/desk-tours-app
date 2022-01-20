@@ -10,9 +10,9 @@ import {
 } from 'typeorm'
 import * as isBase64 from 'is-base64'
 
-import { Comment } from 'src/comments/comments.entity'
-import { Like } from 'src/likes/likes.entity'
-import { Post } from 'src/posts/post.entity'
+import { Comment } from 'src/comments/entities/comments.entity'
+import { Like } from 'src/likes/entities/likes.entity'
+import { Post } from 'src/posts/entities/post.entity'
 
 @Entity()
 @Unique(['email'])

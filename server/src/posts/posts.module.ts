@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common'
 import { TypeOrmModule } from '@nestjs/typeorm'
 
-import { Comment } from 'src/comments/comments.entity'
-import { Item } from 'src/items/items.entity'
+import { Comment } from 'src/comments/entities/comments.entity'
+import { Item } from 'src/items/entities/items.entity'
 import { PhotoModule } from 'src/photo/photo.module'
-import { Tag } from 'src/tags/tags.entity'
+import { Tag } from 'src/tags/entities/tags.entity'
 import { UsersModule } from 'src/users/users.module'
-import { Post } from './post.entity'
+import { Post } from './entities/post.entity'
 import { PostsController } from './posts.controller'
 import { PostsService } from './posts.service'
 

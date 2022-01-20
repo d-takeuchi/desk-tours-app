@@ -14,11 +14,11 @@ import {
   UpdateDateColumn,
 } from 'typeorm'
 
-import { Comment } from 'src/comments/comments.entity'
-import { Like } from 'src/likes/likes.entity'
-import { Tag } from 'src/tags/tags.entity'
-import { User } from 'src/users/users.entity'
-import { Item } from 'src/items/items.entity'
+import { Comment } from 'src/comments/entities/comments.entity'
+import { Like } from 'src/likes/entities/likes.entity'
+import { Tag } from 'src/tags/entities/tags.entity'
+import { User } from 'src/users/entities/users.entity'
+import { Item } from 'src/items/entities/items.entity'
 
 @Entity({ name: 'posts' })
 export class Post {

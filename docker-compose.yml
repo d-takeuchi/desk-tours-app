@@ -1,29 +1,28 @@
 version: '3.7'
 services:
   frontend:
-    build: /client
-    command: 'yarn start'
+    container_name: frontend
+    image: 591105994502.dkr.ecr.ap-northeast-1.amazonaws.com/desk-tours-app-frontend:latest
+    build: ./client
     ports:
       - '3000:3000'
     volumes:
       - ./client:/frontend
     tty: true
-  api:
-    build: /server
+  backend:
+    container_name: backend
+    image: 591105994502.dkr.ecr.ap-northeast-1.amazonaws.com/desk-tours-app-backend:latest
+    build: ./server
     tty: true
     restart: always
     ports:
       - '3001:3001'
     volumes:
-      - type: bind
-        source: /server
-        target: /api-server
+      - ./server:/backend
     depends_on:
-      - db-server
-    environment:
-      TZ: Asia/Tokyo
+      - db
   db:
-    container_name: db-server
+    container_name: db
     image: mysql:5.7.29
     restart: always
     ports:

@@ -1,6 +1,6 @@
 import { VFC } from 'react'
 import { useParams } from 'react-router'
-import { PencilAltIcon, TrashIcon } from '@heroicons/react/outline'
+import { HeartIcon, PencilAltIcon, TrashIcon } from '@heroicons/react/outline'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -22,6 +22,7 @@ export const PostView: VFC = () => {
   const { deletePost } = useProcessPost()
   const user = queryClient.getQueryData<LoginUserInfo>('user')
   const { createCommentMutation } = useMutatePost()
+  const { toggleFavoriteMutation } = useMutatePost()
   const {
     register,
     handleSubmit,
@@ -44,19 +45,37 @@ export const PostView: VFC = () => {
   return (
     <div className="flex-grow bg-primary min-h-screen">
       <div className="container items-center px-5 pb-8 mx-auto lg:px-24 pt-10">
-        <div className="flex items-center mb-5">
-          <h1 className="text-2xl text-white ">投稿詳細</h1>
-          {user?.id === post?.userId && (
-            <>
-              <TrashIcon
-                className="h-7 text-white cursor-pointer"
-                onClick={() => deletePost(Number(id))}
-              />
-              <Link to={`/posts/edit/${id}`}>
-                <PencilAltIcon className="h-7 text-white cursor-pointer" />
-              </Link>
-            </>
-          )}
+        <div className="flex items-center mb-5 justify-between">
+          <div className="flex items-center">
+            <h1 className="text-2xl text-white ">投稿詳細</h1>
+            {user?.id === post?.userId && (
+              <>
+                <TrashIcon
+                  className="h-7 text-white cursor-pointer"
+                  onClick={() => deletePost(Number(id))}
+                />
+                <Link to={`/posts/edit/${id}`}>
+                  <PencilAltIcon className="h-7 text-white cursor-pointer" />
+                </Link>
+              </>
+            )}
+          </div>
+          <div className="flex items-center">
+            <p className="text-white mr-1">いいね</p>
+            <HeartIcon
+              className={`h-5 w-5  cursor-pointer ${
+                post?.likes?.find((like) => like.userId === user?.id)
+                  ? 'text-red-600'
+                  : 'text-gray-400'
+              }`}
+              onClick={() =>
+                toggleFavoriteMutation.mutate({
+                  userId: user?.id,
+                  postId: post?.id,
+                })
+              }
+            />
+          </div>
         </div>
         <div className="md:grid md:grid-cols-3 md:gap-6">
           <div className="mt-5 md:mt-0 md:col-span-3">

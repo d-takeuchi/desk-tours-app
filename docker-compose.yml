@@ -1,14 +1,14 @@
 version: '3.7'
 services:
-  # frontend:
-  #   container_name: frontend
-  #   image: 591105994502.dkr.ecr.ap-northeast-1.amazonaws.com/desk-tours-app-frontend:latest
-  #   build: ./client
-  #   ports:
-  #     - '3000:3000'
-  #   volumes:
-  #     - ./client:/frontend
-  #   tty: true
+  frontend:
+    container_name: frontend
+    image: 591105994502.dkr.ecr.ap-northeast-1.amazonaws.com/desk-tours-app-frontend:latest
+    build: ./client
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./client:/frontend
+    tty: true
   backend:
     container_name: backend
     image: 591105994502.dkr.ecr.ap-northeast-1.amazonaws.com/desk-tours-app-backend:latest

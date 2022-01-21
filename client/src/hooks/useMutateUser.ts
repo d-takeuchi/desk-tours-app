@@ -31,7 +31,7 @@ export const useMutateUser = () => {
         toast.error('更新失敗')
         dispatch(toggleCsrfState())
         if (err.response.data.message === 'Unauthorized') {
-          toast.error('再度ログインしてください')
+          toast.error('ログインしてください')
           logout()
         }
       },

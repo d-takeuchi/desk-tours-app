@@ -45,7 +45,7 @@ export const useMutatePost = () => {
         toast.error('投稿失敗')
         dispatch(toggleCsrfState())
         if (err.response.data.message === 'Unauthorized') {
-          toast.error('再度ログインしてください')
+          toast.error('ログインしてください')
           logout()
         }
       },
@@ -79,7 +79,7 @@ export const useMutatePost = () => {
         toast.error('更新失敗')
         dispatch(toggleCsrfState())
         if (err.response.data.message === 'Unauthorized') {
-          toast.error('再度ログインしてください')
+          toast.error('ログインしてください')
           logout()
         }
       },
@@ -107,7 +107,7 @@ export const useMutatePost = () => {
         toast.error('削除失敗')
         dispatch(toggleCsrfState())
         if (err.response.data.message === 'Unauthorized') {
-          toast.error('再度ログインしてください')
+          toast.error('ログインしてください')
           logout()
         }
       },
@@ -130,7 +130,7 @@ export const useMutatePost = () => {
         toast.error('コメント投稿失敗')
         dispatch(toggleCsrfState())
         if (err.response.data.message === 'Unauthorized') {
-          toast.error('再度ログインしてください')
+          toast.error('ログインしてください')
           logout()
         }
       },
@@ -170,7 +170,7 @@ export const useMutatePost = () => {
         toast.error('いいね失敗')
         dispatch(toggleCsrfState())
         if (err.response.data.message === 'Unauthorized') {
-          toast.error('再度ログインしてください')
+          toast.error('ログインしてください')
           logout()
         }
       },

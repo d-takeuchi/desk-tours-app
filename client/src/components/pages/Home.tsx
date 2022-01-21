@@ -18,7 +18,7 @@ export const Home: VFC = () => {
             </h1>
             <Link
               to="/posts/create"
-              className="block bg-primaryButton hover:bg-gray-300 py-3 px-4 rounded-lg text-lg text-white font-bold uppercase mt-10"
+              className="block bg-primaryButton hover:bg-opacity-80 py-3 px-4 rounded-lg text-lg text-white font-bold uppercase mt-10"
             >
               あなたのデスク環境を投稿
             </Link>
@@ -33,7 +33,7 @@ export const Home: VFC = () => {
             <h2 className="font-medium text-white">新着</h2>
             <Link
               to="/posts"
-              className="text-white bg-primaryButton rounded-xl py-2 px-8 hover:bg-gray-300"
+              className="text-white bg-primaryButton rounded-xl py-2 px-8 hover:bg-opacity-40"
             >
               すべて見る
             </Link>

@@ -59,7 +59,7 @@ export const Header: VFC = () => {
                 </Link>
                 <Link
                   to="/sign-up"
-                  className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-primaryButton hover:bg-gray-300"
+                  className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-primaryButton hover:bg-opacity-40"
                 >
                   サインアップ
                 </Link>

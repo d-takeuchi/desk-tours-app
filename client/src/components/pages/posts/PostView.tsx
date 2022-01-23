@@ -22,7 +22,6 @@ export const PostView: VFC = () => {
   const { deletePost } = useProcessPost()
   const user = queryClient.getQueryData<LoginUserInfo>('user')
   const { createCommentMutation } = useMutatePost()
-  const { toggleFavoriteMutation } = useMutatePost()
   const {
     register,
     handleSubmit,
@@ -59,22 +58,6 @@ export const PostView: VFC = () => {
                 </Link>
               </>
             )}
-          </div>
-          <div className="flex items-center">
-            <p className="text-white mr-1">いいね</p>
-            <HeartIcon
-              className={`h-5 w-5  cursor-pointer ${
-                post?.likes?.find((like) => like.userId === user?.id)
-                  ? 'text-red-600'
-                  : 'text-gray-400'
-              }`}
-              onClick={() =>
-                toggleFavoriteMutation.mutate({
-                  userId: user?.id,
-                  postId: post?.id,
-                })
-              }
-            />
           </div>
         </div>
         <div className="md:grid md:grid-cols-3 md:gap-6">

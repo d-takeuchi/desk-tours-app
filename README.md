@@ -1,7 +1,10 @@
 # DeskTourApp　(デスクツアーアップ)
 
 ### **https://desk-tours.tk**  
-<br />
+
+### **テストアカウント**
+メールアドレス：`test@example.com`<br />
+パスワード：`password`
 
 ## サービス概要
 自慢のデスク環境を投稿したり、
@@ -44,3 +47,4 @@
 
 ## **ER図**
 - https://drive.google.com/file/d/170KM-b5RbITTDEHDYnKD360GPEOMeqZH/view?usp=sharing
+

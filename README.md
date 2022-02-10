@@ -22,7 +22,7 @@
 ### フロントエンド
 - React
 - TypeScript
-- TailwindCss
+- Tailwind Css
 
 ### バックエンド
 - NestJs

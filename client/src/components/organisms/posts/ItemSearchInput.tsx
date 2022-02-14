@@ -51,7 +51,7 @@ export const ItemSearchInput: VFC<Props> = ({ addItem }) => {
         <input
           type="search"
           className="py-2 text-sm  rounded-md pl-10 focus:outline-none focus:bg-white focus:text-gray-900"
-          placeholder="アイテム名をここに入力"
+          placeholder="（例：マウス、キーボードなど）"
           value={itemName}
           onChange={(e) => setItemName(e.target.value)}
         />

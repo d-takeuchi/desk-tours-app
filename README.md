@@ -1,4 +1,4 @@
-# DeskTourApp　(デスクツアーアップ) ※現在公開停止中
+# ※現在公開停止中 DeskTourApp　(デスクツアーアップ) 
 
 ### **https://desk-tours.tk**  
 
